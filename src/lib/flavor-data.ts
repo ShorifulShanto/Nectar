@@ -22,8 +22,8 @@ export const flavors: Flavor[] = [
     hex: '#059669', // Emerald 600
     accentHex: '#34D399', // Emerald 400
     sequenceId: 'WA0022',
-    videoUrl: '', // CLOUDINARY_WEBP_URL_HERE
-    imageUrl: '', // CLOUDINARY_IMAGE_URL_HERE
+    imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574830/Whisk_8e13f16450d1dbca76a4a21b38cf482edr_mklm4x.png',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574932/Product_mid-spin_ingredient_2026040622561-ezgif.com-video-to-webp-converter_mkh5o4.webp',
   },
   {
     id: '02',
@@ -34,8 +34,8 @@ export const flavors: Flavor[] = [
     hex: '#65A30D', // Lime 600
     accentHex: '#A3E635', // Lime 400
     sequenceId: 'WA0023',
-    videoUrl: '', 
-    imageUrl: '', 
+    imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574830/Whisk_b27f025f2eb6153a39b448db383a25e9dr_donx23.png',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574941/Product_mid-spin_ingredient_202604062252-ezgif.com-video-to-webp-converter_fvywbo.webp',
   },
   {
     id: '03',
@@ -46,8 +46,8 @@ export const flavors: Flavor[] = [
     hex: '#DB2777', // Pink 600
     accentHex: '#F472B6', // Pink 400
     sequenceId: 'WA0024',
-    videoUrl: '',
-    imageUrl: '',
+    imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574831/Whisk_5ded24668f3739d9d09469c17ffb60d7dr_h9mfl6.png',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574957/Product_mid-spin_ingredient_202604062256-ezgif.com-video-to-webp-converter_ikcrre.webp',
   },
   {
     id: '04',
@@ -58,8 +58,8 @@ export const flavors: Flavor[] = [
     hex: '#9F1239', // Rose 800
     accentHex: '#F43F5E', // Rose 500
     sequenceId: 'WA0025',
-    videoUrl: '',
-    imageUrl: '',
+    imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574831/Whisk_03bddc76892ae9493a340545afadb486dr_qcfonm.png',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574964/Product_mid-spin_ingredient_202604062246-ezgif.com-video-to-webp-converter_hltpqk.webp',
   },
   {
     id: '05',
@@ -70,8 +70,8 @@ export const flavors: Flavor[] = [
     hex: '#EA580C', // Orange 600
     accentHex: '#FB923C', // Orange 400
     sequenceId: 'WA0026',
-    videoUrl: '',
-    imageUrl: '',
+    imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574832/Whisk_b43a340c0dfc0ea9b6d461dd4ae11d27dr_mltqzc.png',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574967/Product_mid-spin_ingredient_202604062257-ezgif.com-video-to-webp-converter_bw7ag2.webp',
   },
   {
     id: '06',
@@ -82,8 +82,8 @@ export const flavors: Flavor[] = [
     hex: '#CA8A04', // Yellow 600
     accentHex: '#FACC15', // Yellow 400
     sequenceId: 'WA0027',
-    videoUrl: '',
-    imageUrl: '',
+    imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574832/Whisk_d2a583f9d8507b297ac44fe94a32dfafdr_epwoao.png',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574976/Product_mid-spin_ingredient_202604062247-ezgif.com-video-to-webp-converter_dadvdu.webp',
   },
   {
     id: '07',
@@ -94,7 +94,7 @@ export const flavors: Flavor[] = [
     hex: '#7C3AED', // Violet 600
     accentHex: '#A78BFA', // Violet 400
     sequenceId: 'WA0028',
-    videoUrl: '',
-    imageUrl: '',
+    imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574836/Whisk_5680db65a5a5a4685174bce120d48be3dr_e9wmrf.png',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574979/Product_mid-spin_ingredient_202604062243-ezgif.com-video-to-webp-converter_zdssjv.webp',
   },
 ];
