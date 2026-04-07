@@ -7,6 +7,7 @@ export interface Flavor {
   color: string;
   sequenceId: string;
   hex: string;
+  videoUrl?: string;
 }
 
 export const flavors: Flavor[] = [
@@ -18,6 +19,7 @@ export const flavors: Flavor[] = [
     color: 'Green',
     hex: '#4ADE80',
     sequenceId: 'WA0022',
+    videoUrl: '', // Replace with public cloud URL for WA0022
   },
   {
     id: '02',
@@ -27,6 +29,7 @@ export const flavors: Flavor[] = [
     color: 'Light Green',
     hex: '#86EFAC',
     sequenceId: 'WA0023',
+    videoUrl: '', // Replace with public cloud URL for WA0023
   },
   {
     id: '03',
@@ -36,6 +39,7 @@ export const flavors: Flavor[] = [
     color: 'Pink',
     hex: '#F472B6',
     sequenceId: 'WA0024',
+    videoUrl: '', // Replace with public cloud URL for WA0024
   },
   {
     id: '04',
@@ -45,6 +49,7 @@ export const flavors: Flavor[] = [
     color: 'Deep Red',
     hex: '#EF4444',
     sequenceId: 'WA0025',
+    videoUrl: '', // Replace with public cloud URL for WA0025
   },
   {
     id: '05',
@@ -54,6 +59,7 @@ export const flavors: Flavor[] = [
     color: 'Orange',
     hex: '#F97316',
     sequenceId: 'WA0026',
+    videoUrl: '', // Replace with public cloud URL for WA0026
   },
   {
     id: '06',
@@ -63,6 +69,7 @@ export const flavors: Flavor[] = [
     color: 'Yellow',
     hex: '#FACC15',
     sequenceId: 'WA0027',
+    videoUrl: '', // Replace with public cloud URL for WA0027
   },
   {
     id: '07',
@@ -72,5 +79,6 @@ export const flavors: Flavor[] = [
     color: 'Purple',
     hex: '#A855F7',
     sequenceId: 'WA0028',
+    videoUrl: '', // Replace with public cloud URL for WA0028
   },
 ];
