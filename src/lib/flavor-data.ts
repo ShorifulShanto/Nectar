@@ -7,6 +7,7 @@ export interface Flavor {
   color: string;
   sequenceId: string;
   hex: string;
+  accentHex: string;
   videoUrl?: string;
 }
 
@@ -17,9 +18,10 @@ export const flavors: Flavor[] = [
     subtitle: 'Tropical Functional Soda',
     description: 'A vibrant burst of tropical guava that transports you to a sun-drenched paradise with every sip.',
     color: 'Green',
-    hex: '#4ADE80',
+    hex: '#22C55E', // Vibrant Green
+    accentHex: '#DCFCE7',
     sequenceId: 'WA0022',
-    videoUrl: '', // Replace with public cloud URL for WA0022
+    videoUrl: '',
   },
   {
     id: '02',
@@ -27,9 +29,10 @@ export const flavors: Flavor[] = [
     subtitle: 'Crisp Functional Soda',
     description: 'Refreshing and clean, our apple soda captures the essence of a perfectly ripe orchard harvest.',
     color: 'Light Green',
-    hex: '#86EFAC',
+    hex: '#86EFAC', // Light Green
+    accentHex: '#F0FDF4',
     sequenceId: 'WA0023',
-    videoUrl: '', // Replace with public cloud URL for WA0023
+    videoUrl: '',
   },
   {
     id: '03',
@@ -37,9 +40,10 @@ export const flavors: Flavor[] = [
     subtitle: 'Sweet Functional Soda',
     description: 'A nostalgic journey into summer berry sweetness, balanced perfectly for a modern palate.',
     color: 'Pink',
-    hex: '#F472B6',
+    hex: '#EC4899', // Pink
+    accentHex: '#FCE7F3',
     sequenceId: 'WA0024',
-    videoUrl: '', // Replace with public cloud URL for WA0024
+    videoUrl: '',
   },
   {
     id: '04',
@@ -47,9 +51,10 @@ export const flavors: Flavor[] = [
     subtitle: 'Classic Functional Soda',
     description: 'Bold, deep, and sophisticated. The ultimate cherry experience without the artificial guilt.',
     color: 'Deep Red',
-    hex: '#EF4444',
+    hex: '#991B1B', // Deep Red
+    accentHex: '#FEE2E2',
     sequenceId: 'WA0025',
-    videoUrl: '', // Replace with public cloud URL for WA0025
+    videoUrl: '',
   },
   {
     id: '05',
@@ -57,9 +62,10 @@ export const flavors: Flavor[] = [
     subtitle: 'Zesty Functional Soda',
     description: 'Citrus energy refined. A bright, effervescent orange flavor that pops with functional goodness.',
     color: 'Orange',
-    hex: '#F97316',
+    hex: '#F97316', // Orange
+    accentHex: '#FFEDD5',
     sequenceId: 'WA0026',
-    videoUrl: '', // Replace with public cloud URL for WA0026
+    videoUrl: '',
   },
   {
     id: '06',
@@ -67,9 +73,10 @@ export const flavors: Flavor[] = [
     subtitle: 'Golden Functional Soda',
     description: 'Pure island vibes. The golden sweetness of pineapple meets refreshing functional hydration.',
     color: 'Yellow',
-    hex: '#FACC15',
+    hex: '#EAB308', // Yellow
+    accentHex: '#FEF9C3',
     sequenceId: 'WA0027',
-    videoUrl: '', // Replace with public cloud URL for WA0027
+    videoUrl: '',
   },
   {
     id: '07',
@@ -77,8 +84,9 @@ export const flavors: Flavor[] = [
     subtitle: 'Rich Functional Soda',
     description: 'Velvety grape notes with a smooth finish. A premium take on a beloved classic soda flavor.',
     color: 'Purple',
-    hex: '#A855F7',
+    hex: '#8B5CF6', // Purple
+    accentHex: '#F5F3FF',
     sequenceId: 'WA0028',
-    videoUrl: '', // Replace with public cloud URL for WA0028
+    videoUrl: '',
   },
 ];

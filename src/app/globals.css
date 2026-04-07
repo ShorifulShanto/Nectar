@@ -33,8 +33,22 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
+    @apply bg-background text-foreground overflow-x-hidden antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline tracking-tighter;
+  }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Cinematic Transitions */
+.transition-all {
+  transition-duration: 500ms;
 }
 
 .canvas-container {
@@ -53,6 +67,7 @@ canvas {
   object-fit: contain;
 }
 
+/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -68,4 +83,9 @@ canvas {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #333;
+}
+
+/* Background Gradients */
+.bg-glow {
+  background: radial-gradient(circle at center, hsl(var(--primary) / 0.15) 0%, transparent 70%);
 }
