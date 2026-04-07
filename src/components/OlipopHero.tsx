@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { flavors } from "@/lib/flavor-data";
 import { ChevronUp, ChevronDown, ShoppingBag, ArrowRight } from "lucide-react";
 import { generateFlavorDescription } from "@/ai/flows/generate-flavor-description";
@@ -97,7 +97,7 @@ export function OlipopHero() {
         }}
       />
 
-      {/* Cinematic Video Sequence - No Static Image in Hero */}
+      {/* Cinematic WebP Video Sequence - NO static image here */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
         <div 
           className={`relative w-full h-full transition-all duration-1000 ease-in-out transform ${isLoadingFlavor ? 'opacity-0 scale-110 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
