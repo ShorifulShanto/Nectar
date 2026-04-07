@@ -131,39 +131,39 @@ export function OlipopHero() {
             transform: `translateX(-${scrollProgress * 100}px)` 
           }}
         >
-          <div className="space-y-6">
-            <p className="text-white/40 font-bold tracking-[0.4em] uppercase text-[10px]">
+          <div className="space-y-4">
+            <p className="text-white/40 font-bold tracking-[0.4em] uppercase text-[9px]">
               OLLANHO — FRESH PRESSED
             </p>
             <h1 
-              className="text-8xl md:text-[11rem] font-headline font-bold leading-[0.8] tracking-tighter transition-colors duration-500"
+              className="text-7xl md:text-8xl font-headline font-bold leading-[0.8] tracking-tighter transition-colors duration-500"
               style={{ color: currentFlavor.accentHex }}
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-xl md:text-2xl font-headline tracking-[0.3em] text-white/60">
+            <p className="text-lg md:text-xl font-headline tracking-[0.3em] text-white/60">
               {currentFlavor.subtitle}
             </p>
-            <p className="text-base text-white/40 leading-relaxed max-w-sm font-light">
+            <p className="text-sm text-white/40 leading-relaxed max-w-sm font-light">
               {aiDescription || currentFlavor.description}
             </p>
             <div className="flex gap-4 pt-4">
               <button 
                 onClick={addToCart}
-                className="px-10 py-4 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-neutral-200 transition-all border border-white"
+                className="px-8 py-3 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[9px] hover:bg-neutral-200 transition-all border border-white"
               >
                 ADD TO CART
               </button>
-              <button className="px-10 py-4 border border-white/20 text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all">
+              <button className="px-8 py-3 border border-white/20 text-white font-bold rounded-full uppercase tracking-widest text-[9px] hover:bg-white/10 transition-all">
                 $12.00
               </button>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-12">
+        <div className="flex flex-col items-center gap-10">
           <div className="text-center">
-             <span className="font-headline font-bold text-7xl md:text-9xl text-white/5 leading-none select-none">
+             <span className="font-headline font-bold text-6xl md:text-8xl text-white/5 leading-none select-none">
                {currentFlavor.index}
              </span>
           </div>
@@ -171,24 +171,24 @@ export function OlipopHero() {
           <div className="flex flex-col items-center gap-2">
             <button 
               onClick={() => changeFlavor("prev")}
-              className="group flex flex-col items-center gap-2 py-4 text-[10px] font-bold tracking-[0.2em] text-white/40 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-2 py-4 text-[9px] font-bold tracking-[0.2em] text-white/40 hover:text-white transition-all"
             >
-              <ChevronUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
+              <ChevronUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
               PREV
             </button>
-            <div className="w-px h-12 bg-white/10" />
+            <div className="w-px h-10 bg-white/10" />
             <button 
               onClick={() => changeFlavor("next")}
-              className="group flex flex-col items-center gap-2 py-4 text-[10px] font-bold tracking-[0.2em] text-white/40 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-2 py-4 text-[9px] font-bold tracking-[0.2em] text-white/40 hover:text-white transition-all"
             >
               NEXT
-              <ChevronDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+              <ChevronDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
             </button>
           </div>
         </div>
       </div>
 
-      <div className="absolute bottom-12 left-6 md:left-24 z-30 flex gap-3">
+      <div className="absolute bottom-10 left-6 md:left-24 z-30 flex gap-2.5">
         {flavors.map((f, i) => (
           <button
             key={f.id}
@@ -198,20 +198,20 @@ export function OlipopHero() {
               setTimeout(() => setCurrentFlavorIndex(i), 400);
               setTimeout(() => setIsLoadingFlavor(false), 800);
             }}
-            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-150 shadow-[0_0_15px_rgba(255,255,255,0.6)]' : 'bg-white/10 hover:bg-white/40'}`}
+            className={`w-1 h-1 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-150 shadow-[0_0_10px_rgba(255,255,255,0.6)]' : 'bg-white/10 hover:bg-white/40'}`}
           />
         ))}
       </div>
 
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-8">
-        <Instagram className="w-5 h-5 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Twitter className="w-5 h-5 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Facebook className="w-5 h-5 text-white/20 hover:text-white transition-colors cursor-pointer" />
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-6">
+        <Instagram className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
+        <Twitter className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
+        <Facebook className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
       </div>
 
-      <div className="absolute bottom-12 right-6 md:right-24 z-30 flex flex-col items-center gap-4">
-        <div className="w-px h-10 bg-gradient-to-t from-white/20 to-transparent scroll-hint-line" />
-        <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-white/20">SCROLL</span>
+      <div className="absolute bottom-10 right-6 md:right-24 z-30 flex flex-col items-center gap-3">
+        <div className="w-px h-8 bg-gradient-to-t from-white/20 to-transparent scroll-hint-line" />
+        <span className="text-[8px] font-bold tracking-[0.4em] uppercase text-white/20">SCROLL</span>
       </div>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
