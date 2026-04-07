@@ -1,0 +1,47 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "guava-hero",
+      "description": "Tropical guava soda splash",
+      "imageUrl": "https://picsum.photos/seed/guava/1200/800",
+      "imageHint": "guava soda"
+    },
+    {
+      "id": "apple-hero",
+      "description": "Crisp green apple soda",
+      "imageUrl": "https://picsum.photos/seed/apple/1200/800",
+      "imageHint": "apple soda"
+    },
+    {
+      "id": "strawberry-hero",
+      "description": "Fresh strawberry soda",
+      "imageUrl": "https://picsum.photos/seed/strawberry/1200/800",
+      "imageHint": "strawberry soda"
+    },
+    {
+      "id": "cherry-hero",
+      "description": "Deep red cherry soda",
+      "imageUrl": "https://picsum.photos/seed/cherry/1200/800",
+      "imageHint": "cherry soda"
+    },
+    {
+      "id": "orange-hero",
+      "description": "Zesty orange soda",
+      "imageUrl": "https://picsum.photos/seed/orange/1200/800",
+      "imageHint": "orange soda"
+    },
+    {
+      "id": "pineapple-hero",
+      "description": "Golden pineapple soda",
+      "imageUrl": "https://picsum.photos/seed/pineapple/1200/800",
+      "imageHint": "pineapple soda"
+    },
+    {
+      "id": "grapes-hero",
+      "description": "Rich purple grape soda",
+      "imageUrl": "https://picsum.photos/seed/grapes/1200/800",
+      "imageHint": "grape soda"
+    }
+  ]
+}
