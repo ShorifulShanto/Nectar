@@ -4,7 +4,6 @@
 import { useEffect, useState, useRef } from "react";
 import { flavors } from "@/lib/flavor-data";
 import { ChevronUp, ChevronDown, Instagram, Twitter, Facebook } from "lucide-react";
-import { generateFlavorDescription } from "@/ai/flows/generate-flavor-description";
 import Image from "next/image";
 import { useUser, useFirestore } from "@/firebase";
 import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
@@ -14,7 +13,6 @@ import { AuthModal } from "./AuthModal";
 export function OlipopHero() {
   const [currentFlavorIndex, setCurrentFlavorIndex] = useState(0);
   const [isLoadingFlavor, setIsLoadingFlavor] = useState(false);
-  const [aiDescription, setAiDescription] = useState<string>("");
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -28,11 +26,12 @@ export function OlipopHero() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const winHeight = window.innerHeight;
+      // Calculate progress specifically for the hero scrub
       const progress = Math.min(Math.max(scrollY / winHeight, 0), 1);
       setScrollProgress(progress);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -70,7 +69,7 @@ export function OlipopHero() {
     }
   };
 
-  const changeFlavor = async (dir: "next" | "prev") => {
+  const changeFlavor = (dir: "next" | "prev") => {
     setIsLoadingFlavor(true);
     let nextIdx = currentFlavorIndex;
     if (dir === "next") nextIdx = (currentFlavorIndex + 1) % flavors.length;
@@ -78,22 +77,14 @@ export function OlipopHero() {
     
     setTimeout(() => {
       setCurrentFlavorIndex(nextIdx);
-    }, 400);
-
-    try {
-      const result = await generateFlavorDescription({
-        flavorName: flavors[nextIdx].name,
-        flavorColor: flavors[nextIdx].color
-      });
-      setAiDescription(result.description);
-    } catch (e) {
-      setAiDescription("");
-    }
-
-    setTimeout(() => {
       setIsLoadingFlavor(false);
-    }, 800);
+    }, 500);
   };
+
+  // Calculations for the "scrub" effect
+  const scale = 1 + scrollProgress * 0.4;
+  const opacity = 1 - scrollProgress * 0.8;
+  const yOffset = scrollProgress * -150;
 
   return (
     <section 
@@ -101,12 +92,13 @@ export function OlipopHero() {
       id="hero" 
       className="relative h-screen w-full overflow-hidden bg-black"
     >
+      {/* Cinematic WebP Sequence Background */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
-          className={`relative w-full h-[120%] transition-all duration-1000 ease-in-out transform ${isLoadingFlavor ? 'opacity-0 scale-110 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
+          className={`relative w-full h-full transition-all duration-700 ease-out transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100'}`}
           style={{
-            transform: `translateY(${scrollProgress * -100}px) scale(${1 + scrollProgress * 0.15})`,
-            opacity: 1 - scrollProgress * 0.6
+            transform: `translateY(${yOffset}px) scale(${scale})`,
+            opacity: opacity
           }}
         >
           <Image 
@@ -124,11 +116,12 @@ export function OlipopHero() {
 
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         
+        {/* Left Content */}
         <div 
-          className={`max-w-xl transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-x-12' : 'opacity-100 translate-x-0'}`}
+          className={`max-w-xl transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-x-8 blur-sm' : 'opacity-100 translate-x-0 blur-0'}`}
           style={{ 
-            opacity: 1 - scrollProgress * 2, 
-            transform: `translateX(-${scrollProgress * 100}px)` 
+            opacity: 1 - scrollProgress * 2,
+            transform: `translateX(-${scrollProgress * 50}px)` 
           }}
         >
           <div className="space-y-4">
@@ -136,16 +129,16 @@ export function OlipopHero() {
               OLLANHO — FRESH PRESSED
             </p>
             <h1 
-              className="text-7xl md:text-8xl font-headline font-bold leading-[0.8] tracking-tighter transition-colors duration-500"
+              className="text-6xl md:text-7xl font-headline font-bold leading-[0.9] tracking-tighter transition-colors duration-500 uppercase"
               style={{ color: currentFlavor.accentHex }}
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-lg md:text-xl font-headline tracking-[0.3em] text-white/60">
+            <p className="text-sm md:text-base font-headline tracking-[0.3em] text-white/60 uppercase">
               {currentFlavor.subtitle}
             </p>
-            <p className="text-sm text-white/40 leading-relaxed max-w-sm font-light">
-              {aiDescription || currentFlavor.description}
+            <p className="text-xs md:text-sm text-white/40 leading-relaxed max-w-sm font-light">
+              {currentFlavor.description}
             </p>
             <div className="flex gap-4 pt-4">
               <button 
@@ -161,9 +154,10 @@ export function OlipopHero() {
           </div>
         </div>
 
+        {/* Right Navigation */}
         <div className="flex flex-col items-center gap-10">
           <div className="text-center">
-             <span className="font-headline font-bold text-6xl md:text-8xl text-white/5 leading-none select-none">
+             <span className="font-headline font-bold text-6xl md:text-7xl text-white/5 leading-none select-none">
                {currentFlavor.index}
              </span>
           </div>
@@ -188,6 +182,7 @@ export function OlipopHero() {
         </div>
       </div>
 
+      {/* Socials & Indicators */}
       <div className="absolute bottom-10 left-6 md:left-24 z-30 flex gap-2.5">
         {flavors.map((f, i) => (
           <button
@@ -195,10 +190,12 @@ export function OlipopHero() {
             onClick={() => {
               if (i === currentFlavorIndex) return;
               setIsLoadingFlavor(true);
-              setTimeout(() => setCurrentFlavorIndex(i), 400);
-              setTimeout(() => setIsLoadingFlavor(false), 800);
+              setTimeout(() => {
+                setCurrentFlavorIndex(i);
+                setIsLoadingFlavor(false);
+              }, 500);
             }}
-            className={`w-1 h-1 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-150 shadow-[0_0_10px_rgba(255,255,255,0.6)]' : 'bg-white/10 hover:bg-white/40'}`}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-125 shadow-[0_0_10px_rgba(255,255,255,0.6)]' : 'bg-white/10 hover:bg-white/40'}`}
           />
         ))}
       </div>
