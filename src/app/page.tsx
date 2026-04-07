@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -31,20 +30,26 @@ export default function Home() {
         <FAQSection />
         
         {/* Final CTA */}
-        <section id="contact" className="py-40 bg-primary relative z-10 flex flex-col items-center justify-center text-center overflow-hidden">
-          <div className="absolute inset-0 opacity-20 pointer-events-none">
-             <div className="w-full h-full bg-[radial-gradient(circle_at_center,_white,_transparent_70%)]" />
+        <section id="cta-section" className="py-48 bg-black relative flex flex-col items-center justify-center text-center overflow-hidden border-t border-white/5">
+          <div className="absolute inset-0 opacity-5 pointer-events-none select-none">
+             <h2 className="text-[25rem] font-headline font-bold text-white leading-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+               FRESH
+             </h2>
           </div>
-          <div className="container mx-auto px-6 relative">
-            <h2 className="text-6xl md:text-[10rem] font-headline font-bold text-white uppercase leading-[0.8] mb-16 tracking-tighter">
-              A BETTER <br />WAY TO SODA.
+          <div className="container mx-auto px-6 relative z-10">
+            <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-6">GET STARTED</p>
+            <h2 className="text-7xl md:text-9xl font-headline font-bold text-white uppercase leading-[0.9] mb-8 tracking-tighter">
+              TASTE THE<br />DIFFERENCE
             </h2>
+            <p className="text-white/40 max-w-xl mx-auto mb-12 text-lg font-light leading-relaxed">
+              Order your first case today and discover why thousands have made OLLANHO their daily ritual. Real fruit. Real taste. Real good.
+            </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <button className="px-14 py-6 bg-black text-white font-bold hover:bg-neutral-900 transition-all uppercase tracking-[0.2em] text-[11px] rounded-full shadow-2xl">
-                Shop Variety Pack
+              <button className="px-14 py-5 border border-white text-white font-bold hover:bg-white hover:text-black transition-all uppercase tracking-[0.2em] text-[10px] rounded-full">
+                EXPLORE ALL
               </button>
-              <button className="px-14 py-6 border-2 border-white text-white font-bold hover:bg-white hover:text-primary transition-all uppercase tracking-[0.2em] text-[11px] rounded-full">
-                Find in Store
+              <button className="px-14 py-5 bg-white text-black font-bold hover:bg-neutral-200 transition-all uppercase tracking-[0.2em] text-[10px] rounded-full">
+                SHOP NOW
               </button>
             </div>
           </div>

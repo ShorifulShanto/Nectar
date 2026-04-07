@@ -1,60 +1,39 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { Check, Star, Droplets, Leaf, Zap, ShieldCheck, Waves, Wind } from "lucide-react";
+import { Star, Leaf, Waves, ShieldCheck, Droplets, Zap, Wind } from "lucide-react";
 import { flavors } from "@/lib/flavor-data";
 import Image from "next/image";
 
 export function IngredientsSection() {
   const ingredients = [
-    { name: "Real Fruits", benefit: "Naturally sourced flavors from whole fruits", icon: Leaf },
-    { name: "Pure Water", benefit: "Pure hydration with a refreshing fizz", icon: Waves },
-    { name: "No Additives", benefit: "Zero artificial colors, flavors, or secrets", icon: ShieldCheck },
-    { name: "Natural Sweetness", benefit: "Balanced with plant-based stevia and inulin", icon: Droplets },
-    { name: "Vitamins & Prebiotics", benefit: "Gut health support with functional roots", icon: Zap },
-    { name: "Cold Pressed", benefit: "Preserving nutrient density in every can", icon: Wind },
+    { name: "Real Fruit", benefit: "100% cold-pressed whole fruit. No concentrates or artificial flavoring.", icon: Leaf },
+    { name: "Pure Water", benefit: "Triple-filtered spring water for a perfectly clean finish.", icon: Waves },
+    { name: "No Additives", benefit: "Zero artificial colors, flavors, or preservatives. Just fruit.", icon: ShieldCheck },
+    { name: "Natural Sweetness", benefit: "Sweetened only with the natural sugars found in the fruit itself.", icon: Droplets },
+    { name: "Vitamins", benefit: "Rich in Vitamin C, antioxidants, and natural electrolytes.", icon: Zap },
+    { name: "Cold-Pressed", benefit: "HPP processing preserves nutrients and flavor at their peak.", icon: Wind },
   ];
 
   return (
-    <section id="ingredients" className="py-32 bg-black relative z-10 border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-20 items-center">
-          <div>
-            <h2 className="text-5xl md:text-7xl font-headline font-bold mb-10 tracking-tighter uppercase">
-              PURELY <br /><span className="text-primary">PLANT POWERED.</span>
-            </h2>
-            <p className="text-white/50 mb-12 max-w-md text-lg leading-relaxed">
-              We ditched the chemistry set. Every Olipop is crafted with botanicals, plant fibers, and prebiotics to create a functional soda that loves you back.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              {ingredients.map((item) => (
-                <div key={item.name} className="group">
-                  <div className="mb-4 p-3 w-fit bg-white/5 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                    <item.icon size={20} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm uppercase tracking-widest mb-1">{item.name}</h4>
-                    <p className="text-xs text-white/40 leading-relaxed">{item.benefit}</p>
-                  </div>
-                </div>
-              ))}
+    <section id="ingredients" className="py-32 bg-neutral-900/50">
+      <div className="container mx-auto px-6 md:px-24">
+        <div className="mb-20">
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-4">WHAT'S INSIDE</p>
+          <h2 className="text-6xl md:text-8xl font-headline font-bold leading-tight">REAL INGREDIENTS<br />REAL BENEFITS</h2>
+          <p className="text-white/40 mt-8 max-w-xl font-light text-lg">Every drop starts with real, whole fruit. No concentrates, no preservatives — just nature in a bottle.</p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {ingredients.map((item) => (
+            <div key={item.name} className="p-10 border border-white/5 bg-black/30 rounded-2xl hover:border-white/20 transition-all duration-500 group">
+              <div className="mb-6 text-white/60 group-hover:text-white transition-colors">
+                <item.icon size={32} strokeWidth={1.5} />
+              </div>
+              <h4 className="text-xl font-headline font-bold mb-4">{item.name}</h4>
+              <p className="text-sm text-white/30 leading-relaxed font-light">{item.benefit}</p>
             </div>
-          </div>
-          <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/10 group">
-            <Image 
-              src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop" 
-              alt="Natural Forest" 
-              fill
-              className="object-cover opacity-60 scale-100 group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0"
-              data-ai-hint="botanical garden"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-            <div className="absolute bottom-10 left-10 p-8 backdrop-blur-2xl bg-white/5 border border-white/10 rounded-3xl">
-               <p className="text-3xl font-headline font-bold text-white mb-2">35-50</p>
-               <p className="text-[10px] uppercase tracking-widest text-primary font-bold">CALORIES PER CAN</p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -63,23 +42,18 @@ export function IngredientsSection() {
 
 export function ProductCollection() {
   return (
-    <section className="py-32 bg-neutral-950 border-y border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20">
-           <div>
-              <p className="text-primary font-bold tracking-[0.4em] uppercase text-[10px] mb-4">Functional Flavors</p>
-              <h2 className="text-5xl md:text-7xl font-headline font-bold tracking-tighter uppercase">The Complete <br />Odyssey.</h2>
-           </div>
-           <p className="text-white/40 max-w-sm text-sm mt-6 md:mt-0">Seven unique flavors, one shared mission: to support your digestive health with every refreshing sip.</p>
+    <section id="product" className="py-32 bg-black border-y border-white/5">
+      <div className="container mx-auto px-6 md:px-24">
+        <div className="mb-20">
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-4">OUR COLLECTION</p>
+          <h2 className="text-6xl md:text-8xl font-headline font-bold leading-tight">SEVEN FLAVORS<br />ONE OBSESSION</h2>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
           {flavors.map((flavor) => (
-            <div key={flavor.id} className="group relative">
-               <div 
-                 className="aspect-[2/3] rounded-3xl bg-neutral-900 overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-700 p-6 flex flex-col items-center justify-between"
-               >
-                  <div className="relative w-full h-full transform group-hover:-translate-y-4 transition-transform duration-700">
+            <div key={flavor.id} className="group cursor-pointer">
+               <div className="aspect-[3/4] rounded-2xl bg-neutral-900 border border-white/5 overflow-hidden p-6 mb-4 flex flex-col items-center justify-center group-hover:border-white/20 transition-all duration-700">
+                  <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700">
                     <Image 
                       src={flavor.imageUrl} 
                       alt={flavor.name} 
@@ -87,15 +61,10 @@ export function ProductCollection() {
                       className="object-contain"
                     />
                   </div>
-                  <div className="text-center w-full">
-                    <h4 className="text-sm font-headline font-bold uppercase tracking-widest">{flavor.name}</h4>
-                    <p className="text-[9px] text-white/30 uppercase tracking-[0.2em] mt-1">{flavor.color}</p>
-                  </div>
-                  <div 
-                    className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700"
-                    style={{ background: `radial-gradient(circle at center, ${flavor.hex}, transparent 70%)` }}
-                  />
                </div>
+               <h4 className="text-xs font-bold text-center tracking-widest uppercase text-white/40 group-hover:text-white transition-colors">
+                 {flavor.name}
+               </h4>
             </div>
           ))}
         </div>
@@ -106,34 +75,52 @@ export function ProductCollection() {
 
 export function NutritionSection() {
   return (
-    <section id="nutrition" className="py-32 bg-black relative z-10">
-      <div className="container mx-auto px-6 max-w-5xl">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div className="order-2 md:order-1">
-             <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "Sugars", val: "2-5g", sub: "Natural" },
-                  { label: "Fiber", val: "9g", sub: "Prebiotic" },
-                  { label: "Calories", val: "35-50", sub: "Light" },
-                  { label: "Ingredients", val: "Plant", sub: "Botanical" },
-                ].map((stat) => (
-                  <div key={stat.label} className="p-8 border border-white/5 rounded-3xl bg-neutral-900/50 backdrop-blur-sm">
-                    <p className="text-white/30 text-[9px] uppercase tracking-[0.3em] mb-3">{stat.label}</p>
-                    <h3 className="text-4xl font-headline font-bold text-white mb-2">{stat.val}</h3>
-                    <div className="h-0.5 w-8 bg-primary mb-2" />
-                    <p className="text-primary text-[10px] font-bold uppercase tracking-widest">{stat.sub}</p>
-                  </div>
-                ))}
-             </div>
-          </div>
-          <div className="order-1 md:order-2">
-            <h2 className="text-5xl md:text-7xl font-headline font-bold mb-8 uppercase tracking-tighter">NUTRITION <br />YOU CAN <br /><span className="text-primary">FEEL.</span></h2>
-            <p className="text-white/50 text-lg leading-relaxed mb-10">
-              Forget everything you know about soda. We've packed 9g of dietary fiber into every can to support a healthy microbiome, while keeping sugar to a minimum.
+    <section id="nutrition" className="py-32 bg-black">
+      <div className="container mx-auto px-6 md:px-24 max-w-7xl">
+        <div className="grid md:grid-cols-2 gap-24 items-start">
+          <div className="p-8 border-4 border-white rounded-lg max-w-sm">
+            <h3 className="text-4xl font-bold border-b-8 border-white pb-2 mb-2">Nutrition Facts</h3>
+            <p className="text-xs text-white/60 border-b border-white/20 pb-2 mb-4">Serving Size: 1 Bottle (350ml) | Servings: 1</p>
+            <div className="flex justify-between items-end border-b-4 border-white pb-2 mb-4">
+              <span className="text-sm font-bold">Calories</span>
+              <span className="text-4xl font-bold leading-none">110</span>
+            </div>
+            {[
+              { label: "Total Fat", val: "0g" },
+              { label: "Sodium", val: "15mg" },
+              { label: "Total Carbohydrate", val: "27g" },
+              { label: "Dietary Fiber", val: "1g", indent: true },
+              { label: "Total Sugars", val: "22g", indent: true },
+              { label: "Protein", val: "1g" },
+              { label: "Vitamin C", val: "45%", highlight: true },
+              { label: "Potassium", val: "8%", highlight: true },
+            ].map((row) => (
+              <div key={row.label} className={`flex justify-between py-1.5 border-b border-white/10 text-sm ${row.highlight ? 'font-bold' : ''}`}>
+                <span className={row.indent ? 'pl-4' : ''}>{row.label}</span>
+                <span className="text-white/60">{row.val}</span>
+              </div>
+            ))}
+            <p className="text-[10px] text-white/40 mt-4 leading-tight italic">
+              * Percent daily values are based on a 2,000 calorie diet. All values are approximate.
             </p>
-            <button className="px-10 py-5 border border-white/10 text-white font-bold rounded-full uppercase tracking-widest text-[11px] hover:bg-primary hover:border-primary transition-all">
-              Compare with others
-            </button>
+          </div>
+          
+          <div className="space-y-12">
+            <h2 className="text-5xl md:text-7xl font-headline font-bold leading-tight">NUTRITION<br />YOU CAN FEEL.</h2>
+            {[
+              { num: "01", title: "Immune Support", desc: "High Vitamin C content from real fruit helps strengthen your immune system naturally." },
+              { num: "02", title: "Antioxidant Rich", desc: "Natural antioxidants from whole fruit combat free radicals and support cellular health." },
+              { num: "03", title: "Hydration Boost", desc: "Natural electrolytes and water content keep you hydrated throughout the day." },
+              { num: "04", title: "No Added Sugar", desc: "Every gram of sweetness comes directly from the fruit — nothing added, nothing artificial." },
+            ].map((item) => (
+              <div key={item.num} className="flex gap-8 items-start border-l border-white/10 pl-8 group">
+                <span className="text-3xl font-headline font-bold text-white/20 group-hover:text-white transition-colors">{item.num}</span>
+                <div>
+                  <h4 className="text-xl font-bold mb-2 uppercase tracking-wider">{item.title}</h4>
+                  <p className="text-white/40 font-light leading-relaxed text-sm">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -143,30 +130,40 @@ export function NutritionSection() {
 
 export function ReviewsSection() {
   const reviews = [
-    { name: "Sarah J.", rating: 5, text: "The Guava flavor is literally life-changing. I can't believe it only has 3g of sugar!" },
-    { name: "Marcus T.", rating: 5, text: "Finally, a soda that doesn't make me feel bloated. Strawberry is my go-to." },
-    { name: "Elena R.", rating: 4, text: "Love the brand aesthetic and the flavors are spot on. Can't wait for more variants." },
+    { name: "Sarah M.", flavor: "Guava Juice", rating: 5, text: "The guava flavor is absolutely incredible. Tastes exactly like fresh-cut fruit — I can't believe it comes in a bottle." },
+    { name: "James K.", flavor: "Strawberry Yogurt", rating: 5, text: "Strawberry is my go-to every morning. Clean ingredients, no guilt, just pure delicious fruit juice." },
+    { name: "Priya L.", flavor: "Pineapple Juice", rating: 4, text: "Finally a juice brand that actually tastes fresh. The pineapple is my personal favorite — tropical and perfect." },
+    { name: "Marcus T.", flavor: "Grape Juice", rating: 5, text: "The grape juice converted me. Deep, rich flavor — nothing like the sugary stuff. Will subscribe for life." },
   ];
 
   return (
-    <section id="reviews" className="py-32 bg-neutral-950 relative z-10 border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <h2 className="text-5xl font-headline font-bold text-center mb-20 uppercase tracking-tighter">THE VERDICT</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+    <section id="reviews" className="py-32 bg-neutral-900/50">
+      <div className="container mx-auto px-6 md:px-24">
+        <div className="mb-20 text-center">
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-4">WHAT PEOPLE SAY</p>
+          <h2 className="text-6xl md:text-8xl font-headline font-bold">LOVED BY THOUSANDS</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="bg-black p-10 rounded-2xl border border-white/10 text-center flex flex-col justify-center items-center">
+            <span className="text-8xl font-headline font-bold">4.9</span>
+            <div className="flex gap-1 my-4 text-white">
+              {[...Array(5)].map((_, i) => <Star key={i} size={20} fill="currentColor" />)}
+            </div>
+            <p className="text-xs text-white/30 uppercase tracking-[0.2em]">Based on 2,840 reviews</p>
+          </div>
+          
           {reviews.map((review, i) => (
-            <Card key={i} className="bg-neutral-900 border-white/5 p-4 rounded-[2rem] hover:border-primary/50 transition-colors duration-500">
-              <CardHeader>
-                <div className="flex gap-1 mb-6 text-primary">
-                  {Array.from({ length: review.rating }).map((_, j) => (
-                    <Star key={j} size={14} fill="currentColor" />
-                  ))}
-                </div>
-                <CardTitle className="text-xl font-headline font-bold">{review.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-white/50 text-base leading-relaxed italic">"{review.text}"</p>
-              </CardContent>
-            </Card>
+            <div key={i} className="p-10 border border-white/5 bg-black/30 rounded-2xl italic font-light font-serif">
+              <div className="flex gap-1 mb-6 text-white/40">
+                {[...Array(review.rating)].map((_, j) => <Star key={j} size={12} fill="currentColor" />)}
+              </div>
+              <p className="text-lg text-white/60 mb-8 leading-relaxed">"{review.text}"</p>
+              <div className="not-italic font-headline">
+                <h5 className="font-bold text-sm tracking-widest">{review.name}</h5>
+                <p className="text-[10px] text-white/20 uppercase tracking-widest mt-1">{review.flavor}</p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -176,22 +173,27 @@ export function ReviewsSection() {
 
 export function FAQSection() {
   const faqs = [
-    { q: "What are prebiotics?", a: "Prebiotics are a type of fiber that feed the good bacteria in your gut. We use roots like Chicory and Jerusalem Artichoke to provide high-quality fiber." },
-    { q: "Is Olipop gluten-free?", a: "Yes, all of our flavors are certified gluten-free, non-GMO, vegan, and paleo-friendly." },
-    { q: "How much sugar is in each can?", a: "Most of our flavors contain between 2g and 5g of natural sugar, mostly from real fruit juice." },
+    { q: "Are OLLANHO juices 100% real fruit?", a: "Yes. Every bottle is cold-pressed from whole, real fruit. We never use concentrates, artificial flavoring, or fillers. What you taste is exactly what's in the bottle." },
+    { q: "Is there added sugar in the juice?", a: "No added sugar at all. The sweetness in every bottle comes entirely from the natural fruit sugars. We believe real fruit is sweet enough on its own." },
+    { q: "How long does a bottle stay fresh?", a: "Our HPP (High Pressure Processing) technique extends shelf life to 60 days refrigerated, without any preservatives. Once opened, enjoy within 3 days for best taste." },
+    { q: "Do you ship nationwide?", a: "Yes! We ship cold-packed in insulated boxes across the country. Orders typically arrive within 2 business days." },
   ];
 
   return (
-    <section id="faq" className="py-32 bg-black relative z-10 border-t border-white/5">
-      <div className="container mx-auto px-6 max-w-3xl">
-        <h2 className="text-5xl font-headline font-bold text-center mb-16 uppercase tracking-tighter">COMMON CURIOSITIES</h2>
+    <section id="faq" className="py-32 bg-black">
+      <div className="container mx-auto px-6 md:px-24 max-w-4xl">
+        <div className="mb-20">
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-4">QUESTIONS</p>
+          <h2 className="text-5xl md:text-7xl font-headline font-bold">FREQUENTLY ASKED</h2>
+        </div>
+        
         <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`item-${i}`} className="border-white/10 px-8 bg-neutral-900/30 rounded-3xl overflow-hidden">
-              <AccordionTrigger className="text-lg font-headline font-bold hover:no-underline hover:text-primary transition-colors py-6">
+            <AccordionItem key={i} value={`item-${i}`} className="border-white/10 px-0">
+              <AccordionTrigger className="text-xl font-headline font-bold hover:no-underline hover:text-white/60 transition-colors py-8 uppercase tracking-widest text-left">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="text-white/40 text-base pb-6 leading-relaxed">
+              <AccordionContent className="text-white/40 text-lg pb-8 leading-relaxed font-light">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
@@ -204,41 +206,37 @@ export function FAQSection() {
 
 export function Footer() {
   return (
-    <footer className="py-32 bg-black border-t border-white/5 relative z-10">
-      <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-16 mb-24">
+    <footer className="py-24 bg-black border-t border-white/5">
+      <div className="container mx-auto px-6 md:px-24">
+        <div className="grid md:grid-cols-4 gap-20 mb-20 pb-20 border-b border-white/5">
           <div className="col-span-2">
-            <h2 className="text-4xl font-headline font-bold tracking-tighter mb-8 uppercase">OLIPOP<span className="text-primary">.</span></h2>
-            <p className="text-white/30 max-w-sm mb-10 text-base leading-relaxed">Elevating the classic soda experience with functional ingredients that support your digestive health.</p>
-            <div className="flex gap-8">
-              {["Instagram", "TikTok", "X", "YouTube"].map(social => (
-                <a key={social} href="#" className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/30 hover:text-white transition-colors">{social}</a>
-              ))}
-            </div>
+            <h2 className="text-4xl font-headline font-bold tracking-[0.3em] mb-4">OLLANHO</h2>
+            <p className="text-white/20 text-xs uppercase tracking-[0.4em]">Fresh Cold-Pressed Juice</p>
           </div>
           <div>
-            <h4 className="font-bold mb-8 uppercase text-[11px] tracking-[0.3em] text-primary">Explore</h4>
-            <ul className="space-y-4 text-sm text-white/40 font-bold uppercase tracking-widest">
-              <li><a href="#" className="hover:text-white transition-colors">Our Mission</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Flavor Science</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Store Locator</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+            <h4 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.4em] mb-8">Navigate</h4>
+            <ul className="space-y-4 text-xs font-bold uppercase tracking-[0.2em] text-white/40">
+              <li><a href="#product" className="hover:text-white transition-colors">Product</a></li>
+              <li><a href="#ingredients" className="hover:text-white transition-colors">Ingredients</a></li>
+              <li><a href="#nutrition" className="hover:text-white transition-colors">Nutrition</a></li>
+              <li><a href="#reviews" className="hover:text-white transition-colors">Reviews</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-8 uppercase text-[11px] tracking-[0.3em] text-primary">Privacy</h4>
-            <ul className="space-y-4 text-sm text-white/40 font-bold uppercase tracking-widest">
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Accessibility</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
+            <h4 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.4em] mb-8">Contact</h4>
+            <ul className="space-y-4 text-xs font-bold uppercase tracking-[0.2em] text-white/40">
+              <li>hello@ollanho.com</li>
+              <li>+1 (800) 555-JUICE</li>
+              <li>Find a Store</li>
             </ul>
           </div>
         </div>
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 font-bold uppercase tracking-[0.3em]">
-          <p>© {new Date().getFullYear()} Olipop Odyssey. All rights reserved.</p>
-          <div className="flex gap-8">
-             <span>Crafted with plants</span>
-             <span>Cold Pressed Science</span>
+        
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-white/20 uppercase tracking-[0.3em] font-bold">
+          <p>© 2025 OLLANHO Fresh Juice. All rights reserved.</p>
+          <div className="flex gap-12">
+            <a href="#" className="hover:text-white">Privacy Policy</a>
+            <a href="#" className="hover:text-white">Terms of Service</a>
           </div>
         </div>
       </div>

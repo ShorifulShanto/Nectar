@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { flavors } from "@/lib/flavor-data";
-import { ChevronUp, ChevronDown, ShoppingBag, ArrowRight } from "lucide-react";
+import { ChevronUp, ChevronDown, Instagram, Twitter, Facebook } from "lucide-react";
 import { generateFlavorDescription } from "@/ai/flows/generate-flavor-description";
 import Image from "next/image";
 
@@ -17,17 +17,13 @@ export function OlipopHero() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
+      const scrollY = window.scrollY;
       const winHeight = window.innerHeight;
-      
-      // Calculate progress based on the section's position relative to viewport
-      const progress = Math.max(0, Math.min(1, (winHeight - rect.top) / (winHeight + rect.height)));
+      const progress = Math.min(Math.max(scrollY / winHeight, 0), 1);
       setScrollProgress(progress);
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -56,151 +52,122 @@ export function OlipopHero() {
     }, 800);
   };
 
-  const hexToHsl = (hex: string) => {
-    let r = 0, g = 0, b = 0;
-    if (hex.length === 4) {
-      r = parseInt(hex[1] + hex[1], 16);
-      g = parseInt(hex[2] + hex[2], 16);
-      b = parseInt(hex[3] + hex[3], 16);
-    } else if (hex.length === 7) {
-      r = parseInt(hex.substring(1, 3), 16);
-      g = parseInt(hex.substring(3, 5), 16);
-      b = parseInt(hex.substring(5, 7), 16);
-    }
-    r /= 255; g /= 255; b /= 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h = 0, s = 0, l = (max + min) / 2;
-    if (max !== min) {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
-      }
-      h /= 6;
-    }
-    return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
-  };
-
-  const dynamicStyles = {
-    '--primary': hexToHsl(currentFlavor.hex),
-    '--accent': hexToHsl(currentFlavor.accentHex),
-    '--current-hex': currentFlavor.hex,
-  } as React.CSSProperties;
-
   return (
     <section 
       ref={sectionRef}
-      id="product" 
-      className="relative min-h-screen w-full overflow-hidden bg-black transition-all duration-1000"
-      style={dynamicStyles}
+      id="hero" 
+      className="relative h-screen w-full overflow-hidden bg-black"
     >
-      {/* Dynamic Background Glow */}
-      <div 
-        className="absolute inset-0 z-0 opacity-40 transition-all duration-1000"
-        style={{ 
-          background: `radial-gradient(circle at 50% 50%, ${currentFlavor.hex} 0%, transparent 80%)` 
-        }}
-      />
-
-      {/* Cinematic WebP Video Sequence - No Static Image Here */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 overflow-hidden">
+      {/* Background Sequence - Centered & Responsive to Scroll */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
-          className={`relative w-full h-full transition-all duration-1000 ease-in-out transform ${isLoadingFlavor ? 'opacity-0 scale-110 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
+          className={`relative w-full h-[120%] transition-all duration-1000 ease-in-out transform ${isLoadingFlavor ? 'opacity-0 scale-110 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
           style={{
-            transform: `scale(${1.2 - scrollProgress * 0.4}) translateY(${scrollProgress * 50}px)`
+            transform: `translateY(${scrollProgress * -100}px) scale(${1 + scrollProgress * 0.2})`,
+            opacity: 1 - scrollProgress * 0.5
           }}
         >
           <Image 
             src={currentFlavor.videoUrl} 
             alt={`${currentFlavor.name} sequence`} 
             fill 
-            className="object-contain drop-shadow-[0_0_100px_rgba(var(--primary),0.3)]"
+            className="object-contain"
             unoptimized
             priority
           />
         </div>
       </div>
 
+      <div className="absolute inset-0 hero-vignette z-10 pointer-events-none" />
+
       {/* UI Layers */}
-      <div className="relative z-20 min-h-screen w-full flex flex-col md:flex-row items-center justify-between px-6 md:px-32 py-40">
+      <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         
         {/* Left: Product Info */}
-        <div className={`w-full md:w-1/3 transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-x-12' : 'opacity-100 translate-x-0'}`}>
+        <div 
+          className={`max-w-xl transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-x-12' : 'opacity-100 translate-x-0'}`}
+          style={{ opacity: 1 - scrollProgress * 1.5, transform: `translateX(-${scrollProgress * 50}px)` }}
+        >
           <div className="space-y-6">
-            <div className="flex items-center gap-4">
-              <span className="w-12 h-0.5 bg-primary" />
-              <p className="text-primary font-bold tracking-[0.4em] uppercase text-[10px]">
-                {currentFlavor.subtitle}
-              </p>
-            </div>
-            <h1 className="text-7xl md:text-[10rem] font-headline font-bold uppercase leading-[0.7] tracking-tighter text-white">
+            <p className="text-white/40 font-bold tracking-[0.4em] uppercase text-[10px]">
+              OLLANHO — FRESH PRESSED
+            </p>
+            <h1 className="text-8xl md:text-[11rem] font-headline font-bold leading-[0.8] tracking-tighter text-white">
               {currentFlavor.name}
             </h1>
-            <div className="bg-white/5 backdrop-blur-md p-6 border-l-2 border-primary rounded-r-xl max-w-sm mt-8">
-              <p className="text-base md:text-lg text-white/70 leading-relaxed font-body italic">
-                {aiDescription || currentFlavor.description}
-              </p>
-            </div>
-            <div className="pt-10">
-              <button className="group flex items-center gap-4 px-8 py-4 bg-primary text-white font-bold rounded-full uppercase tracking-widest text-[11px] hover:scale-105 transition-all shadow-2xl shadow-primary/20 pointer-events-auto">
-                <ShoppingBag size={18} />
-                Try {currentFlavor.name} — $2.99
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            <p className="text-xl md:text-2xl font-headline tracking-[0.3em] text-white/60">
+              {currentFlavor.subtitle}
+            </p>
+            <p className="text-base text-white/40 leading-relaxed max-w-sm font-light">
+              {aiDescription || currentFlavor.description}
+            </p>
+            <div className="flex gap-4 pt-4">
+              <button className="px-10 py-4 border border-white text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white hover:text-black transition-all">
+                ADD TO
+              </button>
+              <button className="px-10 py-4 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-transparent hover:text-white border border-white transition-all">
+                CART
               </button>
             </div>
           </div>
         </div>
 
         {/* Right: Navigation Controls */}
-        <div className="w-full md:w-auto mt-20 md:mt-0 flex md:flex-col items-center gap-10">
-          <div className="flex md:flex-col items-center gap-6 p-3 bg-white/5 backdrop-blur-3xl rounded-full border border-white/10 shadow-2xl pointer-events-auto">
-            <button 
-              onClick={() => changeFlavor("prev")}
-              className="p-4 rounded-full hover:bg-primary transition-all group bg-black/40 border border-white/5"
-            >
-              <ChevronUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform text-white" />
-            </button>
-            
-            <div className="flex md:flex-col gap-3 py-4">
-              {flavors.map((f, i) => (
-                <button
-                  key={f.id}
-                  onClick={() => {
-                    if (i === currentFlavorIndex) return;
-                    setIsLoadingFlavor(true);
-                    setTimeout(() => setCurrentFlavorIndex(i), 400);
-                    setTimeout(() => setIsLoadingFlavor(false), 800);
-                  }}
-                  className={`w-2 h-2 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-primary scale-150 shadow-[0_0_15px_rgba(var(--primary),0.8)]' : 'bg-white/20 hover:bg-white/50'}`}
-                />
-              ))}
-            </div>
-
-            <button 
-              onClick={() => changeFlavor("next")}
-              className="p-4 rounded-full hover:bg-primary transition-all group bg-black/40 border border-white/5"
-            >
-              <ChevronDown className="w-5 h-5 group-hover:translate-y-1 transition-transform text-white" />
-            </button>
+        <div className="flex flex-col items-center gap-12">
+          <div className="text-center">
+             <span className="font-headline font-bold text-7xl md:text-9xl text-white/10 leading-none">
+               {currentFlavor.index}
+             </span>
           </div>
           
-          <div className="hidden md:flex flex-col items-center gap-6">
-             <span className="text-white/20 font-headline font-bold text-[9px] tracking-[0.6em] uppercase vertical-text">
-               Scroll to Explore
-             </span>
-             <div className="w-px h-24 bg-gradient-to-b from-primary to-transparent" />
+          <div className="flex flex-col items-center gap-2">
+            <button 
+              onClick={() => changeFlavor("prev")}
+              className="group flex flex-col items-center gap-2 py-4 text-[10px] font-bold tracking-[0.2em] text-white/40 hover:text-white transition-all"
+            >
+              <ChevronUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
+              PREV
+            </button>
+            <div className="w-px h-12 bg-white/10" />
+            <button 
+              onClick={() => changeFlavor("next")}
+              className="group flex flex-col items-center gap-2 py-4 text-[10px] font-bold tracking-[0.2em] text-white/40 hover:text-white transition-all"
+            >
+              NEXT
+              <ChevronDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+            </button>
           </div>
         </div>
+      </div>
+
+      {/* Flavor Dots (Bottom Left) */}
+      <div className="absolute bottom-12 left-6 md:left-24 z-30 flex gap-3">
+        {flavors.map((f, i) => (
+          <button
+            key={f.id}
+            onClick={() => {
+              if (i === currentFlavorIndex) return;
+              setIsLoadingFlavor(true);
+              setTimeout(() => setCurrentFlavorIndex(i), 400);
+              setTimeout(() => setIsLoadingFlavor(false), 800);
+            }}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-150 shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'bg-white/20 hover:bg-white/50'}`}
+          />
+        ))}
+      </div>
+
+      {/* Socials (Bottom Center) */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-8">
+        <Instagram className="w-5 h-5 text-white/30 hover:text-white transition-colors cursor-pointer" />
+        <Twitter className="w-5 h-5 text-white/30 hover:text-white transition-colors cursor-pointer" />
+        <Facebook className="w-5 h-5 text-white/30 hover:text-white transition-colors cursor-pointer" />
+      </div>
+
+      {/* Scroll Hint (Bottom Right) */}
+      <div className="absolute bottom-12 right-6 md:right-24 z-30 flex flex-col items-center gap-4">
+        <div className="w-px h-10 bg-gradient-to-t from-white/40 to-transparent scroll-hint-line" />
+        <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-white/30">SCROLL</span>
       </div>
     </section>
   );
 }
-
-const verticalTextStyles = `
-.vertical-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-`;
