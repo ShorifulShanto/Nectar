@@ -27,21 +27,24 @@ export function OlipopHero() {
       const winHeight = window.innerHeight;
       const progress = Math.min(Math.max(scrollY / winHeight, 0), 1);
       
-      if (heroImageRef.current) {
-        const scale = 1 + progress * 0.15;
-        const opacity = 1 - progress * 1.5;
-        const yOffset = progress * -60;
-        const rotate = progress * 6;
-        heroImageRef.current.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale}) rotate(${rotate}deg)`;
-        heroImageRef.current.style.opacity = opacity.toString();
-      }
+      // Hardware accelerated scrub animation
+      requestAnimationFrame(() => {
+        if (heroImageRef.current) {
+          const scale = 1 + progress * 0.15;
+          const opacity = 1 - progress * 1.5;
+          const yOffset = progress * -60;
+          const rotate = progress * 6;
+          heroImageRef.current.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale}) rotate(${rotate}deg)`;
+          heroImageRef.current.style.opacity = opacity.toString();
+        }
 
-      if (contentRef.current) {
-        const opacity = 1 - progress * 2.5;
-        const xOffset = progress * -50;
-        contentRef.current.style.opacity = opacity.toString();
-        contentRef.current.style.transform = `translate3d(${xOffset}px, 0, 0)`;
-      }
+        if (contentRef.current) {
+          const opacity = 1 - progress * 2.5;
+          const xOffset = progress * -50;
+          contentRef.current.style.opacity = opacity.toString();
+          contentRef.current.style.transform = `translate3d(${xOffset}px, 0, 0)`;
+        }
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
