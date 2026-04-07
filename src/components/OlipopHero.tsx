@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { flavors } from "@/lib/flavor-data";
 import { ChevronUp, ChevronDown, ShoppingBag, ArrowRight } from "lucide-react";
 import { generateFlavorDescription } from "@/ai/flows/generate-flavor-description";
@@ -12,16 +11,23 @@ export function OlipopHero() {
   const [isLoadingFlavor, setIsLoadingFlavor] = useState(false);
   const [aiDescription, setAiDescription] = useState<string>("");
   const [scrollProgress, setScrollProgress] = useState(0);
+  const sectionRef = useRef<HTMLDivElement>(null);
   
   const currentFlavor = flavors[currentFlavorIndex];
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPos = window.scrollY;
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
       const winHeight = window.innerHeight;
-      setScrollProgress(Math.min(scrollPos / winHeight, 1));
+      
+      // Calculate progress based on the section's position relative to viewport
+      const progress = Math.max(0, Math.min(1, (winHeight - rect.top) / (winHeight + rect.height)));
+      setScrollProgress(progress);
     };
+
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -85,11 +91,12 @@ export function OlipopHero() {
 
   return (
     <section 
+      ref={sectionRef}
       id="product" 
       className="relative min-h-screen w-full overflow-hidden bg-black transition-all duration-1000"
       style={dynamicStyles}
     >
-      {/* Background Glow */}
+      {/* Dynamic Background Glow */}
       <div 
         className="absolute inset-0 z-0 opacity-40 transition-all duration-1000"
         style={{ 
@@ -97,29 +104,29 @@ export function OlipopHero() {
         }}
       />
 
-      {/* Cinematic WebP Video Sequence - Strictly No Static Fallback Here */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+      {/* Cinematic WebP Video Sequence - No Static Image Here */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 overflow-hidden">
         <div 
           className={`relative w-full h-full transition-all duration-1000 ease-in-out transform ${isLoadingFlavor ? 'opacity-0 scale-110 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
           style={{
-            transform: `scale(${1 + scrollProgress * 0.15}) translateY(${scrollProgress * 30}px)`
+            transform: `scale(${1.2 - scrollProgress * 0.4}) translateY(${scrollProgress * 50}px)`
           }}
         >
           <Image 
             src={currentFlavor.videoUrl} 
-            alt={currentFlavor.name} 
+            alt={`${currentFlavor.name} sequence`} 
             fill 
-            className="object-contain drop-shadow-[0_0_80px_rgba(var(--primary),0.2)]"
+            className="object-contain drop-shadow-[0_0_100px_rgba(var(--primary),0.3)]"
             unoptimized
             priority
           />
         </div>
       </div>
 
-      {/* Content Layer */}
+      {/* UI Layers */}
       <div className="relative z-20 min-h-screen w-full flex flex-col md:flex-row items-center justify-between px-6 md:px-32 py-40">
         
-        {/* Left: Branding & Story */}
+        {/* Left: Product Info */}
         <div className={`w-full md:w-1/3 transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-x-12' : 'opacity-100 translate-x-0'}`}>
           <div className="space-y-6">
             <div className="flex items-center gap-4">
@@ -146,7 +153,7 @@ export function OlipopHero() {
           </div>
         </div>
 
-        {/* Right: Flavor Selector */}
+        {/* Right: Navigation Controls */}
         <div className="w-full md:w-auto mt-20 md:mt-0 flex md:flex-col items-center gap-10">
           <div className="flex md:flex-col items-center gap-6 p-3 bg-white/5 backdrop-blur-3xl rounded-full border border-white/10 shadow-2xl pointer-events-auto">
             <button 
@@ -181,7 +188,7 @@ export function OlipopHero() {
           
           <div className="hidden md:flex flex-col items-center gap-6">
              <span className="text-white/20 font-headline font-bold text-[9px] tracking-[0.6em] uppercase vertical-text">
-               Explore Collection
+               Scroll to Explore
              </span>
              <div className="w-px h-24 bg-gradient-to-b from-primary to-transparent" />
           </div>
@@ -190,3 +197,10 @@ export function OlipopHero() {
     </section>
   );
 }
+
+const verticalTextStyles = `
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+`;

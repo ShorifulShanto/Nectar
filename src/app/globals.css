@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,20 +50,10 @@ html {
   transition-duration: 500ms;
 }
 
-.canvas-container {
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-canvas {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+/* Vertical Text Helper */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 
 /* Scrollbar Styling */

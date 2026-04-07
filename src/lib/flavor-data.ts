@@ -1,4 +1,3 @@
-
 export interface Flavor {
   id: string;
   name: string;
@@ -11,9 +10,6 @@ export interface Flavor {
   imageUrl: string;
 }
 
-// Base URL for Cloudinary assets
-const CLOUDINARY_BASE = 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto';
-
 export const flavors: Flavor[] = [
   {
     id: 'WA0022',
@@ -23,8 +19,8 @@ export const flavors: Flavor[] = [
     color: 'Green',
     hex: '#059669',
     accentHex: '#34D399',
-    imageUrl: `${CLOUDINARY_BASE}/guava.png`,
-    videoUrl: `${CLOUDINARY_BASE}/guava_webp.webp`,
+    imageUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574830/Whisk_8e13f16450d1dbca76a4a21b38cf482edr_mklm4x.png`,
+    videoUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574932/Product_mid-spin_ingredient_2026040622561-ezgif.com-video-to-webp-converter_mkh5o4.webp`,
   },
   {
     id: 'WA0023',
@@ -34,8 +30,8 @@ export const flavors: Flavor[] = [
     color: 'Light Green',
     hex: '#65A30D',
     accentHex: '#A3E635',
-    imageUrl: `${CLOUDINARY_BASE}/apple.png`,
-    videoUrl: `${CLOUDINARY_BASE}/apple_webp.webp`,
+    imageUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574830/Whisk_b27f025f2eb6153a39b448db383a25e9dr_donx23.png`,
+    videoUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574941/Product_mid-spin_ingredient_202604062252-ezgif.com-video-to-webp-converter_fvywbo.webp`,
   },
   {
     id: 'WA0024',
@@ -45,8 +41,8 @@ export const flavors: Flavor[] = [
     color: 'Pink',
     hex: '#DB2777',
     accentHex: '#F472B6',
-    imageUrl: `${CLOUDINARY_BASE}/strawberry.png`,
-    videoUrl: `${CLOUDINARY_BASE}/strawberry_webp.webp`,
+    imageUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574831/Whisk_5ded24668f3739d9d09469c17ffb60d7dr_h9mfl6.png`,
+    videoUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574957/Product_mid-spin_ingredient_202604062256-ezgif.com-video-to-webp-converter_ikcrre.webp`,
   },
   {
     id: 'WA0025',
@@ -56,8 +52,8 @@ export const flavors: Flavor[] = [
     color: 'Deep Red',
     hex: '#9F1239',
     accentHex: '#F43F5E',
-    imageUrl: `${CLOUDINARY_BASE}/cherry.png`,
-    videoUrl: `${CLOUDINARY_BASE}/cherry_webp.webp`,
+    imageUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574831/Whisk_03bddc76892ae9493a340545afadb486dr_qcfonm.png`,
+    videoUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574964/Product_mid-spin_ingredient_202604062246-ezgif.com-video-to-webp-converter_hltpqk.webp`,
   },
   {
     id: 'WA0026',
@@ -67,8 +63,8 @@ export const flavors: Flavor[] = [
     color: 'Orange',
     hex: '#EA580C',
     accentHex: '#FB923C',
-    imageUrl: `${CLOUDINARY_BASE}/orange.png`,
-    videoUrl: `${CLOUDINARY_BASE}/orange_webp.webp`,
+    imageUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574832/Whisk_b43a340c0dfc0ea9b6d461dd4ae11d27dr_mltqzc.png`,
+    videoUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574967/Product_mid-spin_ingredient_202604062257-ezgif.com-video-to-webp-converter_bw7ag2.webp`,
   },
   {
     id: 'WA0027',
@@ -78,8 +74,8 @@ export const flavors: Flavor[] = [
     color: 'Yellow',
     hex: '#CA8A04',
     accentHex: '#FACC15',
-    imageUrl: `${CLOUDINARY_BASE}/pineapple.png`,
-    videoUrl: `${CLOUDINARY_BASE}/pineapple_webp.webp`,
+    imageUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574832/Whisk_d2a583f9d8507b297ac44fe94a32dfafdr_epwoao.png`,
+    videoUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574976/Product_mid-spin_ingredient_202604062247-ezgif.com-video-to-webp-converter_dadvdu.webp`,
   },
   {
     id: 'WA0028',
@@ -89,7 +85,7 @@ export const flavors: Flavor[] = [
     color: 'Purple',
     hex: '#7C3AED',
     accentHex: '#A78BFA',
-    imageUrl: `${CLOUDINARY_BASE}/grapes.png`,
-    videoUrl: `${CLOUDINARY_BASE}/grapes_webp.webp`,
+    imageUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574836/Whisk_5680db65a5a5a4685174bce120d48be3dr_e9wmrf.png`,
+    videoUrl: `https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574979/Product_mid-spin_ingredient_202604062243-ezgif.com-video-to-webp-converter_zdssjv.webp`,
   },
 ];
