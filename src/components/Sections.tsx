@@ -23,11 +23,11 @@ export function IngredientsSection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-12 text-center md:text-left">
           <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">WHAT'S INSIDE</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">REAL INGREDIENTS<br />REAL BENEFITS</h2>
-          <p className="text-white/40 mt-4 max-w-xl font-light text-sm">Every drop starts with real, whole fruits. No concentrates, no preservatives — just nature in a bottle.</p>
+          <h2 className="text-2xl md:text-4xl font-headline font-bold leading-tight uppercase">REAL INGREDIENTS<br />REAL BENEFITS</h2>
+          <p className="text-white/40 mt-4 max-w-xl font-light text-xs md:text-sm">Every drop starts with real, whole fruits. No concentrates, no preservatives — just nature in a bottle.</p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ingredients.map((item) => (
             <div key={item.name} className="p-8 border border-white/5 bg-black/40 rounded-2xl hover:border-white/20 transition-all duration-500 group">
               <div className="mb-5 text-white/40 group-hover:text-white transition-colors">
@@ -85,7 +85,7 @@ export function ProductCollection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-12 text-center md:text-left">
           <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">OUR COLLECTION</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">SEVEN FLAVORS<br />ONE OBSESSION</h2>
+          <h2 className="text-2xl md:text-4xl font-headline font-bold leading-tight uppercase">SEVEN FLAVORS<br />ONE OBSESSION</h2>
         </div>
         
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -127,11 +127,11 @@ export function NutritionSection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid md:grid-cols-2 gap-20 items-start">
           <div className="p-8 border-[2px] border-white rounded-md max-w-[340px] mx-auto md:mx-0 shadow-[0_0_40px_rgba(255,255,255,0.02)]">
-            <h3 className="text-4xl font-bold font-headline border-b-[8px] border-white pb-1 mb-2 leading-none uppercase">Nutrition</h3>
+            <h3 className="text-3xl font-bold font-headline border-b-[8px] border-white pb-1 mb-2 leading-none uppercase">Nutrition</h3>
             <p className="text-[9px] uppercase tracking-widest text-white/40 border-b border-white/20 pb-2 mb-4">Serving Size: 1 Bottle (350ml)</p>
             <div className="flex justify-between items-end border-b-4 border-white pb-2 mb-4">
               <span className="text-[10px] font-bold uppercase tracking-widest">Calories</span>
-              <span className="text-5xl font-bold leading-none font-headline">110</span>
+              <span className="text-4xl md:text-5xl font-bold leading-none font-headline">110</span>
             </div>
             {[
               { label: "Total Fat", val: "0g" },
@@ -154,7 +154,7 @@ export function NutritionSection() {
           </div>
           
           <div className="space-y-12">
-            <h2 className="text-3xl md:text-5xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">NUTRITION<br />YOU CAN FEEL.</h2>
+            <h2 className="text-2xl md:text-5xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">NUTRITION<br />YOU CAN FEEL.</h2>
             <div className="grid gap-6">
               {[
                 { num: "01", title: "Immune Support", desc: "High Vitamin C content from real fruits helps strengthen your immune system naturally." },
@@ -181,7 +181,7 @@ export function NutritionSection() {
 export function ReviewsSection() {
   const reviews = [
     { name: "Sarah M.", flavor: "Guava Juice", rating: 5, text: "The guava flavor is absolutely incredible. Tastes exactly like fresh-cut fruits — I can't believe it comes in a bottle." },
-    { name: "James K.", flavor: "Strawberry Juice", rating: 5, text: "Strawberry is my go-to every morning. Clean ingredients, no guilt, just pure delicious fruit juice." },
+    { name: "James K.", flavor: "Apple Juice", rating: 5, text: "Apple is my go-to every morning. Clean ingredients, no guilt, just pure delicious fruit juice." },
     { name: "Priya L.", flavor: "Pineapple Juice", rating: 5, text: "Finally a juice brand that actually tastes fresh. The pineapple is my personal favorite — tropical and perfect." },
     { name: "Marcus T.", flavor: "Grape Juice", rating: 5, text: "The grape juice converted me. Deep, rich flavor — nothing like the sugary stuff. Will subscribe for life." },
   ];
@@ -191,12 +191,12 @@ export function ReviewsSection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-12 text-center">
           <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">WHAT PEOPLE SAY</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold uppercase">LOVED BY THOUSANDS</h2>
+          <h2 className="text-2xl md:text-4xl font-headline font-bold uppercase">LOVED BY THOUSANDS</h2>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-black/40 p-10 rounded-3xl border border-white/5 text-center flex flex-col justify-center items-center backdrop-blur-sm">
-            <span className="text-6xl font-headline font-bold">4.9</span>
+            <span className="text-5xl md:text-6xl font-headline font-bold">4.9</span>
             <div className="flex gap-1 my-4 text-white/80">
               {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
             </div>
@@ -234,13 +234,13 @@ export function FAQSection() {
       <div className="container mx-auto px-6 md:px-12 max-w-2xl">
         <div className="mb-12 text-center md:text-left">
           <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">QUESTIONS</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold uppercase">FREQUENTLY ASKED</h2>
+          <h2 className="text-2xl md:text-4xl font-headline font-bold uppercase">FREQUENTLY ASKED</h2>
         </div>
         
         <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, i) => (
             <AccordionItem key={i} value={`item-${i}`} className="border-white/5 px-0">
-              <AccordionTrigger className="text-sm font-headline font-bold hover:no-underline hover:text-white/60 transition-colors py-6 uppercase tracking-widest text-left">
+              <AccordionTrigger className="text-xs md:text-sm font-headline font-bold hover:no-underline hover:text-white/60 transition-colors py-6 uppercase tracking-widest text-left">
                 {faq.q}
               </AccordionTrigger>
               <AccordionContent className="text-white/40 text-xs pb-6 leading-relaxed font-light">
@@ -260,7 +260,7 @@ export function Footer() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid md:grid-cols-4 gap-16 mb-16 pb-16 border-b border-white/5">
           <div className="col-span-2">
-            <h2 className="text-3xl font-headline font-bold tracking-[0.3em] mb-4">OLLANHO</h2>
+            <h2 className="text-2xl font-headline font-bold tracking-[0.3em] mb-4">OLLANHO</h2>
             <p className="text-white/20 text-[9px] uppercase tracking-[0.4em]">Fresh Cold-Pressed Juice</p>
           </div>
           <div>
