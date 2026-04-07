@@ -19,7 +19,7 @@ export const flavors: Flavor[] = [
     description: 'A vibrant burst of tropical guava that transports you to a sun-drenched paradise with every sip.',
     color: 'Green',
     hex: '#22C55E', // Vibrant Green
-    accentHex: '#DCFCE7',
+    accentHex: '#DCFCE7', // Light Mint
     sequenceId: 'WA0022',
     videoUrl: '',
   },
@@ -30,7 +30,7 @@ export const flavors: Flavor[] = [
     description: 'Refreshing and clean, our apple soda captures the essence of a perfectly ripe orchard harvest.',
     color: 'Light Green',
     hex: '#86EFAC', // Light Green
-    accentHex: '#F0FDF4',
+    accentHex: '#F0FDF4', // Pale Green
     sequenceId: 'WA0023',
     videoUrl: '',
   },
@@ -41,7 +41,7 @@ export const flavors: Flavor[] = [
     description: 'A nostalgic journey into summer berry sweetness, balanced perfectly for a modern palate.',
     color: 'Pink',
     hex: '#EC4899', // Pink
-    accentHex: '#FCE7F3',
+    accentHex: '#FCE7F3', // Soft Pink
     sequenceId: 'WA0024',
     videoUrl: '',
   },
@@ -52,7 +52,7 @@ export const flavors: Flavor[] = [
     description: 'Bold, deep, and sophisticated. The ultimate cherry experience without the artificial guilt.',
     color: 'Deep Red',
     hex: '#991B1B', // Deep Red
-    accentHex: '#FEE2E2',
+    accentHex: '#FEE2E2', // Soft Red
     sequenceId: 'WA0025',
     videoUrl: '',
   },
@@ -63,7 +63,7 @@ export const flavors: Flavor[] = [
     description: 'Citrus energy refined. A bright, effervescent orange flavor that pops with functional goodness.',
     color: 'Orange',
     hex: '#F97316', // Orange
-    accentHex: '#FFEDD5',
+    accentHex: '#FFEDD5', // Soft Orange
     sequenceId: 'WA0026',
     videoUrl: '',
   },
@@ -74,7 +74,7 @@ export const flavors: Flavor[] = [
     description: 'Pure island vibes. The golden sweetness of pineapple meets refreshing functional hydration.',
     color: 'Yellow',
     hex: '#EAB308', // Yellow
-    accentHex: '#FEF9C3',
+    accentHex: '#FEF9C3', // Soft Yellow
     sequenceId: 'WA0027',
     videoUrl: '',
   },
@@ -85,7 +85,7 @@ export const flavors: Flavor[] = [
     description: 'Velvety grape notes with a smooth finish. A premium take on a beloved classic soda flavor.',
     color: 'Purple',
     hex: '#8B5CF6', // Purple
-    accentHex: '#F5F3FF',
+    accentHex: '#F5F3FF', // Soft Purple
     sequenceId: 'WA0028',
     videoUrl: '',
   },
