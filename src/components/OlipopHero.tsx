@@ -22,29 +22,33 @@ export function OlipopHero() {
   const currentFlavor = flavors[currentFlavorIndex];
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const winHeight = window.innerHeight;
-      const progress = Math.min(Math.max(scrollY / winHeight, 0), 1);
-      
-      // Hardware accelerated scrub animation
-      requestAnimationFrame(() => {
-        if (heroImageRef.current) {
-          const scale = 1 + progress * 0.15;
-          const opacity = 1 - progress * 1.5;
-          const yOffset = progress * -60;
-          const rotate = progress * 6;
-          heroImageRef.current.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale}) rotate(${rotate}deg)`;
-          heroImageRef.current.style.opacity = opacity.toString();
-        }
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const winHeight = window.innerHeight;
+          const progress = Math.min(Math.max(scrollY / (winHeight * 0.8), 0), 1);
+          
+          if (heroImageRef.current) {
+            // High performance scrub simulation (transformations)
+            const scale = 1 + progress * 0.2;
+            const opacity = 1 - progress * 1.8;
+            const yOffset = progress * -80;
+            heroImageRef.current.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale})`;
+            heroImageRef.current.style.opacity = opacity.toFixed(3);
+          }
 
-        if (contentRef.current) {
-          const opacity = 1 - progress * 2.5;
-          const xOffset = progress * -50;
-          contentRef.current.style.opacity = opacity.toString();
-          contentRef.current.style.transform = `translate3d(${xOffset}px, 0, 0)`;
-        }
-      });
+          if (contentRef.current) {
+            const opacity = 1 - progress * 2.5;
+            const xOffset = progress * -40;
+            contentRef.current.style.opacity = opacity.toFixed(3);
+            contentRef.current.style.transform = `translate3d(${xOffset}px, 0, 0)`;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -102,18 +106,18 @@ export function OlipopHero() {
       id="hero" 
       className="relative h-screen w-full overflow-hidden bg-black"
     >
-      {/* Background WebP Animation - Hardware Accelerated */}
+      {/* Background WebP Animation - Hardware Accelerated Scrub Simulation */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-opacity duration-700 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95 blur-xl' : 'opacity-100'}`}
+          className={`relative w-full h-full transition-opacity duration-700 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100'}`}
           style={{ transform: 'translate3d(0,0,0)' }}
         >
           <Image 
             src={currentFlavor.videoUrl} 
-            alt={`${currentFlavor.name} animation`} 
+            alt={`${currentFlavor.name} sequence`} 
             fill 
-            className="object-contain p-12 md:p-32"
+            className="object-contain p-8 md:p-24"
             unoptimized
             priority
           />
@@ -127,32 +131,32 @@ export function OlipopHero() {
         {/* Left Content */}
         <div 
           ref={contentRef}
-          className={`max-w-lg transition-all duration-700 will-change-transform ${isLoadingFlavor ? 'opacity-0 -translate-x-8 blur-md' : 'opacity-100 translate-x-0 blur-0'}`}
+          className={`max-w-md transition-all duration-700 will-change-transform ${isLoadingFlavor ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'}`}
         >
-          <div className="space-y-4 md:space-y-5">
-            <p className="text-white/30 font-bold tracking-[0.4em] uppercase text-[9px]">
+          <div className="space-y-4">
+            <p className="text-white/30 font-bold tracking-[0.4em] uppercase text-[8px]">
               OLLANHO — FRESH PRESSED
             </p>
             <h1 
-              className="text-6xl md:text-7xl lg:text-8xl font-headline font-bold leading-[0.85] tracking-tighter transition-colors duration-500 uppercase"
+              className="text-5xl md:text-6xl lg:text-7xl font-headline font-bold leading-[0.85] tracking-tighter transition-colors duration-500 uppercase"
               style={{ color: currentFlavor.accentHex }}
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-[10px] md:text-xs font-headline tracking-[0.3em] text-white/40 uppercase">
+            <p className="text-[9px] md:text-[10px] font-headline tracking-[0.3em] text-white/40 uppercase">
               {currentFlavor.subtitle}
             </p>
-            <p className="text-[9px] md:text-[10px] text-white/30 leading-relaxed max-w-[280px] font-light">
+            <p className="text-[9px] md:text-[10px] text-white/30 leading-relaxed max-w-[260px] font-light">
               {currentFlavor.description}
             </p>
-            <div className="flex gap-4 pt-4 md:pt-6">
+            <div className="flex gap-3 pt-4">
               <button 
                 onClick={addToCart}
-                className="px-8 py-3 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[9px] hover:bg-neutral-200 transition-all"
+                className="px-6 py-2.5 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[8px] hover:bg-neutral-200 transition-all"
               >
                 ADD TO CART
               </button>
-              <button className="px-8 py-3 border border-white/20 text-white font-bold rounded-full uppercase tracking-widest text-[9px] hover:bg-white/10 transition-all backdrop-blur-sm">
+              <button className="px-6 py-2.5 border border-white/20 text-white font-bold rounded-full uppercase tracking-widest text-[8px] hover:bg-white/10 transition-all backdrop-blur-sm">
                 $12.00
               </button>
             </div>
@@ -160,9 +164,9 @@ export function OlipopHero() {
         </div>
 
         {/* Right Navigation */}
-        <div className="flex flex-col items-center gap-8 md:gap-12">
+        <div className="flex flex-col items-center gap-6 md:gap-8">
           <div className="text-center">
-             <span className="font-headline font-bold text-6xl md:text-8xl text-white/5 leading-none select-none">
+             <span className="font-headline font-bold text-5xl md:text-7xl text-white/5 leading-none select-none">
                {currentFlavor.index}
              </span>
           </div>
@@ -170,25 +174,25 @@ export function OlipopHero() {
           <div className="flex flex-col items-center gap-2">
             <button 
               onClick={() => changeFlavor("prev")}
-              className="group flex flex-col items-center gap-1 py-2 text-[8px] md:text-[9px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-1 py-1 text-[8px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
             >
-              <ChevronUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
+              <ChevronUp className="w-3.5 h-3.5 group-hover:-translate-y-1 transition-transform" />
               PREV
             </button>
-            <div className="w-px h-8 bg-white/10" />
+            <div className="w-px h-6 bg-white/10" />
             <button 
               onClick={() => changeFlavor("next")}
-              className="group flex flex-col items-center gap-1 py-2 text-[8px] md:text-[9px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-1 py-1 text-[8px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
             >
               NEXT
-              <ChevronDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
+              <ChevronDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform" />
             </button>
           </div>
         </div>
       </div>
 
       {/* Indicators */}
-      <div className="absolute bottom-10 left-6 md:left-24 z-30 flex gap-2">
+      <div className="absolute bottom-10 left-6 md:left-24 z-30 flex gap-1.5">
         {flavors.map((f, i) => (
           <button
             key={f.id}
@@ -200,20 +204,20 @@ export function OlipopHero() {
                 setIsLoadingFlavor(false);
               }, 400);
             }}
-            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-150 shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'bg-white/10 hover:bg-white/40'}`}
+            className={`w-1 h-1 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-150' : 'bg-white/10'}`}
           />
         ))}
       </div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-6">
-        <Instagram className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Twitter className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Facebook className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-4">
+        <Instagram className="w-3.5 h-3.5 text-white/20 hover:text-white transition-colors cursor-pointer" />
+        <Twitter className="w-3.5 h-3.5 text-white/20 hover:text-white transition-colors cursor-pointer" />
+        <Facebook className="w-3.5 h-3.5 text-white/20 hover:text-white transition-colors cursor-pointer" />
       </div>
 
-      <div className="absolute bottom-10 right-6 md:right-24 z-30 flex flex-col items-center gap-3">
-        <div className="w-px h-8 bg-gradient-to-t from-white/20 to-transparent scroll-hint-line" />
-        <span className="text-[7px] font-bold tracking-[0.5em] uppercase text-white/20">SCROLL</span>
+      <div className="absolute bottom-10 right-6 md:right-24 z-30 flex flex-col items-center gap-2">
+        <div className="w-px h-6 bg-gradient-to-t from-white/20 to-transparent scroll-hint-line" />
+        <span className="text-[6px] font-bold tracking-[0.5em] uppercase text-white/20">SCROLL</span>
       </div>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />

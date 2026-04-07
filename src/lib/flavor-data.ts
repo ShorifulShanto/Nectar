@@ -52,7 +52,7 @@ export const flavors: Flavor[] = [
     id: 'WA0025',
     index: '04',
     name: 'CHERRY',
-    subtitle: 'DEEP RED',
+    subtitle: 'DEEP PINK-RED',
     description: 'Bold and beautiful. A rich cherry profile with a slightly tart finish, delivering a powerful antioxidant boost.',
     color: 'Deep Red',
     hex: '#b71c1c',
