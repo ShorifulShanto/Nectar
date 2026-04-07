@@ -9,8 +9,8 @@ import Image from "next/image";
 
 export function IngredientsSection() {
   const ingredients = [
-    { name: "Real Fruit Juices", benefit: "Naturally sourced flavors from whole fruits", icon: Leaf },
-    { name: "Sparkling Water", benefit: "Pure hydration with a refreshing fizz", icon: Waves },
+    { name: "Real Fruits", benefit: "Naturally sourced flavors from whole fruits", icon: Leaf },
+    { name: "Pure Water", benefit: "Pure hydration with a refreshing fizz", icon: Waves },
     { name: "No Additives", benefit: "Zero artificial colors, flavors, or secrets", icon: ShieldCheck },
     { name: "Natural Sweetness", benefit: "Balanced with plant-based stevia and inulin", icon: Droplets },
     { name: "Vitamins & Prebiotics", benefit: "Gut health support with functional roots", icon: Zap },
@@ -79,7 +79,6 @@ export function ProductCollection() {
             <div key={flavor.id} className="group relative">
                <div 
                  className="aspect-[2/3] rounded-3xl bg-neutral-900 overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-700 p-6 flex flex-col items-center justify-between"
-                 style={{ '--hover-color': flavor.hex } as React.CSSProperties}
                >
                   <div className="relative w-full h-full transform group-hover:-translate-y-4 transition-transform duration-700">
                     <Image 

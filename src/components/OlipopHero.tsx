@@ -97,19 +97,19 @@ export function OlipopHero() {
         }}
       />
 
-      {/* Cinematic WebP Video Sequence - NO static image here */}
+      {/* Cinematic WebP Video Sequence - Strictly No Static Fallback Here */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
         <div 
           className={`relative w-full h-full transition-all duration-1000 ease-in-out transform ${isLoadingFlavor ? 'opacity-0 scale-110 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
           style={{
-            transform: `scale(${1 + scrollProgress * 0.2}) translateY(${scrollProgress * 50}px)`
+            transform: `scale(${1 + scrollProgress * 0.15}) translateY(${scrollProgress * 30}px)`
           }}
         >
           <Image 
             src={currentFlavor.videoUrl} 
             alt={currentFlavor.name} 
             fill 
-            className="object-contain md:object-cover drop-shadow-[0_0_100px_rgba(var(--primary),0.3)]"
+            className="object-contain drop-shadow-[0_0_80px_rgba(var(--primary),0.2)]"
             unoptimized
             priority
           />
