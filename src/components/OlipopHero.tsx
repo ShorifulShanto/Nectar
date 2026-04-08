@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useEffect, useState, useRef } from "react";
 import { flavors } from "@/lib/flavor-data";
 import { ChevronUp, ChevronDown, Instagram, Twitter, Facebook } from "lucide-react";
 import Image from "next/image";
-import { useUser, useFirestore } from "@/firebase";
+import { useUser, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { collection, doc, setDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { AuthModal } from "./AuthModal";
@@ -20,6 +21,17 @@ export function OlipopHero() {
   const db = useFirestore();
   const { toast } = useToast();
   const currentFlavor = flavors[currentFlavorIndex];
+
+  // Real-time product data (price, inventory)
+  const productRef = useMemoFirebase(() => {
+    if (!db) return null;
+    return doc(db, "products", currentFlavor.id);
+  }, [db, currentFlavor.id]);
+
+  const { data: productData } = useDoc(productRef);
+
+  const price = productData?.price ?? 12.00;
+  const isSoldOut = productData?.amount === 0;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,7 +61,7 @@ export function OlipopHero() {
       setIsAuthOpen(true);
       return;
     }
-    if (!db) return;
+    if (!db || isSoldOut) return;
 
     try {
       const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
@@ -67,7 +79,7 @@ export function OlipopHero() {
           id: newRef.id,
           productId: currentFlavor.id,
           quantity: 1,
-          priceAtAddToCart: 12,
+          priceAtAddToCart: price,
           cartId: 'cart'
         });
       }
@@ -140,7 +152,7 @@ export function OlipopHero() {
               {currentFlavor.subtitle}
             </p>
             <p className="text-[10px] md:text-[11px] text-white/40 leading-relaxed max-w-[300px] font-light">
-              {currentFlavor.description}
+              {productData?.description || currentFlavor.description}
             </p>
             
             <div className="flex flex-wrap gap-2 pt-2">
@@ -152,16 +164,17 @@ export function OlipopHero() {
             <div className="flex gap-4 pt-8">
               <button 
                 onClick={addToCart}
-                style={{ backgroundColor: currentFlavor.accentHex }}
-                className="px-8 py-4 text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] active:scale-95"
+                disabled={isSoldOut}
+                style={{ backgroundColor: isSoldOut ? '#333' : currentFlavor.accentHex }}
+                className={`px-8 py-4 text-black font-bold rounded-full uppercase tracking-widest text-[10px] transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] active:scale-95 ${isSoldOut ? 'cursor-not-allowed' : 'hover:scale-105'}`}
               >
-                ORDER NOW →
+                {isSoldOut ? 'SOLD OUT' : 'ORDER NOW →'}
               </button>
               <button 
                 style={{ borderColor: `${currentFlavor.accentHex}30`, color: currentFlavor.accentHex }}
                 className="px-8 py-4 border bg-white/5 text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all backdrop-blur-sm"
               >
-                $12.00
+                ${price.toFixed(2)}
               </button>
             </div>
           </div>

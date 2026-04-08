@@ -1,11 +1,12 @@
+
 "use client";
 
 import { useState } from "react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Star, Leaf, Waves, ShieldCheck, Droplets, Zap, Wind, Plus, Send, Instagram, Twitter, Facebook } from "lucide-react";
-import { flavors } from "@/lib/flavor-data";
+import { flavors, Flavor } from "@/lib/flavor-data";
 import Image from "next/image";
-import { useUser, useFirestore } from "@/firebase";
+import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
 import { collection, doc, setDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
@@ -51,15 +52,31 @@ export function ProductCollection() {
   const db = useFirestore();
   const { toast } = useToast();
 
-  const handleAddToCart = async (flavorId: string, flavorName: string) => {
+  const productsQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return collection(db, "products");
+  }, [db]);
+
+  const { data: dbProducts } = useCollection(productsQuery);
+
+  const handleAddToCart = async (flavor: Flavor) => {
     if (!user || !db) {
       toast({ title: "Please sign in to shop", description: "You need an account to add items to cart." });
       return;
     }
 
+    const productRecord = dbProducts?.find(p => p.id === flavor.id);
+    const price = productRecord?.price ?? 12.00;
+    const isSoldOut = productRecord?.amount === 0;
+
+    if (isSoldOut) {
+      toast({ variant: "destructive", title: "Sold Out", description: "This flavor is currently unavailable." });
+      return;
+    }
+
     try {
       const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
-      const q = query(cartItemsRef, where("productId", "==", flavorId));
+      const q = query(cartItemsRef, where("productId", "==", flavor.id));
       const snap = await getDocs(q);
 
       if (!snap.empty) {
@@ -71,9 +88,9 @@ export function ProductCollection() {
         const newRef = doc(cartItemsRef);
         await setDoc(newRef, {
           id: newRef.id,
-          productId: flavorId,
+          productId: flavor.id,
           quantity: 1,
-          priceAtAddToCart: 12,
+          priceAtAddToCart: price,
           cartId: 'cart'
         });
       }
@@ -84,12 +101,12 @@ export function ProductCollection() {
         type: "cart_addition",
         userId: user.uid,
         userEmail: user.email,
-        payload: { productId: flavorId, flavorName: flavorName },
+        payload: { productId: flavor.id, flavorName: flavor.name },
         timestamp: new Date().toISOString(),
         createdAt: serverTimestamp()
       });
 
-      toast({ title: `${flavorName} added to cart.` });
+      toast({ title: `${flavor.name} added to cart.` });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Error", description: e.message });
     }
@@ -104,32 +121,47 @@ export function ProductCollection() {
         </div>
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {flavors.map((flavor) => (
-            <div key={flavor.id} className="group relative">
-               <div className="aspect-[4/5] rounded-2xl bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-4 flex flex-col items-center justify-center group-hover:border-white/10 transition-all duration-700 shadow-xl">
-                  <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-700">
-                    <Image 
-                      src={flavor.imageUrl} 
-                      alt={flavor.name} 
-                      fill 
-                      className="object-contain p-2"
-                    />
-                  </div>
-                  <button 
-                    onClick={() => handleAddToCart(flavor.id, flavor.name)}
-                    className="absolute bottom-4 right-4 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-2xl"
-                  >
-                    <Plus size={18} />
-                  </button>
-               </div>
-               <div className="text-center md:text-left px-2">
-                 <h4 className="text-[10px] font-bold tracking-[0.25em] uppercase text-white/80 mb-1">
-                   {flavor.name}
-                 </h4>
-                 <p className="text-[8px] text-white/30 uppercase tracking-widest font-medium">$12.00 — 350ml</p>
-               </div>
-            </div>
-          ))}
+          {flavors.map((flavor) => {
+            const productRecord = dbProducts?.find(p => p.id === flavor.id);
+            const isSoldOut = productRecord?.amount === 0;
+            const price = productRecord?.price ?? 12.00;
+
+            return (
+              <div key={flavor.id} className="group relative">
+                 <div className="aspect-[4/5] rounded-2xl bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-4 flex flex-col items-center justify-center group-hover:border-white/10 transition-all duration-700 shadow-xl relative">
+                    {isSoldOut && (
+                      <div className="absolute top-4 left-4 z-10 bg-red-600 text-white text-[8px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest shadow-lg">
+                        Sold Out
+                      </div>
+                    )}
+                    <div className={`relative w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
+                      <Image 
+                        src={flavor.imageUrl} 
+                        alt={flavor.name} 
+                        fill 
+                        className="object-contain p-2"
+                      />
+                    </div>
+                    {!isSoldOut && (
+                      <button 
+                        onClick={() => handleAddToCart(flavor)}
+                        className="absolute bottom-4 right-4 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-2xl"
+                      >
+                        <Plus size={18} />
+                      </button>
+                    )}
+                 </div>
+                 <div className="text-center md:text-left px-2">
+                   <h4 className={`text-[10px] font-bold tracking-[0.25em] uppercase mb-1 ${isSoldOut ? 'text-white/20' : 'text-white/80'}`}>
+                     {flavor.name}
+                   </h4>
+                   <p className="text-[8px] text-white/30 uppercase tracking-widest font-medium">
+                     ${price.toFixed(2)} — 350ml
+                   </p>
+                 </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,104 +1,44 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /**
-     * SECURITY RULES DOCUMENTATION
-     *
-     * Core Philosophy: 
-     * This ruleset implements a robust commerce security model centered on strict user-ownership 
-     * and public read-only access for product catalogs. Personal data like profiles, carts, 
-     * and orders are siloed under user-specific paths to ensure privacy and high performance.
-     *
-     * Data Structure:
-     * - /users/{userId}: Private user profile, cart, and order history.
-     * - /central_hub/{entryId}: Log of all site data and activities (Admin only read).
-     */
-
-    // --- Global Helper Functions ---
-
-    /** Checks if the request is from an authenticated user. */
     function isSignedIn() {
       return request.auth != null;
     }
 
-    /** Checks if the authenticated user matches the provided ID. */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    /** Checks if the user is an owner and the document exists (for update/delete). */
-    function isExistingOwner(userId) {
-      return resource != null && isOwner(userId);
-    }
-
-    /** Checks if the user has an administrative role. */
     function isAdmin() {
       return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
     }
 
-    // --- Collection Rules ---
-
-    /**
-     * @description Rules for the Central Hub logging.
-     * @path /central_hub/{entryId}
-     * @allow (create) for any signed-in user or anonymous logger.
-     * @principle Allows tracking of user actions while restricting read access to admins.
-     */
     match /central_hub/{entryId} {
-      allow create: if true; // Allow logging from any source for analytics
+      allow create: if true;
       allow get, list: if isAdmin();
       allow update, delete: if isAdmin();
     }
 
-    /**
-     * @description Rules for UserProfile documents.
-     * @path /users/{userId}
-     */
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /users/{userId} {
       allow get: if isOwner(userId);
       allow list: if isAdmin();
       allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-      allow delete: if isExistingOwner(userId);
+      allow update: if isOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isOwner(userId);
 
       match /cart/{cartId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && request.resource.data.userId == userId;
-        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-        allow delete: if isExistingOwner(userId);
-
-        match /items/{cartItemId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update: if isExistingOwner(userId);
-          allow delete: if isExistingOwner(userId);
+        allow read, write: if isOwner(userId);
+        match /items/{itemId} {
+          allow read, write: if isOwner(userId);
         }
       }
-
-      match /orders/{orderId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && request.resource.data.userId == userId;
-        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-        allow delete: if isExistingOwner(userId);
-      }
-    }
-
-    match /products/{productId} {
-      allow get, list: if true;
-      allow create, update, delete: if isAdmin();
-
-      match /reviews/{reviewId} {
-        allow get, list: if true;
-        allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-        allow update: if isExistingOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId;
-        allow delete: if isExistingOwner(resource.data.userId);
-      }
-    }
-
-    match /faqs/{faqId} {
-      allow get, list: if true;
-      allow create, update, delete: if isAdmin();
     }
   }
 }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -35,18 +36,21 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     const userRef = doc(db, "users", user.uid);
     const snap = await getDoc(userRef);
     
-    if (!snap.exists()) {
-      await setDoc(userRef, {
-        id: user.uid,
-        email: user.email,
+    // Always update/create to ensure all information is present
+    await setDoc(userRef, {
+      id: user.uid,
+      email: user.email,
+      updatedAt: serverTimestamp(),
+      ...(snap.exists() ? {} : {
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
         firstName: "",
         lastName: "",
         phoneNumber: "",
         location: ""
-      });
+      })
+    }, { merge: true });
 
+    if (!snap.exists()) {
       const hubRef = doc(db, "central_hub", `signup_${user.uid}_${Date.now()}`);
       await setDoc(hubRef, {
         id: hubRef.id,
