@@ -3,17 +3,20 @@
 
 import { useState } from "react";
 import { useFirestore, useCollection } from "@/firebase";
-import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, updateDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Search, ArrowLeft } from "lucide-react";
+import { Trash2, Edit, Search, ArrowLeft, Database, Package, Activity, Save, RefreshCw } from "lucide-react";
 import { useMemoFirebase } from "@/firebase/provider";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
+import { flavors } from "@/lib/flavor-data";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminDashboard() {
   const [search, setSearch] = useState("");
+  const [isSyncing, setIsSyncing] = useState(false);
   const db = useFirestore();
   const { toast } = useToast();
 
@@ -22,34 +25,66 @@ export default function AdminDashboard() {
     return collection(db, "central_hub");
   }, [db]);
 
-  const { data: entries, isLoading } = useCollection(hubQuery);
+  const productsQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return collection(db, "products");
+  }, [db]);
 
-  const filteredEntries = entries?.filter((entry) => 
+  const { data: entries, isLoading: isHubLoading } = useCollection(hubQuery);
+  const { data: dbProducts, isLoading: isProductsLoading } = useCollection(productsQuery);
+
+  const filteredEntries = entries?.sort((a, b) => {
+    const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+    const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+    return timeB - timeA;
+  }).filter((entry) => 
     entry.userEmail?.toLowerCase().includes(search.toLowerCase()) ||
-    entry.type?.toLowerCase().includes(search.toLowerCase()) ||
-    entry.id?.toLowerCase().includes(search.toLowerCase())
+    entry.type?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = async (id: string) => {
+  const handleSyncProducts = async () => {
+    if (!db) return;
+    setIsSyncing(true);
+    try {
+      for (const flavor of flavors) {
+        const productRef = doc(db, "products", flavor.id);
+        await setDoc(productRef, {
+          id: flavor.id,
+          name: flavor.name,
+          price: 12.00,
+          amount: 50,
+          description: flavor.description,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      }
+      toast({ title: "Products Initialized", description: "All flavors have been synced to Firestore." });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "Sync Failed", description: e.message });
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleUpdateProduct = async (id: string, field: string, value: any) => {
+    if (!db) return;
+    try {
+      await updateDoc(doc(db, "products", id), {
+        [field]: value,
+        updatedAt: serverTimestamp()
+      });
+      toast({ title: "Product Updated", description: `${field} changed successfully.` });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "Update Failed", description: e.message });
+    }
+  };
+
+  const handleDeleteEntry = async (id: string) => {
     if (!db) return;
     try {
       await deleteDoc(doc(db, "central_hub", id));
       toast({ title: "Entry deleted" });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Delete failed", description: e.message });
-    }
-  };
-
-  const handleEdit = async (id: string, currentType: string) => {
-    if (!db) return;
-    const newType = prompt("Update Entry Type:", currentType);
-    if (newType && newType !== currentType) {
-      try {
-        await updateDoc(doc(db, "central_hub", id), { type: newType });
-        toast({ title: "Entry updated" });
-      } catch (e: any) {
-        toast({ variant: "destructive", title: "Update failed", description: e.message });
-      }
     }
   };
 
@@ -62,83 +97,151 @@ export default function AdminDashboard() {
             <Link href="/" className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/40 hover:text-white mb-4 transition-colors">
               <ArrowLeft size={12} /> Back to Site
             </Link>
-            <h1 className="text-4xl font-headline font-bold tracking-tight uppercase">Central Hub</h1>
-            <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] mt-2">Admin Data Management</p>
+            <h1 className="text-4xl font-headline font-bold tracking-tight uppercase">Admin Hub</h1>
+            <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] mt-2">Data Management & Controls</p>
           </div>
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-            <Input 
-              placeholder="SEARCH ENTRIES..." 
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-neutral-900 border-white/5 pl-10 h-11 text-[10px] tracking-widest uppercase focus:ring-white/10"
-            />
+          
+          <div className="flex gap-4 w-full md:w-auto">
+            <Button 
+              onClick={handleSyncProducts} 
+              disabled={isSyncing}
+              variant="outline"
+              className="border-white/10 bg-white/5 uppercase tracking-widest text-[9px] h-11 px-6 rounded-full hover:bg-white hover:text-black transition-all"
+            >
+              <RefreshCw size={14} className={`mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
+              Sync Flavors to DB
+            </Button>
+            <div className="relative flex-1 md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+              <Input 
+                placeholder="SEARCH..." 
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="bg-neutral-900 border-white/5 pl-10 h-11 text-[10px] tracking-widest uppercase focus:ring-white/10"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="bg-neutral-950 border border-white/5 rounded-xl overflow-hidden shadow-2xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-neutral-900/50 border-b border-white/5">
-                  <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40">ID</th>
-                  <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40">Type</th>
-                  <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40">User Email</th>
-                  <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40">Timestamp</th>
-                  <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {isLoading ? (
-                  <tr>
-                    <td colSpan={5} className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Loading Data Hub...</td>
-                  </tr>
-                ) : filteredEntries && filteredEntries.length > 0 ? (
-                  filteredEntries.map((entry, i) => (
-                    <tr key={entry.id} className={`${i % 2 === 0 ? 'bg-black/20' : 'bg-transparent'} hover:bg-white/5 transition-colors group`}>
-                      <td className="p-4 font-mono text-[9px] text-white/30">{entry.id.slice(0, 8)}...</td>
-                      <td className="p-4">
-                        <span className={`px-2 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest ${
-                          entry.type === 'signup' ? 'bg-blue-500/10 text-blue-400' :
-                          entry.type === 'cart_addition' ? 'bg-green-500/10 text-green-400' :
-                          'bg-neutral-800 text-white/60'
-                        }`}>
-                          {entry.type}
-                        </span>
-                      </td>
-                      <td className="p-4 text-[10px] font-medium text-white/80">{entry.userEmail || 'ANONYMOUS'}</td>
-                      <td className="p-4 text-[10px] text-white/40">
-                        {entry.timestamp ? new Date(entry.timestamp).toLocaleString() : 'N/A'}
-                      </td>
-                      <td className="p-4 text-right space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 text-white/40 hover:text-white"
-                          onClick={() => handleEdit(entry.id, entry.type)}
-                        >
-                          <Edit size={14} />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 text-white/40 hover:text-destructive"
-                          onClick={() => handleDelete(entry.id)}
-                        >
-                          <Trash2 size={14} />
-                        </Button>
-                      </td>
+        <Tabs defaultValue="products" className="w-full">
+          <TabsList className="bg-neutral-900/50 border border-white/5 p-1 rounded-full mb-8">
+            <TabsTrigger value="products" className="rounded-full px-8 py-2 text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-black">
+              <Package size={14} className="mr-2" /> Catalog
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="rounded-full px-8 py-2 text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-black">
+              <Activity size={14} className="mr-2" /> Activity Log
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="products">
+            <div className="grid grid-cols-1 gap-4">
+              {isProductsLoading ? (
+                <div className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Loading Catalog...</div>
+              ) : dbProducts && dbProducts.length > 0 ? (
+                dbProducts.map((product) => (
+                  <div key={product.id} className="bg-neutral-950 border border-white/5 rounded-xl p-6 flex flex-col md:flex-row gap-6 items-center">
+                    <div className="w-16 h-16 bg-neutral-900 rounded-lg flex items-center justify-center font-headline font-bold text-white/20 text-xl">
+                      {product.name.slice(0, 1).toUpperCase()}
+                    </div>
+                    <div className="flex-1 space-y-1">
+                      <h4 className="text-sm font-bold uppercase tracking-widest">{product.name}</h4>
+                      <p className="text-[10px] text-white/40 font-mono">{product.id}</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
+                      <div className="space-y-2">
+                        <label className="text-[8px] uppercase tracking-widest text-white/20">Price ($)</label>
+                        <Input 
+                          type="number"
+                          step="0.01"
+                          defaultValue={product.price}
+                          onBlur={(e) => handleUpdateProduct(product.id, 'price', parseFloat(e.target.value))}
+                          className="bg-neutral-900 border-white/5 h-9 text-[10px]"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[8px] uppercase tracking-widest text-white/20">Inventory (Qty)</label>
+                        <Input 
+                          type="number"
+                          defaultValue={product.amount}
+                          onBlur={(e) => handleUpdateProduct(product.id, 'amount', parseInt(e.target.value))}
+                          className={`bg-neutral-900 border-white/5 h-9 text-[10px] ${product.amount === 0 ? 'text-red-500 font-bold' : ''}`}
+                        />
+                      </div>
+                      <div className="space-y-2 col-span-2 md:col-span-1">
+                        <label className="text-[8px] uppercase tracking-widest text-white/20">Status</label>
+                        <div className={`h-9 px-4 rounded-md flex items-center text-[9px] font-bold uppercase tracking-widest ${product.amount > 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
+                          {product.amount > 0 ? 'Available' : 'Sold Out'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-20 text-center border border-dashed border-white/10 rounded-xl bg-neutral-950">
+                  <p className="text-white/20 uppercase tracking-widest text-[10px] mb-6">Database is empty.</p>
+                  <Button onClick={handleSyncProducts} className="bg-white text-black rounded-full uppercase text-[10px] tracking-widest font-bold">Initialize Catalog</Button>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="activity">
+            <div className="bg-neutral-950 border border-white/5 rounded-xl overflow-hidden shadow-2xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-neutral-900/50 border-b border-white/5">
+                      <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40">Type</th>
+                      <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40">User</th>
+                      <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40">Timestamp</th>
+                      <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-white/40 text-right">Action</th>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="p-20 text-center text-white/20 uppercase tracking-widest text-[10px]">No records found.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {isHubLoading ? (
+                      <tr>
+                        <td colSpan={4} className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Loading Logs...</td>
+                      </tr>
+                    ) : filteredEntries && filteredEntries.length > 0 ? (
+                      filteredEntries.map((entry, i) => (
+                        <tr key={entry.id} className={`${i % 2 === 0 ? 'bg-black/20' : 'bg-transparent'} hover:bg-white/5 transition-colors group`}>
+                          <td className="p-4">
+                            <span className={`px-2 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest ${
+                              entry.type === 'signup' ? 'bg-blue-500/10 text-blue-400' :
+                              entry.type === 'cart_addition' ? 'bg-green-500/10 text-green-400' :
+                              'bg-neutral-800 text-white/60'
+                            }`}>
+                              {entry.type}
+                            </span>
+                          </td>
+                          <td className="p-4 text-[10px] font-medium text-white/80">{entry.userEmail || 'ANONYMOUS'}</td>
+                          <td className="p-4 text-[10px] text-white/40">
+                            {entry.timestamp ? new Date(entry.timestamp).toLocaleString() : 'N/A'}
+                          </td>
+                          <td className="p-4 text-right">
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 text-white/40 hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => handleDeleteEntry(entry.id)}
+                            >
+                              <Trash2 size={14} />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="p-20 text-center text-white/20 uppercase tracking-widest text-[10px]">No records found.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
