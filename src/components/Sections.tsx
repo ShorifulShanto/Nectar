@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -130,7 +131,7 @@ export function ProductCollection() {
 
                 return (
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start">
-                     <div className="aspect-square w-full max-w-[320px] rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-10 mb-6 flex flex-col items-center justify-center group-hover:border-primary/20 transition-all duration-700 shadow-2xl relative">
+                     <div className="aspect-square w-full max-w-[320px] rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
                         {/* Dynamic Glow Background */}
                         <div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[40px] pointer-events-none"
@@ -142,7 +143,7 @@ export function ProductCollection() {
                             Sold Out
                           </div>
                         )}
-                        <div className={`relative w-full h-full transform group-hover:scale-110 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
+                        <div className={`relative w-full h-full p-4 transform group-hover:scale-110 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
                           <Image 
                             src={product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600'} 
                             alt={product.name} 
