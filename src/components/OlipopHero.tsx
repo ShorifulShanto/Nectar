@@ -21,7 +21,6 @@ export function OlipopHero() {
   const { toast } = useToast();
   const currentFlavor = flavors[currentFlavorIndex];
 
-  // High-performance scroll scrubbing with direct DOM manipulation
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -29,7 +28,6 @@ export function OlipopHero() {
       const progress = Math.min(Math.max(scrollY / (winHeight * 0.8), 0), 1);
       
       if (heroImageRef.current) {
-        // Tied scale, translation and rotation to scroll speed (scrub)
         const scale = 1 + progress * 0.15;
         const opacity = 1 - progress * 1.5;
         const yOffset = progress * -60;
@@ -78,7 +76,6 @@ export function OlipopHero() {
         });
       }
       
-      // Central Hub Logging
       const hubRef = doc(collection(db, "central_hub"));
       await setDoc(hubRef, {
         id: hubRef.id,
@@ -150,14 +147,25 @@ export function OlipopHero() {
             <p className="text-[10px] md:text-[11px] text-white/30 leading-relaxed max-w-[280px] font-light">
               {currentFlavor.description}
             </p>
+            
+            <div className="flex flex-wrap gap-2 pt-2">
+              <span className="px-3 py-1 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/40">Cold Pressed</span>
+              <span className="px-3 py-1 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/40">Vit C</span>
+              <span className="px-3 py-1 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/40">No Sugar</span>
+            </div>
+
             <div className="flex gap-4 pt-6">
               <button 
                 onClick={addToCart}
-                className="px-8 py-3.5 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-neutral-200 transition-all shadow-lg"
+                style={{ backgroundColor: currentFlavor.accentHex }}
+                className="px-8 py-3.5 text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:brightness-110 transition-all shadow-lg"
               >
-                ADD TO CART
+                ORDER NOW →
               </button>
-              <button className="px-8 py-3.5 border border-white/20 text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all backdrop-blur-sm">
+              <button 
+                style={{ borderColor: `${currentFlavor.accentHex}40`, color: currentFlavor.accentHex }}
+                className="px-8 py-3.5 border text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/5 transition-all backdrop-blur-sm"
+              >
                 $12.00
               </button>
             </div>
@@ -166,9 +174,18 @@ export function OlipopHero() {
 
         <div className="flex flex-col items-center gap-10">
           <div className="text-center">
-             <span className="font-headline font-bold text-6xl md:text-8xl text-white/5 leading-none select-none">
+             <span 
+               className="font-headline font-bold text-7xl md:text-9xl leading-none select-none transition-colors duration-500"
+               style={{ 
+                 color: 'transparent', 
+                 WebkitTextStroke: `1px ${currentFlavor.accentHex}20` 
+               }}
+             >
                {currentFlavor.index}
              </span>
+             <p className="text-[9px] uppercase tracking-[0.4em] mt-2" style={{ color: `${currentFlavor.accentHex}40` }}>
+               {currentFlavor.index} / 07
+             </p>
           </div>
           
           <div className="flex flex-col items-center gap-4">
