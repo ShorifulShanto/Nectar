@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -139,7 +138,7 @@ export function ProductCollection() {
                         />
                         
                         {isSoldOut && (
-                          <div className="absolute top-4 left-4 z-10 bg-primary text-white text-[8px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                          <div className="absolute top-4 left-4 z-10 bg-primary text-black text-[8px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
                             Sold Out
                           </div>
                         )}
@@ -154,7 +153,7 @@ export function ProductCollection() {
                         {!isSoldOut && (
                           <button 
                             onClick={() => handleAddToCart(product.id, product.name, price, isSoldOut)}
-                            className="absolute bottom-6 right-6 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
+                            className="absolute bottom-6 right-6 w-12 h-12 bg-primary text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
                           >
                             <Plus size={20} />
                           </button>
@@ -359,7 +358,7 @@ export function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-neutral-900 border-white/5 text-[10px] tracking-widest"
                 />
-                <Button type="submit" size="icon" className="bg-primary text-white hover:bg-primary/80">
+                <Button type="submit" size="icon" className="bg-primary text-black hover:bg-primary/80">
                   <Send size={16} />
                 </Button>
               </form>

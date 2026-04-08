@@ -10,19 +10,19 @@
     --card-foreground: 0 0% 100%;
     --popover: 0 0% 6%;
     --popover-foreground: 0 0% 100%;
-    --primary: 350 60% 40%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 105 21% 67%;
+    --primary-foreground: 0 0% 0%;
     --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 60%;
-    --accent: 350 60% 40%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 105 21% 67%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 350 60% 40%;
+    --ring: 105 21% 67%;
     --radius: 1rem;
   }
 }
@@ -32,7 +32,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-black text-white selection:bg-primary selection:text-white antialiased overflow-x-hidden;
+    @apply bg-black text-white selection:bg-primary selection:text-black antialiased overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
   h1, h2, h3, h4, h5, h6 {
@@ -41,14 +41,14 @@
 }
 
 .maroon-glow-border {
-  border: 1px solid hsl(350, 60%, 40%, 0.3);
-  box-shadow: 0 0 15px hsl(350, 60%, 40%, 0.1);
+  border: 1px solid hsla(105, 21%, 67%, 0.3);
+  box-shadow: 0 0 15px hsla(105, 21%, 67%, 0.1);
   transition: all 0.5s ease;
 }
 
 .maroon-glow-border:hover {
-  border-color: hsl(350, 60%, 40%, 0.6);
-  box-shadow: 0 0 25px hsl(350, 60%, 40%, 0.2);
+  border-color: hsla(105, 21%, 67%, 0.6);
+  box-shadow: 0 0 25px hsla(105, 21%, 67%, 0.2);
 }
 
 .hero-vignette {
