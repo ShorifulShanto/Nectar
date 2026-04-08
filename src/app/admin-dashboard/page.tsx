@@ -1,30 +1,59 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFirestore, useCollection, useUser } from "@/firebase";
 import { collection, deleteDoc, doc, updateDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Search, ArrowLeft, Package, Activity, RefreshCw, AlertCircle, Lock } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  Trash2, 
+  Search, 
+  ArrowLeft, 
+  Package, 
+  Activity, 
+  RefreshCw, 
+  AlertCircle, 
+  Lock, 
+  Plus 
+} from "lucide-react";
 import { useMemoFirebase } from "@/firebase/provider";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { flavors } from "@/lib/flavor-data";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useRouter } from "next/navigation";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger,
+  DialogFooter
+} from "@/components/ui/dialog";
 
 const ADMIN_EMAIL = "md.si.shanto001@gmail.com";
 
 export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  
+  const [newProduct, setNewProduct] = useState({
+    id: "",
+    name: "",
+    price: 12.00,
+    amount: 50,
+    image: "https://picsum.photos/seed/juice/400/600",
+    description: ""
+  });
+
   const db = useFirestore();
   const { user, isUserLoading } = useUser();
   const { toast } = useToast();
-  const router = useRouter();
 
   const hubQuery = useMemoFirebase(() => {
     if (!db || user?.email !== ADMIN_EMAIL) return null;
@@ -98,6 +127,35 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleAddProduct = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!db) return;
+    setIsAdding(true);
+    try {
+      const docId = newProduct.id || `PROD_${Date.now()}`;
+      const productRef = doc(db, "products", docId);
+      await setDoc(productRef, {
+        ...newProduct,
+        id: docId,
+        updatedAt: serverTimestamp()
+      });
+      toast({ title: "Product Added", description: `${newProduct.name} is now in the catalog.` });
+      setIsAddModalOpen(false);
+      setNewProduct({
+        id: "",
+        name: "",
+        price: 12.00,
+        amount: 50,
+        image: "https://picsum.photos/seed/juice/400/600",
+        description: ""
+      });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "Failed to add", description: e.message });
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   const handleUpdateProduct = async (id: string, field: string, value: any) => {
     if (!db) return;
     try {
@@ -121,6 +179,16 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDeleteProduct = async (id: string) => {
+    if (!db) return;
+    try {
+      await deleteDoc(doc(db, "products", id));
+      toast({ title: "Product removed from catalog" });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "Delete failed", description: e.message });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-white">
       <Navbar />
@@ -134,7 +202,100 @@ export default function AdminDashboard() {
             <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] mt-2">Authenticated as {user.email}</p>
           </div>
           
-          <div className="flex gap-4 w-full md:w-auto">
+          <div className="flex flex-wrap gap-4 w-full md:w-auto">
+            <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline"
+                  className="border-white/10 bg-white/5 uppercase tracking-widest text-[9px] h-11 px-6 rounded-full hover:bg-white hover:text-black transition-all"
+                >
+                  <Plus size={14} className="mr-2" />
+                  Add Product
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-black border-white/10 text-white sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-headline tracking-widest uppercase">New Product</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleAddProduct} className="space-y-4 py-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest text-white/40">Product ID (Unique)</label>
+                      <Input 
+                        placeholder="WA00xx" 
+                        value={newProduct.id}
+                        onChange={(e) => setNewProduct({...newProduct, id: e.target.value})}
+                        className="bg-neutral-900 border-white/5"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest text-white/40">Name</label>
+                      <Input 
+                        placeholder="Flavor Name" 
+                        value={newProduct.name}
+                        onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                        className="bg-neutral-900 border-white/5"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest text-white/40">Price ($)</label>
+                      <Input 
+                        type="number" 
+                        step="0.01"
+                        value={newProduct.price}
+                        onChange={(e) => setNewProduct({...newProduct, price: parseFloat(e.target.value)})}
+                        className="bg-neutral-900 border-white/5"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest text-white/40">Initial Stock</label>
+                      <Input 
+                        type="number" 
+                        value={newProduct.amount}
+                        onChange={(e) => setNewProduct({...newProduct, amount: parseInt(e.target.value)})}
+                        className="bg-neutral-900 border-white/5"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/40">Image URL</label>
+                    <Input 
+                      placeholder="https://..." 
+                      value={newProduct.image}
+                      onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+                      className="bg-neutral-900 border-white/5"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/40">Description</label>
+                    <Textarea 
+                      placeholder="Product storytelling..." 
+                      value={newProduct.description}
+                      onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
+                      className="bg-neutral-900 border-white/5 min-h-[100px]"
+                      required
+                    />
+                  </div>
+                  <DialogFooter className="pt-4">
+                    <Button 
+                      type="submit" 
+                      disabled={isAdding}
+                      className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-12 rounded-full"
+                    >
+                      {isAdding ? "Creating..." : "Create Product"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
             <Button 
               onClick={handleSyncProducts} 
               disabled={isSyncing}
@@ -142,9 +303,9 @@ export default function AdminDashboard() {
               className="border-white/10 bg-white/5 uppercase tracking-widest text-[9px] h-11 px-6 rounded-full hover:bg-white hover:text-black transition-all"
             >
               <RefreshCw size={14} className={`mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
-              Sync Products
+              Sync Base Flavors
             </Button>
-            <div className="relative flex-1 md:w-64">
+            <div className="relative flex-1 md:w-64 min-w-[200px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" size={16} />
               <Input 
                 placeholder="SEARCH..." 
@@ -161,7 +322,7 @@ export default function AdminDashboard() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle className="uppercase tracking-widest text-[10px] font-bold">Data Access Error</AlertTitle>
             <AlertDescription className="text-[11px] opacity-70">
-              There was an issue fetching data. This may be due to administrative permission restrictions.
+              There was an issue fetching data. Admin permissions might be restricted.
             </AlertDescription>
           </Alert>
         )}
@@ -182,16 +343,16 @@ export default function AdminDashboard() {
                 <div className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Fetching Catalog...</div>
               ) : dbProducts && dbProducts.length > 0 ? (
                 dbProducts.map((product) => (
-                  <div key={product.id} className="bg-neutral-950 border border-white/5 rounded-xl p-6 flex flex-col md:flex-row gap-6 items-center">
-                    <div className="w-16 h-16 bg-neutral-900 rounded-lg flex items-center justify-center overflow-hidden">
+                  <div key={product.id} className="bg-neutral-950 border border-white/5 rounded-xl p-6 flex flex-col md:flex-row gap-6 items-center group/item">
+                    <div className="w-16 h-16 bg-neutral-900 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
                       <img src={product.image} alt={product.name} className="w-full h-full object-contain p-2" />
                     </div>
-                    <div className="flex-1 space-y-1">
-                      <h4 className="text-sm font-bold uppercase tracking-widest">{product.name}</h4>
+                    <div className="flex-1 space-y-1 min-w-0">
+                      <h4 className="text-sm font-bold uppercase tracking-widest truncate">{product.name}</h4>
                       <p className="text-[10px] text-white/40 font-mono">{product.id}</p>
                     </div>
                     
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
                       <div className="space-y-2">
                         <label className="text-[8px] uppercase tracking-widest text-white/20">Price ($)</label>
                         <Input 
@@ -211,11 +372,21 @@ export default function AdminDashboard() {
                           className={`bg-neutral-900 border-white/5 h-9 text-[10px] ${product.amount === 0 ? 'text-red-500 font-bold' : ''}`}
                         />
                       </div>
-                      <div className="space-y-2 col-span-2 md:col-span-1">
+                      <div className="space-y-2">
                         <label className="text-[8px] uppercase tracking-widest text-white/20">Status</label>
                         <div className={`h-9 px-4 rounded-md flex items-center text-[9px] font-bold uppercase tracking-widest ${product.amount > 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                           {product.amount > 0 ? 'In Stock' : 'Sold Out'}
                         </div>
+                      </div>
+                      <div className="flex items-end justify-end md:pb-1">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleDeleteProduct(product.id)}
+                          className="h-9 w-9 text-white/20 hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 size={14} />
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -223,7 +394,7 @@ export default function AdminDashboard() {
               ) : (
                 <div className="p-20 text-center border border-dashed border-white/10 rounded-xl bg-neutral-950">
                   <p className="text-white/20 uppercase tracking-widest text-[10px] mb-6">Product collection is empty.</p>
-                  <Button onClick={handleSyncProducts} className="bg-white text-black rounded-full uppercase text-[10px] tracking-widest font-bold">Initialize Flavors</Button>
+                  <Button onClick={handleSyncProducts} className="bg-white text-black rounded-full uppercase text-[10px] tracking-widest font-bold px-10">Initialize Flavors</Button>
                 </div>
               )}
             </div>
