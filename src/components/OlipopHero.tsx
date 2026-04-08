@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -5,7 +6,7 @@ import { flavors } from "@/lib/flavor-data";
 import { ChevronUp, ChevronDown, Instagram, Twitter, Facebook } from "lucide-react";
 import Image from "next/image";
 import { useUser, useFirestore } from "@/firebase";
-import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { AuthModal } from "./AuthModal";
 
@@ -31,17 +32,16 @@ export function OlipopHero() {
           const progress = Math.min(Math.max(scrollY / (winHeight * 0.8), 0), 1);
           
           if (heroImageRef.current) {
-            // High performance scrub simulation (transformations)
-            const scale = 1 + progress * 0.2;
-            const opacity = 1 - progress * 1.8;
-            const yOffset = progress * -80;
+            const scale = 1 + progress * 0.15;
+            const opacity = 1 - progress * 1.5;
+            const yOffset = progress * -40;
             heroImageRef.current.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale})`;
             heroImageRef.current.style.opacity = opacity.toFixed(3);
           }
 
           if (contentRef.current) {
-            const opacity = 1 - progress * 2.5;
-            const xOffset = progress * -40;
+            const opacity = 1 - progress * 2.2;
+            const xOffset = progress * -30;
             contentRef.current.style.opacity = opacity.toFixed(3);
             contentRef.current.style.transform = `translate3d(${xOffset}px, 0, 0)`;
           }
@@ -83,6 +83,18 @@ export function OlipopHero() {
         });
       }
       
+      // Central Hub Logging
+      const hubRef = doc(collection(db, "central_hub"));
+      setDoc(hubRef, {
+        id: hubRef.id,
+        type: "cart_addition",
+        userId: user.uid,
+        userEmail: user.email,
+        payload: { productId: currentFlavor.id, flavorName: currentFlavor.name },
+        timestamp: new Date().toISOString(),
+        createdAt: serverTimestamp()
+      });
+
       toast({ title: `${currentFlavor.name} added to cart!` });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Could not add to cart", description: e.message });
@@ -102,11 +114,7 @@ export function OlipopHero() {
   };
 
   return (
-    <section 
-      id="hero" 
-      className="relative h-screen w-full overflow-hidden bg-black"
-    >
-      {/* Background WebP Animation - Hardware Accelerated Scrub Simulation */}
+    <section id="hero" className="relative h-screen w-full overflow-hidden bg-black flex items-center">
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
@@ -127,72 +135,68 @@ export function OlipopHero() {
       <div className="absolute inset-0 hero-vignette z-10 pointer-events-none" />
 
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
-        
-        {/* Left Content */}
         <div 
           ref={contentRef}
           className={`max-w-md transition-all duration-700 will-change-transform ${isLoadingFlavor ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'}`}
         >
-          <div className="space-y-4">
-            <p className="text-white/30 font-bold tracking-[0.4em] uppercase text-[8px]">
+          <div className="space-y-6">
+            <p className="text-white/30 font-bold tracking-[0.4em] uppercase text-[9px]">
               OLLANHO — FRESH PRESSED
             </p>
             <h1 
-              className="text-5xl md:text-6xl lg:text-7xl font-headline font-bold leading-[0.85] tracking-tighter transition-colors duration-500 uppercase"
+              className="text-5xl md:text-6xl lg:text-8xl font-headline font-bold leading-[0.8] tracking-tighter transition-colors duration-500 uppercase"
               style={{ color: currentFlavor.accentHex }}
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-[9px] md:text-[10px] font-headline tracking-[0.3em] text-white/40 uppercase">
+            <p className="text-[10px] md:text-[12px] font-headline tracking-[0.3em] text-white/40 uppercase">
               {currentFlavor.subtitle}
             </p>
-            <p className="text-[9px] md:text-[10px] text-white/30 leading-relaxed max-w-[260px] font-light">
+            <p className="text-[10px] md:text-[12px] text-white/30 leading-relaxed max-w-[280px] font-light">
               {currentFlavor.description}
             </p>
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-4 pt-6">
               <button 
                 onClick={addToCart}
-                className="px-6 py-2.5 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[8px] hover:bg-neutral-200 transition-all"
+                className="px-8 py-3.5 bg-white text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-neutral-200 transition-all shadow-lg"
               >
                 ADD TO CART
               </button>
-              <button className="px-6 py-2.5 border border-white/20 text-white font-bold rounded-full uppercase tracking-widest text-[8px] hover:bg-white/10 transition-all backdrop-blur-sm">
+              <button className="px-8 py-3.5 border border-white/20 text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all backdrop-blur-sm">
                 $12.00
               </button>
             </div>
           </div>
         </div>
 
-        {/* Right Navigation */}
-        <div className="flex flex-col items-center gap-6 md:gap-8">
+        <div className="flex flex-col items-center gap-10">
           <div className="text-center">
-             <span className="font-headline font-bold text-5xl md:text-7xl text-white/5 leading-none select-none">
+             <span className="font-headline font-bold text-6xl md:text-9xl text-white/5 leading-none select-none">
                {currentFlavor.index}
              </span>
           </div>
           
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-4">
             <button 
               onClick={() => changeFlavor("prev")}
-              className="group flex flex-col items-center gap-1 py-1 text-[8px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-2 py-2 text-[10px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
             >
-              <ChevronUp className="w-3.5 h-3.5 group-hover:-translate-y-1 transition-transform" />
+              <ChevronUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
               PREV
             </button>
-            <div className="w-px h-6 bg-white/10" />
+            <div className="w-px h-10 bg-white/10" />
             <button 
               onClick={() => changeFlavor("next")}
-              className="group flex flex-col items-center gap-1 py-1 text-[8px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-2 py-2 text-[10px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
             >
               NEXT
-              <ChevronDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform" />
+              <ChevronDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Indicators */}
-      <div className="absolute bottom-10 left-6 md:left-24 z-30 flex gap-1.5">
+      <div className="absolute bottom-12 left-6 md:left-24 z-30 flex gap-2">
         {flavors.map((f, i) => (
           <button
             key={f.id}
@@ -204,20 +208,20 @@ export function OlipopHero() {
                 setIsLoadingFlavor(false);
               }, 400);
             }}
-            className={`w-1 h-1 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-150' : 'bg-white/10'}`}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${i === currentFlavorIndex ? 'bg-white scale-125' : 'bg-white/10'}`}
           />
         ))}
       </div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-4">
-        <Instagram className="w-3.5 h-3.5 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Twitter className="w-3.5 h-3.5 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Facebook className="w-3.5 h-3.5 text-white/20 hover:text-white transition-colors cursor-pointer" />
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-6">
+        <Instagram className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
+        <Twitter className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
+        <Facebook className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
       </div>
 
-      <div className="absolute bottom-10 right-6 md:right-24 z-30 flex flex-col items-center gap-2">
-        <div className="w-px h-6 bg-gradient-to-t from-white/20 to-transparent scroll-hint-line" />
-        <span className="text-[6px] font-bold tracking-[0.5em] uppercase text-white/20">SCROLL</span>
+      <div className="absolute bottom-12 right-6 md:right-24 z-30 flex flex-col items-center gap-3">
+        <div className="w-px h-10 bg-gradient-to-t from-white/20 to-transparent scroll-hint-line" />
+        <span className="text-[8px] font-bold tracking-[0.5em] uppercase text-white/20">SCROLL</span>
       </div>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
