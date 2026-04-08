@@ -121,43 +121,50 @@ export function ProductCollection() {
             <RefreshCw className="animate-spin text-white/10" size={40} />
           </div>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {dbProducts && dbProducts.length > 0 ? (
               dbProducts.map((product) => {
                 const isSoldOut = product.amount <= 0;
                 const price = product.price || 12.00;
                 const flavorConfig = flavors.find(f => f.id === product.id);
+                const accentColor = flavorConfig?.accentHex || '#ffffff';
 
                 return (
-                  <div key={product.id} className="group relative">
-                     <div className="aspect-[4/5] rounded-2xl bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-4 flex flex-col items-center justify-center group-hover:border-white/10 transition-all duration-700 shadow-xl relative">
+                  <div key={product.id} className="group relative flex flex-col items-center sm:items-start">
+                     <div className="aspect-square w-full max-w-[320px] rounded-3xl bg-neutral-950 border border-white/5 overflow-hidden p-8 mb-6 flex flex-col items-center justify-center group-hover:border-white/20 transition-all duration-700 shadow-2xl relative">
+                        {/* Dynamic Glow Background */}
+                        <div 
+                          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700"
+                          style={{ background: `radial-gradient(circle at center, ${accentColor} 0%, transparent 70%)` }}
+                        />
+                        
                         {isSoldOut && (
-                          <div className="absolute top-4 left-4 z-10 bg-red-600 text-white text-[8px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest shadow-lg">
+                          <div className="absolute top-4 left-4 z-10 bg-red-600 text-white text-[8px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
                             Sold Out
                           </div>
                         )}
-                        <div className={`relative w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
+                        <div className={`relative w-full h-full transform group-hover:scale-110 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
                           <Image 
                             src={product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600'} 
                             alt={product.name} 
                             fill 
-                            className="object-contain p-2"
+                            className="object-contain"
                           />
                         </div>
                         {!isSoldOut && (
                           <button 
                             onClick={() => handleAddToCart(product.id, product.name, price, isSoldOut)}
-                            className="absolute bottom-4 right-4 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-2xl"
+                            className="absolute bottom-6 right-6 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
                           >
-                            <Plus size={18} />
+                            <Plus size={20} />
                           </button>
                         )}
                      </div>
-                     <div className="text-center md:text-left px-2">
-                       <h4 className={`text-[10px] font-bold tracking-[0.25em] uppercase mb-1 ${isSoldOut ? 'text-white/20' : 'text-white/80'}`}>
+                     <div className="text-center sm:text-left px-2">
+                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-colors ${isSoldOut ? 'text-white/20' : 'text-white/90 group-hover:text-white'}`}>
                          {product.name}
                        </h4>
-                       <p className="text-[8px] text-white/30 uppercase tracking-widest font-medium">
+                       <p className="text-[9px] text-white/30 uppercase tracking-[0.4em] font-medium">
                          ${price.toFixed(2)} — 350ml
                        </p>
                      </div>
@@ -165,8 +172,8 @@ export function ProductCollection() {
                 );
               })
             ) : (
-              <div className="col-span-full py-20 text-center border border-dashed border-white/5 rounded-3xl">
-                <p className="text-white/20 uppercase tracking-[0.3em] text-[10px]">No products found in catalog.</p>
+              <div className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-[3rem] bg-neutral-950/50">
+                <p className="text-white/20 uppercase tracking-[0.5em] text-[10px]">Catalog is being harvested...</p>
               </div>
             )}
           </div>
