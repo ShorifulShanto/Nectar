@@ -131,10 +131,10 @@ export function ProductCollection() {
 
                 return (
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start">
-                     <div className="aspect-square w-full max-w-[320px] rounded-3xl bg-neutral-950 border border-white/5 overflow-hidden p-8 mb-6 flex flex-col items-center justify-center group-hover:border-white/20 transition-all duration-700 shadow-2xl relative">
+                     <div className="aspect-square w-full max-w-[320px] rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-10 mb-6 flex flex-col items-center justify-center group-hover:border-white/10 transition-all duration-700 shadow-2xl relative">
                         {/* Dynamic Glow Background */}
                         <div 
-                          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700"
+                          className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[40px] pointer-events-none"
                           style={{ background: `radial-gradient(circle at center, ${accentColor} 0%, transparent 70%)` }}
                         />
                         

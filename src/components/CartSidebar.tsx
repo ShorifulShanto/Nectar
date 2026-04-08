@@ -20,12 +20,18 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     return collection(db, "users", user.uid, "cart", "cart", "items");
   }, [db, user]);
 
+  const productsQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return collection(db, "products");
+  }, [db]);
+
   const userRef = useMemoFirebase(() => {
     if (!db || !user) return null;
     return doc(db, "users", user.uid);
   }, [db, user]);
 
   const { data: items, isLoading } = useCollection(cartQuery);
+  const { data: dbProducts } = useCollection(productsQuery);
   const { data: profile } = useDoc(userRef);
 
   const updateQty = async (id: string, newQty: number) => {
@@ -74,7 +80,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="bg-black/80 backdrop-blur-3xl border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[200]">
+      <SheetContent className="bg-black/90 backdrop-blur-3xl border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[300]">
         <SheetHeader className="p-6 border-b border-white/5 bg-black/40">
           <SheetTitle className="text-xl font-headline font-bold tracking-widest uppercase flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -96,16 +102,23 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             </div>
           ) : items && items.length > 0 ? (
             items.map((item) => {
-              const product = flavors.find(f => f.id === item.productId);
+              // Resolve product details from DB or static config
+              const dbProduct = dbProducts?.find(p => p.id === item.productId);
+              const flavorConfig = flavors.find(f => f.id === item.productId);
+              
+              const name = dbProduct?.name || flavorConfig?.name || "Olipop Flavor";
+              const image = dbProduct?.image || flavorConfig?.imageUrl || "https://picsum.photos/seed/juice/400/600";
+              const price = item.priceAtAddToCart || dbProduct?.price || 12.00;
+
               return (
                 <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500">
-                  <div className="relative w-16 h-16 bg-neutral-900/40 rounded-lg overflow-hidden flex-shrink-0">
-                    {product && <Image src={product.imageUrl} alt={product.name} fill className="object-contain p-2" />}
+                  <div className="relative w-20 h-20 bg-neutral-900/40 rounded-lg overflow-hidden flex-shrink-0">
+                    <Image src={image} alt={name} fill className="object-contain p-2" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-xs font-bold uppercase tracking-widest truncate">{product?.name || "Olipop Flavor"}</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-widest truncate">{name}</h4>
                     <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">
-                      ${(item.priceAtAddToCart || 12.00).toFixed(2)}
+                      ${price.toFixed(2)}
                     </p>
                     <div className="flex items-center gap-3 mt-3">
                       <div className="flex items-center border border-white/10 rounded-full px-2 py-0.5 bg-black/40">
@@ -117,14 +130,14 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                           <Plus size={10} />
                         </button>
                       </div>
-                      <button onClick={() => removeItem(item.id)} className="text-white/20 hover:text-destructive transition-colors">
-                        <Trash2 size={12} />
+                      <button onClick={() => removeItem(item.id)} className="text-white/20 hover:text-destructive transition-colors ml-auto">
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] font-bold font-mono">
-                      ${((item.priceAtAddToCart || 12.00) * item.quantity).toFixed(2)}
+                      ${(price * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
