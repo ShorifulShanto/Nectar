@@ -7,12 +7,13 @@ import { collection, deleteDoc, doc, updateDoc, setDoc, serverTimestamp } from "
 import { Navbar } from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Search, ArrowLeft, Database, Package, Activity, RefreshCw } from "lucide-react";
+import { Trash2, Edit, Search, ArrowLeft, Package, Activity, RefreshCw, AlertCircle } from "lucide-react";
 import { useMemoFirebase } from "@/firebase/provider";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { flavors } from "@/lib/flavor-data";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function AdminDashboard() {
   const [search, setSearch] = useState("");
@@ -30,8 +31,8 @@ export default function AdminDashboard() {
     return collection(db, "products");
   }, [db]);
 
-  const { data: entries, isLoading: isHubLoading } = useCollection(hubQuery);
-  const { data: dbProducts, isLoading: isProductsLoading } = useCollection(productsQuery);
+  const { data: entries, isLoading: isHubLoading, error: hubError } = useCollection(hubQuery);
+  const { data: dbProducts, isLoading: isProductsLoading, error: productsError } = useCollection(productsQuery);
 
   const filteredEntries = entries?.sort((a, b) => {
     const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
@@ -123,6 +124,16 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
+
+        {hubError && (
+          <Alert variant="destructive" className="mb-8 bg-destructive/10 border-destructive/20">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle className="uppercase tracking-widest text-[10px] font-bold">Access Warning</AlertTitle>
+            <AlertDescription className="text-[11px] opacity-70">
+              You may have limited permissions to view certain data. Please ensure your account has administrative access.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <Tabs defaultValue="products" className="w-full">
           <TabsList className="bg-neutral-900/50 border border-white/5 p-1 rounded-full mb-8">
