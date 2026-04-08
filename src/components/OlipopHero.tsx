@@ -22,7 +22,6 @@ export function OlipopHero() {
   const { toast } = useToast();
   const currentFlavor = flavors[currentFlavorIndex];
 
-  // Real-time product data (price, inventory)
   const productRef = useMemoFirebase(() => {
     if (!db) return null;
     return doc(db, "products", currentFlavor.id);
@@ -40,14 +39,14 @@ export function OlipopHero() {
       const progress = Math.min(Math.max(scrollY / (winHeight * 0.8), 0), 1);
       
       if (heroImageRef.current) {
-        const scale = 1 + progress * 0.1;
-        const opacity = 1 - progress * 1.5;
-        heroImageRef.current.style.transform = `translate3d(0, ${progress * -50}px, 0) scale(${scale})`;
+        const scale = 1 + progress * 0.05;
+        const opacity = 1 - progress * 1.2;
+        heroImageRef.current.style.transform = `translate3d(0, ${progress * -30}px, 0) scale(${scale})`;
         heroImageRef.current.style.opacity = opacity.toString();
       }
 
       if (contentRef.current) {
-        const opacity = 1 - progress * 2.5;
+        const opacity = 1 - progress * 2.2;
         contentRef.current.style.opacity = opacity.toString();
       }
     };
@@ -70,12 +69,12 @@ export function OlipopHero() {
 
       if (!snap.empty) {
         const existing = snap.docs[0];
-        await setDoc(doc(cartItemsRef, existing.id), {
+        setDoc(doc(cartItemsRef, existing.id), {
           quantity: existing.data().quantity + 1
         }, { merge: true });
       } else {
         const newRef = doc(cartItemsRef);
-        await setDoc(newRef, {
+        setDoc(newRef, {
           id: newRef.id,
           productId: currentFlavor.id,
           quantity: 1,
@@ -85,7 +84,7 @@ export function OlipopHero() {
       }
       
       const hubRef = doc(collection(db, "central_hub"));
-      await setDoc(hubRef, {
+      setDoc(hubRef, {
         id: hubRef.id,
         type: "cart_addition",
         userId: user.uid,
@@ -110,21 +109,21 @@ export function OlipopHero() {
     setTimeout(() => {
       setCurrentFlavorIndex(nextIdx);
       setIsLoadingFlavor(false);
-    }, 450);
+    }, 400);
   };
 
   return (
-    <section id="hero" className="relative h-screen w-full overflow-hidden bg-black flex items-center">
+    <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-black flex items-center">
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-all duration-700 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-90 rotate-3' : 'opacity-100 scale-100 rotate-0'}`}
+          className={`relative w-full h-full transition-all duration-700 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
         >
           <Image 
             src={currentFlavor.videoUrl} 
             alt={`${currentFlavor.name} sequence`} 
             fill 
-            className="object-contain p-8 md:p-24"
+            className="object-contain p-8 md:p-20"
             unoptimized
             priority
           />
@@ -136,7 +135,7 @@ export function OlipopHero() {
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         <div 
           ref={contentRef}
-          className={`max-w-md transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-y-4 blur-md' : 'opacity-100 translate-y-0 blur-0'}`}
+          className={`max-w-md transition-all duration-500 ${isLoadingFlavor ? 'opacity-0 translate-y-2 blur-sm' : 'opacity-100 translate-y-0 blur-0'}`}
         >
           <div className="space-y-6">
             <p className="text-white/40 font-bold tracking-[0.5em] text-[9px] uppercase">
@@ -166,7 +165,7 @@ export function OlipopHero() {
                 onClick={addToCart}
                 disabled={isSoldOut}
                 style={{ backgroundColor: isSoldOut ? '#333' : currentFlavor.accentHex }}
-                className={`px-8 py-4 text-black font-bold rounded-full uppercase tracking-widest text-[10px] transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] active:scale-95 ${isSoldOut ? 'cursor-not-allowed' : 'hover:scale-105'}`}
+                className={`px-8 py-4 text-black font-bold rounded-full uppercase tracking-widest text-[10px] transition-all active:scale-95 ${isSoldOut ? 'cursor-not-allowed opacity-50' : 'hover:scale-105'}`}
               >
                 {isSoldOut ? 'SOLD OUT' : 'ORDER NOW →'}
               </button>
@@ -187,7 +186,7 @@ export function OlipopHero() {
                style={{ 
                  color: 'transparent', 
                  WebkitTextStroke: `1px ${currentFlavor.accentHex}20`,
-                 transform: isLoadingFlavor ? 'scale(0.8) translateY(20px)' : 'scale(1) translateY(0)'
+                 transform: isLoadingFlavor ? 'scale(0.9) translateY(10px)' : 'scale(1) translateY(0)'
                }}
              >
                {currentFlavor.index}

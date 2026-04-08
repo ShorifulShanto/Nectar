@@ -2,10 +2,10 @@
 "use client";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useUser, useFirestore, useCollection } from "@/firebase";
+import { useUser, useFirestore, useCollection, useDoc } from "@/firebase";
 import { collection, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { flavors } from "@/lib/flavor-data";
-import { Trash2, Plus, Minus, Truck } from "lucide-react";
+import { Trash2, Plus, Minus, Truck, Info } from "lucide-react";
 import Image from "next/image";
 import { useMemoFirebase } from "@/firebase/provider";
 import { useToast } from "@/hooks/use-toast";
@@ -20,7 +20,13 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     return collection(db, "users", user.uid, "cart", "cart", "items");
   }, [db, user]);
 
+  const userRef = useMemoFirebase(() => {
+    if (!db || !user) return null;
+    return doc(db, "users", user.uid);
+  }, [db, user]);
+
   const { data: items, isLoading } = useCollection(cartQuery);
+  const { data: profile } = useDoc(userRef);
 
   const updateQty = async (id: string, newQty: number) => {
     if (!user || !db) return;
@@ -28,22 +34,38 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       await deleteDoc(doc(db, "users", user.uid, "cart", "cart", "items", id));
       return;
     }
-    await updateDoc(doc(db, "users", user.uid, "cart", "cart", "items", id), {
+    updateDoc(doc(db, "users", user.uid, "cart", "cart", "items", id), {
       quantity: newQty
     });
   };
 
   const removeItem = async (id: string) => {
     if (!user || !db) return;
-    await deleteDoc(doc(db, "users", user.uid, "cart", "cart", "items", id));
+    deleteDoc(doc(db, "users", user.uid, "cart", "cart", "items", id));
     toast({ title: "Item removed from cart" });
   };
 
-  // Pricing constants
+  const handleCheckout = () => {
+    const isProfileIncomplete = !profile?.firstName || !profile?.lastName || !profile?.location;
+    
+    if (isProfileIncomplete) {
+      toast({
+        title: "Profile Incomplete",
+        description: "Please fill in your delivery details in your profile before checking out.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "Checkout Information",
+      description: "Note: We currently don't have a payment gateway integrated. This is a prototype.",
+      action: <Info className="h-4 w-4" />
+    });
+  };
+
   const SHIPPING_FEE = 5.00;
-  
   const subtotal = items?.reduce((acc, item) => {
-    const product = flavors.find(f => f.id === item.productId);
     const itemPrice = item.priceAtAddToCart || 12.00;
     return acc + (itemPrice * item.quantity);
   }, 0) || 0;
@@ -52,7 +74,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="bg-black border-white/10 text-white w-full sm:max-w-md flex flex-col p-0">
+      <SheetContent className="bg-black/60 backdrop-blur-2xl border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out">
         <SheetHeader className="p-6 border-b border-white/5">
           <SheetTitle className="text-2xl font-headline font-bold tracking-widest uppercase flex items-center gap-3">
             Your Cart
@@ -64,7 +86,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
           </SheetTitle>
         </SheetHeader>
         
-        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
           {isLoading ? (
             <div className="h-full flex items-center justify-center">
               <p className="text-white/20 uppercase tracking-[0.3em] text-[10px] animate-pulse">Synchronizing Cart...</p>
@@ -74,14 +96,14 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               const product = flavors.find(f => f.id === item.productId);
               if (!product) return null;
               return (
-                <div key={item.id} className="flex gap-6 items-center group">
-                  <div className="relative w-20 h-24 bg-neutral-900 rounded-lg overflow-hidden border border-white/5 group-hover:border-white/10 transition-colors">
+                <div key={item.id} className="flex gap-6 items-center group animate-in fade-in slide-in-from-right-4 duration-500">
+                  <div className="relative w-20 h-24 bg-neutral-900/40 rounded-lg overflow-hidden border border-white/5 group-hover:border-white/20 transition-all">
                     <Image src={product.imageUrl} alt={product.name} fill className="object-contain p-2" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-bold uppercase tracking-widest truncate">{product.name}</h4>
                     <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">
-                      ${(item.priceAtAddToCart || 12.00).toFixed(2)} / bottle
+                      ${(item.priceAtAddToCart || 12.00).toFixed(2)} / unit
                     </p>
                     <div className="flex items-center gap-4 mt-4">
                       <div className="flex items-center border border-white/10 rounded-full px-2 py-1 bg-white/5">
@@ -118,7 +140,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         </div>
 
         {items && items.length > 0 && (
-          <div className="p-8 border-t border-white/5 bg-neutral-950/80 backdrop-blur-md">
+          <div className="p-8 border-t border-white/5 bg-black/40 backdrop-blur-3xl">
             <div className="space-y-3 mb-8">
               <div className="flex justify-between items-center">
                 <span className="text-[10px] uppercase tracking-widest text-white/40">Subtotal</span>
@@ -135,7 +157,10 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               </div>
             </div>
             
-            <button className="w-full h-14 bg-white text-black font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:bg-neutral-200 transition-all active:scale-95 shadow-2xl">
+            <button 
+              onClick={handleCheckout}
+              className="w-full h-14 bg-white text-black font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:bg-neutral-200 transition-all active:scale-95 shadow-2xl"
+            >
               Proceed to Checkout
             </button>
             <div className="mt-6 flex items-center justify-center gap-2 opacity-30">

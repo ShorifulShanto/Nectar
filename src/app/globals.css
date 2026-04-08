@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,7 +75,7 @@
 }
 
 .forest-mirror {
-  background: rgba(8, 12, 10, 0.75);
+  background: rgba(8, 12, 10, 0.6);
   backdrop-filter: blur(50px) saturate(180%);
   border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -90,4 +91,20 @@
   z-index: 50;
   opacity: 0.03;
   background-image: url("https://res.cloudinary.com/drmpjeatm/image/upload/v1775574830/grain_texture.png");
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hardware accelerated smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 400ms;
+  will-change: transform, opacity;
 }
