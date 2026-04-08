@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -10,16 +9,18 @@ import {
   sendEmailVerification, 
   signOut,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Github } from "lucide-react";
+import { Mail, ShieldCheck, ArrowLeft } from "lucide-react";
+
+type AuthView = "login" | "signup" | "verify" | "forgot" | "reset_sent";
 
 export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [isLogin, setIsLogin] = useState(true);
-  const [isVerificationSent, setIsVerificationSent] = useState(false);
+  const [view, setView] = useState<AuthView>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,26 +31,43 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     e.preventDefault();
     setIsLoading(true);
     try {
-      if (isLogin) {
+      if (view === "login") {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         if (!userCred.user.emailVerified) {
           await sendEmailVerification(userCred.user);
           await signOut(auth);
-          setIsVerificationSent(true);
+          setView("verify");
           return;
         }
         onClose();
-        toast({ title: "Welcome back!" });
-      } else {
+        toast({ title: "Welcome back to Olipop!" });
+      } else if (view === "signup") {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(userCred.user);
         await signOut(auth);
-        setIsVerificationSent(true);
+        setView("verify");
       }
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
         title: "Authentication Failed", 
+        description: error.message 
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setView("reset_sent");
+    } catch (error: any) {
+      toast({ 
+        variant: "destructive", 
+        title: "Error", 
         description: error.message 
       });
     } finally {
@@ -76,8 +94,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   };
 
   const resetState = () => {
-    setIsVerificationSent(false);
-    setIsLogin(true);
+    setView("login");
     setEmail("");
     setPassword("");
   };
@@ -89,8 +106,8 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         setTimeout(resetState, 300);
       }
     }}>
-      <DialogContent className="bg-black border-white/10 text-white sm:max-w-[400px]">
-        {isVerificationSent ? (
+      <DialogContent className="bg-black border-white/10 text-white sm:max-w-[400px] overflow-hidden">
+        {view === "verify" ? (
           <div className="py-8 text-center space-y-6">
             <div className="flex justify-center">
               <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
@@ -105,7 +122,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             <div className="space-y-4 px-4">
               <p className="text-[12px] text-white/40 uppercase tracking-widest leading-relaxed">
                 We have sent you a verification email to <span className="text-white">{email}</span>. 
-                Verify it and log in.
+                verify it and log in.
               </p>
               <Button 
                 onClick={resetState}
@@ -115,43 +132,108 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
               </Button>
             </div>
           </div>
+        ) : view === "reset_sent" ? (
+          <div className="py-8 text-center space-y-6">
+            <div className="flex justify-center">
+              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                <ShieldCheck className="text-white/60" size={32} />
+              </div>
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-headline tracking-widest text-center uppercase">
+                Reset Sent
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 px-4">
+              <p className="text-[12px] text-white/40 uppercase tracking-widest leading-relaxed">
+                We sent you a password change link to <span className="text-white">{email}</span>.
+              </p>
+              <Button 
+                onClick={resetState}
+                className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full mt-4"
+              >
+                Sign In
+              </Button>
+            </div>
+          </div>
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-headline tracking-widest text-center uppercase">
-                {isLogin ? "Sign In" : "Join Olipop"}
-              </DialogTitle>
+              <div className="flex items-center justify-center relative mb-4">
+                {(view === "forgot" || view === "signup") && (
+                   <button onClick={() => setView("login")} className="absolute left-0 text-white/40 hover:text-white transition-colors">
+                     <ArrowLeft size={16} />
+                   </button>
+                )}
+                <DialogTitle className="text-2xl font-headline tracking-widest text-center uppercase">
+                  {view === "login" ? "Sign In" : view === "signup" ? "Join Olipop" : "Reset Password"}
+                </DialogTitle>
+              </div>
             </DialogHeader>
+            
             <div className="space-y-6 pt-4">
-              <form onSubmit={handleAuth} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest text-white/40">Email Address</label>
-                  <Input 
-                    type="email" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest text-white/40">Secure Password</label>
-                  <Input 
-                    type="password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
-                    required
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  disabled={isLoading}
-                  className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
-                >
-                  {isLoading ? "Processing..." : isLogin ? "Sign In" : "Create Account"}
-                </Button>
-              </form>
+              {view === "forgot" ? (
+                <form onSubmit={handleForgotPassword} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/40">Email Address</label>
+                    <Input 
+                      type="email" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
+                      required
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
+                  >
+                    {isLoading ? "Processing..." : "Get Reset Link"}
+                  </Button>
+                </form>
+              ) : (
+                <form onSubmit={handleAuth} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/40">Email Address</label>
+                    <Input 
+                      type="email" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <label className="text-[10px] uppercase tracking-widest text-white/40">Secure Password</label>
+                      {view === "login" && (
+                        <button 
+                          type="button" 
+                          onClick={() => setView("forgot")}
+                          className="text-[9px] uppercase tracking-widest text-white/20 hover:text-white"
+                        >
+                          Forgot Password?
+                        </button>
+                      )}
+                    </div>
+                    <Input 
+                      type="password" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
+                      required
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
+                  >
+                    {isLoading ? "Processing..." : view === "login" ? "Sign In" : "Create Account"}
+                  </Button>
+                </form>
+              )}
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -180,10 +262,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
               <div className="text-center">
                 <button 
                   type="button"
-                  onClick={() => setIsLogin(!isLogin)}
+                  onClick={() => setView(view === "login" ? "signup" : "login")}
                   className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white"
                 >
-                  {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+                  {view === "login" ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
                 </button>
               </div>
             </div>
