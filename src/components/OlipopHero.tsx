@@ -128,8 +128,8 @@ export function OlipopHero() {
           className={`max-w-md transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'}`}
         >
           <div className="space-y-6">
-            <p className="text-white/30 font-bold tracking-[0.4em] uppercase text-[9px]">
-              OLIPOP — FRESH PRESSED
+            <p className="text-white/30 font-bold tracking-[0.4em] text-[9px]">
+              Olipop — fresh pressed
             </p>
             <h1 
               className="text-4xl md:text-5xl lg:text-7xl font-headline font-bold leading-[0.8] tracking-tighter uppercase"
@@ -137,7 +137,7 @@ export function OlipopHero() {
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-[10px] md:text-[11px] font-headline tracking-[0.3em] text-white/40">
+            <p className="text-[10px] md:text-[11px] font-headline tracking-[0.3em] text-white/40 italic">
               {currentFlavor.subtitle}
             </p>
             <p className="text-[10px] md:text-[11px] text-white/30 leading-relaxed max-w-[280px] font-light">
