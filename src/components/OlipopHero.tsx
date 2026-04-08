@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -55,48 +54,10 @@ export function OlipopHero() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const addToCart = async () => {
-    if (!user) {
-      setIsAuthOpen(true);
-      return;
-    }
-    if (!db || isSoldOut) return;
-
-    try {
-      const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
-      const q = query(cartItemsRef, where("productId", "==", currentFlavor.id));
-      const snap = await getDocs(q);
-
-      if (!snap.empty) {
-        const existing = snap.docs[0];
-        setDoc(doc(cartItemsRef, existing.id), {
-          quantity: existing.data().quantity + 1
-        }, { merge: true });
-      } else {
-        const newRef = doc(cartItemsRef);
-        setDoc(newRef, {
-          id: newRef.id,
-          productId: currentFlavor.id,
-          quantity: 1,
-          priceAtAddToCart: price,
-          cartId: 'cart'
-        });
-      }
-      
-      const hubRef = doc(collection(db, "central_hub"));
-      setDoc(hubRef, {
-        id: hubRef.id,
-        type: "cart_addition",
-        userId: user.uid,
-        userEmail: user.email,
-        payload: { productId: currentFlavor.id, flavorName: currentFlavor.name },
-        timestamp: new Date().toISOString(),
-        createdAt: serverTimestamp()
-      });
-
-      toast({ title: `${currentFlavor.name} added to cart!` });
-    } catch (e: any) {
-      toast({ variant: "destructive", title: "Could not add to cart", description: e.message });
+  const handleOrderNow = () => {
+    const section = document.getElementById('product');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -162,15 +123,14 @@ export function OlipopHero() {
 
             <div className="flex gap-4 pt-8">
               <button 
-                onClick={addToCart}
-                disabled={isSoldOut}
-                style={{ backgroundColor: isSoldOut ? '#333' : currentFlavor.accentHex }}
-                className={`px-8 py-4 text-black font-bold rounded-full uppercase tracking-widest text-[10px] transition-all active:scale-95 ${isSoldOut ? 'cursor-not-allowed opacity-50' : 'hover:scale-105'}`}
+                onClick={handleOrderNow}
+                style={{ backgroundColor: isSoldOut ? '#333' : 'hsl(350, 60%, 40%)' }}
+                className={`px-8 py-4 text-white font-bold rounded-full uppercase tracking-widest text-[10px] transition-all active:scale-95 hover:scale-105`}
               >
-                {isSoldOut ? 'SOLD OUT' : 'ORDER NOW →'}
+                ORDER NOW →
               </button>
               <button 
-                style={{ borderColor: `${currentFlavor.accentHex}30`, color: currentFlavor.accentHex }}
+                style={{ borderColor: `hsl(350, 60%, 40%, 0.3)`, color: 'white' }}
                 className="px-8 py-4 border bg-white/5 text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all backdrop-blur-sm"
               >
                 ${price.toFixed(2)}
@@ -217,13 +177,13 @@ export function OlipopHero() {
       </div>
 
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-8">
-        <Instagram className="w-4 h-4 text-white/15 hover:text-white transition-colors cursor-pointer" />
-        <Twitter className="w-4 h-4 text-white/15 hover:text-white transition-colors cursor-pointer" />
-        <Facebook className="w-4 h-4 text-white/15 hover:text-white transition-colors cursor-pointer" />
+        <Instagram className="w-4 h-4 text-white/15 hover:text-primary transition-colors cursor-pointer" />
+        <Twitter className="w-4 h-4 text-white/15 hover:text-primary transition-colors cursor-pointer" />
+        <Facebook className="w-4 h-4 text-white/15 hover:text-primary transition-colors cursor-pointer" />
       </div>
 
       <div className="absolute bottom-12 right-6 md:right-24 z-30 flex flex-col items-center gap-4">
-        <div className="w-px h-12 bg-gradient-to-t from-white/30 to-transparent scroll-hint-line" />
+        <div className="w-px h-12 bg-gradient-to-t from-primary/30 to-transparent scroll-hint-line" />
         <span className="text-[8px] font-bold tracking-[0.6em] uppercase text-white/20">SCROLL</span>
       </div>
 

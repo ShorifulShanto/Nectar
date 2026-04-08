@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,19 +10,19 @@
     --card-foreground: 0 0% 100%;
     --popover: 0 0% 6%;
     --popover-foreground: 0 0% 100%;
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 350 60% 40%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 60%;
-    --accent: 0 0% 100%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 350 60% 40%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 0 0% 100%;
+    --ring: 350 60% 40%;
     --radius: 1rem;
   }
 }
@@ -33,12 +32,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-black text-white selection:bg-white selection:text-black antialiased overflow-x-hidden;
+    @apply bg-black text-white selection:bg-primary selection:text-white antialiased overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline tracking-tighter uppercase;
   }
+}
+
+.maroon-glow-border {
+  border: 1px solid hsl(350, 60%, 40%, 0.3);
+  box-shadow: 0 0 15px hsl(350, 60%, 40%, 0.1);
+  transition: all 0.5s ease;
+}
+
+.maroon-glow-border:hover {
+  border-color: hsl(350, 60%, 40%, 0.6);
+  box-shadow: 0 0 25px hsl(350, 60%, 40%, 0.2);
 }
 
 .hero-vignette {
@@ -101,7 +111,6 @@
   scrollbar-width: none;
 }
 
-/* Hardware accelerated smooth transitions */
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);

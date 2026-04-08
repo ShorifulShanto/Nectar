@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -26,15 +25,15 @@ export function IngredientsSection() {
     <section id="ingredients" className="py-24 bg-neutral-900/50">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
-          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what's inside</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">Real Ingredients<br />Real Benefits</h2>
+          <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what's inside</p>
+          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">Real Ingredients<br /><span className="text-primary">Real Benefits</span></h2>
           <p className="text-white/40 mt-4 max-w-lg font-light text-[11px] md:text-sm">Every drop starts with real, whole fruits. No concentrates, no preservatives — just nature in a bottle.</p>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ingredients.map((item) => (
-            <div key={item.name} className="p-8 border border-white/5 bg-black/40 rounded-2xl hover:border-white/20 transition-all duration-500 group">
-              <div className="mb-4 text-white/40 group-hover:text-white transition-colors">
+            <div key={item.name} className="p-8 bg-black/40 rounded-2xl transition-all duration-500 group maroon-glow-border">
+              <div className="mb-4 text-primary transition-colors">
                 <item.icon size={22} strokeWidth={1.5} />
               </div>
               <h4 className="text-[12px] font-headline font-bold mb-2 tracking-widest uppercase">{item.name}</h4>
@@ -112,13 +111,13 @@ export function ProductCollection() {
     <section id="product" className="py-24 bg-black">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
-          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">our collection</p>
+          <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">our collection</p>
           <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">Discover Our<br />Latest Batch</h2>
         </div>
         
         {isLoading ? (
           <div className="flex items-center justify-center p-20">
-            <RefreshCw className="animate-spin text-white/10" size={40} />
+            <RefreshCw className="animate-spin text-primary/10" size={40} />
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -131,7 +130,7 @@ export function ProductCollection() {
 
                 return (
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start">
-                     <div className="aspect-square w-full max-w-[320px] rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-10 mb-6 flex flex-col items-center justify-center group-hover:border-white/10 transition-all duration-700 shadow-2xl relative">
+                     <div className="aspect-square w-full max-w-[320px] rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-10 mb-6 flex flex-col items-center justify-center group-hover:border-primary/20 transition-all duration-700 shadow-2xl relative">
                         {/* Dynamic Glow Background */}
                         <div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[40px] pointer-events-none"
@@ -139,7 +138,7 @@ export function ProductCollection() {
                         />
                         
                         {isSoldOut && (
-                          <div className="absolute top-4 left-4 z-10 bg-red-600 text-white text-[8px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                          <div className="absolute top-4 left-4 z-10 bg-primary text-white text-[8px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
                             Sold Out
                           </div>
                         )}
@@ -154,14 +153,14 @@ export function ProductCollection() {
                         {!isSoldOut && (
                           <button 
                             onClick={() => handleAddToCart(product.id, product.name, price, isSoldOut)}
-                            className="absolute bottom-6 right-6 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
+                            className="absolute bottom-6 right-6 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
                           >
                             <Plus size={20} />
                           </button>
                         )}
                      </div>
                      <div className="text-center sm:text-left px-2">
-                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-colors ${isSoldOut ? 'text-white/20' : 'text-white/90 group-hover:text-white'}`}>
+                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-colors ${isSoldOut ? 'text-white/20' : 'text-white/90 group-hover:text-primary'}`}>
                          {product.name}
                        </h4>
                        <p className="text-[9px] text-white/30 uppercase tracking-[0.4em] font-medium">
@@ -188,12 +187,12 @@ export function NutritionSection() {
     <section id="nutrition" className="py-24 bg-black border-y border-white/5">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid md:grid-cols-2 gap-16 items-start">
-          <div className="p-8 border-[1px] border-white/40 rounded-sm max-w-[320px] mx-auto md:mx-0 shadow-2xl bg-neutral-950/50">
-            <h3 className="text-2xl font-bold font-headline border-b-[6px] border-white pb-2 mb-3 leading-none uppercase">Nutrition Facts</h3>
+          <div className="p-8 border-[1px] border-primary rounded-sm max-w-[320px] mx-auto md:mx-0 shadow-2xl bg-neutral-950/50">
+            <h3 className="text-2xl font-bold font-headline border-b-[6px] border-primary pb-2 mb-3 leading-none uppercase text-primary">Nutrition Facts</h3>
             <p className="text-[9px] uppercase tracking-widest text-white/40 border-b border-white/20 pb-3 mb-4 font-bold">Serving Size: 1 Bottle (350ml)</p>
-            <div className="flex justify-between items-end border-b-[3px] border-white pb-2 mb-3">
+            <div className="flex justify-between items-end border-b-[3px] border-primary pb-2 mb-3">
               <span className="text-[10px] font-bold uppercase tracking-widest">Calories</span>
-              <span className="text-4xl font-bold leading-none font-headline">110</span>
+              <span className="text-4xl font-bold leading-none font-headline text-primary">110</span>
             </div>
             {[
               { label: "Total Fat", val: "0g" },
@@ -205,7 +204,7 @@ export function NutritionSection() {
               { label: "Vitamin C", val: "45%", highlight: true },
               { label: "Potassium", val: "8%", highlight: true },
             ].map((row) => (
-              <div key={row.label} className={`flex justify-between py-1.5 border-b border-white/10 text-[9px] uppercase tracking-widest ${row.highlight ? 'font-bold text-white' : 'text-white/50'}`}>
+              <div key={row.label} className={`flex justify-between py-1.5 border-b border-white/10 text-[9px] uppercase tracking-widest ${row.highlight ? 'font-bold text-primary' : 'text-white/50'}`}>
                 <span className={row.indent ? 'pl-4' : ''}>{row.label}</span>
                 <span>{row.val}</span>
               </div>
@@ -216,7 +215,7 @@ export function NutritionSection() {
           </div>
           
           <div className="space-y-12">
-            <h2 className="text-3xl md:text-4xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">Nutrition<br />You Can Feel.</h2>
+            <h2 className="text-3xl md:text-4xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">Nutrition<br /><span className="text-primary">You Can Feel.</span></h2>
             <div className="grid gap-6">
               {[
                 { num: "01", title: "Immune Support", desc: "High Vitamin C content from real fruits helps strengthen your immune system naturally." },
@@ -224,8 +223,8 @@ export function NutritionSection() {
                 { num: "03", title: "Hydration Boost", desc: "Natural electrolytes and pure water content keep you hydrated throughout the day." },
                 { num: "04", title: "No Added Sugar", desc: "Every gram of sweetness comes directly from the fruits — nothing added, nothing artificial." },
               ].map((item) => (
-                <div key={item.num} className="flex gap-6 items-start border-l border-white/10 pl-6 group">
-                  <span className="text-2xl font-headline font-bold text-white/10 group-hover:text-white/30 transition-colors duration-500">{item.num}</span>
+                <div key={item.num} className="flex gap-6 items-start border-l border-primary/20 pl-6 group">
+                  <span className="text-2xl font-headline font-bold text-primary/10 group-hover:text-primary transition-colors duration-500">{item.num}</span>
                   <div>
                     <h4 className="text-[11px] font-bold mb-1 uppercase tracking-[0.2em]">{item.title}</h4>
                     <p className="text-white/40 font-light leading-relaxed text-[10px] max-w-sm">{item.desc}</p>
@@ -252,28 +251,28 @@ export function ReviewsSection() {
     <section id="reviews" className="py-24 bg-neutral-900/20">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center">
-          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what people say</p>
+          <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what people say</p>
           <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">Loved By Thousands</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-black/40 p-10 rounded-3xl border border-white/5 text-center flex flex-col justify-center items-center backdrop-blur-sm shadow-xl">
-            <span className="text-4xl md:text-5xl font-headline font-bold">4.9</span>
-            <div className="flex gap-1.5 my-3 text-white/80">
+          <div className="bg-black/40 p-10 rounded-3xl border border-primary/10 text-center flex flex-col justify-center items-center backdrop-blur-sm shadow-xl">
+            <span className="text-4xl md:text-5xl font-headline font-bold text-primary">4.9</span>
+            <div className="flex gap-1.5 my-3 text-primary">
               {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
             </div>
             <p className="text-[9px] text-white/30 uppercase tracking-[0.3em]">Based on 2,840 reviews</p>
           </div>
           
           {reviews.map((review, i) => (
-            <div key={i} className="p-8 border border-white/5 bg-black/20 rounded-3xl group hover:border-white/20 transition-all duration-500 shadow-lg">
-              <div className="flex gap-1 mb-5 text-white/20 group-hover:text-white/50 transition-colors">
+            <div key={i} className="p-8 bg-black/20 rounded-3xl group hover:border-primary transition-all duration-500 shadow-lg maroon-glow-border">
+              <div className="flex gap-1 mb-5 text-primary/20 group-hover:text-primary transition-colors">
                 {[...Array(review.rating)].map((_, j) => <Star key={j} size={10} fill="currentColor" />)}
               </div>
               <p className="text-[12px] text-white/50 mb-6 leading-relaxed font-light italic">"{review.text}"</p>
               <div className="mt-auto pt-4 border-t border-white/5">
                 <h5 className="font-bold text-[10px] tracking-widest uppercase">{review.name}</h5>
-                <p className="text-[9px] text-white/20 uppercase tracking-widest mt-1">{review.flavor}</p>
+                <p className="text-[9px] text-primary uppercase tracking-widest mt-1">{review.flavor}</p>
               </div>
             </div>
           ))}
@@ -295,14 +294,14 @@ export function FAQSection() {
     <section id="faq" className="py-24 bg-black">
       <div className="container mx-auto px-6 md:px-12 max-w-2xl">
         <div className="mb-12 text-center md:text-left">
-          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">questions</p>
+          <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">questions</p>
           <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">Frequently Asked</h2>
         </div>
         
         <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, i) => (
             <AccordionItem key={i} value={`item-${i}`} className="border-white/5 px-0 bg-neutral-900/20 rounded-xl px-6">
-              <AccordionTrigger className="text-[11px] md:text-sm font-headline font-bold hover:no-underline hover:text-white/60 transition-colors py-5 uppercase tracking-widest text-left">
+              <AccordionTrigger className="text-[11px] md:text-sm font-headline font-bold hover:no-underline hover:text-primary transition-colors py-5 uppercase tracking-widest text-left">
                 {faq.q}
               </AccordionTrigger>
               <AccordionContent className="text-white/40 text-[11px] pb-5 leading-relaxed font-light border-t border-white/5 pt-4">
@@ -348,7 +347,7 @@ export function Footer() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid md:grid-cols-4 gap-16 mb-16 pb-16 border-b border-white/5">
           <div className="col-span-2">
-            <h2 className="text-3xl font-headline font-bold tracking-[0.3em] mb-4">Olipop</h2>
+            <h2 className="text-3xl font-headline font-bold tracking-[0.3em] mb-4 text-primary">Olipop</h2>
             <p className="text-white/20 text-[10px] lowercase tracking-[0.4em] mb-8 font-medium">Fresh Cold-Pressed Juice</p>
             <div className="max-w-sm">
               <h4 className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] mb-4">Newsletter Signup</h4>
@@ -359,7 +358,7 @@ export function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-neutral-900 border-white/5 text-[10px] tracking-widest"
                 />
-                <Button type="submit" size="icon" className="bg-white text-black hover:bg-neutral-200">
+                <Button type="submit" size="icon" className="bg-primary text-white hover:bg-primary/80">
                   <Send size={16} />
                 </Button>
               </form>
@@ -368,11 +367,11 @@ export function Footer() {
           <div>
             <h4 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em] mb-6">Navigate</h4>
             <ul className="space-y-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-              <li><a href="#product" className="hover:text-white transition-colors">Product</a></li>
-              <li><a href="#ingredients" className="hover:text-white transition-colors">Ingredients</a></li>
-              <li><a href="#nutrition" className="hover:text-white transition-colors">Nutrition</a></li>
-              <li><a href="#reviews" className="hover:text-white transition-colors">Reviews</a></li>
-              <li><a href="/admin-dashboard" className="hover:text-white transition-colors text-white/20">Admin Hub</a></li>
+              <li><a href="#product" className="hover:text-primary transition-colors">Product</a></li>
+              <li><a href="#ingredients" className="hover:text-primary transition-colors">Ingredients</a></li>
+              <li><a href="#nutrition" className="hover:text-primary transition-colors">Nutrition</a></li>
+              <li><a href="#reviews" className="hover:text-primary transition-colors">Reviews</a></li>
+              <li><a href="/admin-dashboard" className="hover:text-primary transition-colors text-white/20">Admin Hub</a></li>
             </ul>
           </div>
           <div>
