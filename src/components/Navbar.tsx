@@ -45,13 +45,14 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-black/70 backdrop-blur-xl py-4 border-b border-white/5' : 'bg-transparent py-10'}`}>
+      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-xl py-4 border-b border-white/5' : 'bg-transparent py-10'}`}>
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-headline font-bold tracking-[0.3em] text-white">
+          <Link href="/" className="text-2xl font-headline font-bold tracking-[0.2em] text-white flex items-center gap-2">
             Olipop
+            <span className="w-1.5 h-1.5 bg-primary rounded-full" />
           </Link>
           
-          <div className="flex items-center gap-6 md:gap-10">
+          <div className="flex items-center gap-4 md:gap-8">
             <button 
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 text-white/60 hover:text-white transition-colors"
@@ -67,17 +68,17 @@ export function Navbar() {
             {user ? (
               <button 
                 onClick={() => setIsProfileOpen(true)}
-                className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group"
+                className="flex items-center gap-2 text-white/60 hover:text-white transition-colors group"
               >
-                <span className="text-[10px] uppercase tracking-widest hidden sm:block">
+                <User size={20} strokeWidth={1.5} className="group-hover:scale-110 transition-transform" />
+                <span className="text-[10px] uppercase tracking-widest hidden sm:block font-medium">
                   {user.email?.split('@')[0]}
                 </span>
-                <User size={20} strokeWidth={1.5} className="group-hover:scale-110 transition-transform" />
               </button>
             ) : (
               <button 
                 onClick={() => setIsAuthOpen(true)}
-                className="px-6 py-2 border border-white/20 rounded-full text-[10px] uppercase tracking-widest font-bold hover:bg-white hover:text-black transition-all"
+                className="px-5 py-2 border border-white/10 rounded-full text-[9px] uppercase tracking-widest font-bold hover:bg-white hover:text-black transition-all bg-white/5 backdrop-blur-md"
               >
                 Sign In
               </button>
@@ -87,32 +88,35 @@ export function Navbar() {
               onClick={() => setIsMenuOpen(true)}
               className="p-2 text-white/60 hover:text-white transition-colors"
             >
-              <Menu size={24} strokeWidth={1.5} />
+              <Menu size={22} strokeWidth={1.5} />
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Hamburger Navigation Overlay */}
-      <div className={`fixed inset-0 z-[110] transition-all duration-700 ease-in-out ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <div className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-700 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
-        <div className={`absolute top-0 right-0 h-full w-full sm:max-w-md forest-mirror transition-transform duration-700 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl`}>
-          <div className="h-full flex flex-col p-12">
-            <div className="flex justify-between items-center mb-24">
-              <span className="text-xl font-headline tracking-[0.3em] text-white/20">NAV</span>
-              <button onClick={() => setIsMenuOpen(false)} className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
-                <X size={20} className="text-white/40" />
+      {/* Compact Side Navigation Overlay */}
+      <div className={`fixed inset-0 z-[110] transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
+        <div className={`absolute top-0 right-0 h-full w-full sm:max-w-[380px] forest-mirror transition-transform duration-500 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl overflow-hidden`}>
+          <div className="h-full flex flex-col p-8 md:p-12 relative">
+             {/* Decorative Background Element */}
+            <div className="absolute top-[-10%] right-[-20%] w-80 h-80 rounded-full bg-white/5 blur-[100px] pointer-events-none" />
+            
+            <div className="flex justify-between items-center mb-16 relative z-10">
+              <span className="text-xs font-headline font-bold tracking-[0.3em] text-white/40 uppercase">Navigation</span>
+              <button onClick={() => setIsMenuOpen(false)} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <X size={18} className="text-white/40" />
               </button>
             </div>
 
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6 relative z-10">
               {navLinks.map((link, i) => (
                 <Link 
                   key={link.name} 
                   href={link.href} 
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-4xl md:text-5xl font-headline font-bold text-white/40 hover:text-white transition-all hover:translate-x-4 flex items-center gap-6 group"
-                  style={{ transitionDelay: `${i * 100}ms` }}
+                  className="text-3xl font-headline font-bold text-white/40 hover:text-white transition-all hover:translate-x-3 flex items-center gap-4 group"
+                  style={{ transitionDelay: `${i * 50}ms` }}
                 >
                   <span className="text-[10px] font-mono text-white/10 group-hover:text-white/40">{String(i + 1).padStart(2, '0')}</span>
                   {link.name}
@@ -120,14 +124,14 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="mt-auto space-y-8">
-               <div className="h-px w-full bg-white/5" />
+            <div className="mt-auto relative z-10">
+               <div className="h-px w-full bg-white/10 mb-8" />
                <div className="flex flex-col gap-4">
-                 <p className="text-[9px] uppercase tracking-[0.4em] text-white/20">Connect</p>
+                 <p className="text-[9px] uppercase tracking-[0.4em] text-white/20 font-bold">Follow Olipop</p>
                  <div className="flex gap-6 text-[10px] uppercase tracking-widest font-bold text-white/40">
-                   <a href="#" className="hover:text-white transition-colors">Instagram</a>
-                   <a href="#" className="hover:text-white transition-colors">Twitter</a>
-                   <a href="#" className="hover:text-white transition-colors">Facebook</a>
+                   <a href="#" className="hover:text-white transition-colors">IG</a>
+                   <a href="#" className="hover:text-white transition-colors">TW</a>
+                   <a href="#" className="hover:text-white transition-colors">FB</a>
                  </div>
                </div>
             </div>

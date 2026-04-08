@@ -23,7 +23,7 @@
     --border: 0 0% 15%;
     --input: 0 0% 15%;
     --ring: 0 0% 100%;
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 }
 
@@ -41,8 +41,8 @@
 }
 
 .hero-vignette {
-  background: radial-gradient(ellipse 70% 100% at 30% 50%, transparent 20%, rgba(0,0,0,.75) 100%),
-              linear-gradient(to right, rgba(0,0,0,.65) 0%, transparent 50%, rgba(0,0,0,.4) 100%);
+  background: radial-gradient(ellipse 75% 100% at 35% 50%, transparent 20%, rgba(0,0,0,.8) 100%),
+              linear-gradient(to right, rgba(0,0,0,.7) 0%, transparent 60%, rgba(0,0,0,.5) 100%);
 }
 
 .scroll-hint-line {
@@ -50,18 +50,22 @@
 }
 
 @keyframes scrollPulse {
-  0%, 100% { opacity: 0.3; transform: scaleY(1); }
-  50% { opacity: 0.8; transform: scaleY(1.3); }
+  0%, 100% { opacity: 0.2; transform: scaleY(1); }
+  50% { opacity: 0.8; transform: scaleY(1.4); }
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: #000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #222;
+  background: #1a1a1a;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #252525;
 }
 
 .text-stroke {
@@ -70,7 +74,20 @@
 }
 
 .forest-mirror {
-  background: rgba(5, 15, 10, 0.7);
-  backdrop-filter: blur(40px) saturate(160%);
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(8, 12, 10, 0.75);
+  backdrop-filter: blur(50px) saturate(180%);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.grain-texture::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.03;
+  background-image: url("https://res.cloudinary.com/drmpjeatm/image/upload/v1775574830/grain_texture.png");
 }

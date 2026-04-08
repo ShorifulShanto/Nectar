@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -30,13 +29,13 @@ export function OlipopHero() {
       
       if (heroImageRef.current) {
         const scale = 1 + progress * 0.1;
-        const opacity = 1 - progress * 1.2;
-        heroImageRef.current.style.transform = `translate3d(0, ${progress * -30}px, 0) scale(${scale})`;
+        const opacity = 1 - progress * 1.5;
+        heroImageRef.current.style.transform = `translate3d(0, ${progress * -50}px, 0) scale(${scale})`;
         heroImageRef.current.style.opacity = opacity.toString();
       }
 
       if (contentRef.current) {
-        const opacity = 1 - progress * 2;
+        const opacity = 1 - progress * 2.5;
         contentRef.current.style.opacity = opacity.toString();
       }
     };
@@ -99,7 +98,7 @@ export function OlipopHero() {
     setTimeout(() => {
       setCurrentFlavorIndex(nextIdx);
       setIsLoadingFlavor(false);
-    }, 400);
+    }, 450);
   };
 
   return (
@@ -107,7 +106,7 @@ export function OlipopHero() {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-opacity duration-700 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100'}`}
+          className={`relative w-full h-full transition-all duration-700 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-90 rotate-3' : 'opacity-100 scale-100 rotate-0'}`}
         >
           <Image 
             src={currentFlavor.videoUrl} 
@@ -125,42 +124,42 @@ export function OlipopHero() {
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         <div 
           ref={contentRef}
-          className={`max-w-md transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'}`}
+          className={`max-w-md transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 -translate-y-4 blur-md' : 'opacity-100 translate-y-0 blur-0'}`}
         >
           <div className="space-y-6">
-            <p className="text-white/30 font-bold tracking-[0.4em] text-[9px]">
-              Olipop — fresh pressed
+            <p className="text-white/40 font-bold tracking-[0.5em] text-[9px] uppercase">
+              Olipop — real pressed
             </p>
             <h1 
-              className="text-4xl md:text-5xl lg:text-7xl font-headline font-bold leading-[0.8] tracking-tighter uppercase"
+              className="text-5xl md:text-7xl lg:text-9xl font-headline font-bold leading-[0.85] tracking-tighter uppercase"
               style={{ color: currentFlavor.accentHex }}
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-[10px] md:text-[11px] font-headline tracking-[0.3em] text-white/40 italic">
+            <p className="text-[11px] md:text-[12px] font-accent tracking-[0.2em] italic transition-colors duration-500" style={{ color: `${currentFlavor.accentHex}80` }}>
               {currentFlavor.subtitle}
             </p>
-            <p className="text-[10px] md:text-[11px] text-white/30 leading-relaxed max-w-[280px] font-light">
+            <p className="text-[10px] md:text-[11px] text-white/40 leading-relaxed max-w-[300px] font-light">
               {currentFlavor.description}
             </p>
             
             <div className="flex flex-wrap gap-2 pt-2">
-              <span className="px-3 py-1 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/40">Cold Pressed</span>
-              <span className="px-3 py-1 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/40">Vit C</span>
-              <span className="px-3 py-1 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/40">No Sugar</span>
+              <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/30">Cold Pressed</span>
+              <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/30">High Vit C</span>
+              <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] uppercase tracking-widest text-white/30">No Added Sugar</span>
             </div>
 
-            <div className="flex gap-4 pt-6">
+            <div className="flex gap-4 pt-8">
               <button 
                 onClick={addToCart}
                 style={{ backgroundColor: currentFlavor.accentHex }}
-                className="px-8 py-3.5 text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:brightness-110 transition-all shadow-lg"
+                className="px-8 py-4 text-black font-bold rounded-full uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] active:scale-95"
               >
                 ORDER NOW →
               </button>
               <button 
-                style={{ borderColor: `${currentFlavor.accentHex}40`, color: currentFlavor.accentHex }}
-                className="px-8 py-3.5 border text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/5 transition-all backdrop-blur-sm"
+                style={{ borderColor: `${currentFlavor.accentHex}30`, color: currentFlavor.accentHex }}
+                className="px-8 py-4 border bg-white/5 text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all backdrop-blur-sm"
               >
                 $12.00
               </button>
@@ -168,34 +167,35 @@ export function OlipopHero() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-10">
-          <div className="text-center">
+        <div className="flex flex-col items-center gap-12">
+          <div className="text-center relative">
              <span 
-               className="font-headline font-bold text-7xl md:text-9xl leading-none select-none transition-colors duration-500"
+               className="font-headline font-bold text-7xl md:text-[10rem] leading-none select-none transition-all duration-700 inline-block"
                style={{ 
                  color: 'transparent', 
-                 WebkitTextStroke: `1px ${currentFlavor.accentHex}20` 
+                 WebkitTextStroke: `1px ${currentFlavor.accentHex}20`,
+                 transform: isLoadingFlavor ? 'scale(0.8) translateY(20px)' : 'scale(1) translateY(0)'
                }}
              >
                {currentFlavor.index}
              </span>
-             <p className="text-[9px] uppercase tracking-[0.4em] mt-2" style={{ color: `${currentFlavor.accentHex}40` }}>
+             <p className="text-[9px] uppercase tracking-[0.5em] mt-2 font-bold transition-colors duration-500" style={{ color: `${currentFlavor.accentHex}40` }}>
                {currentFlavor.index} / 07
              </p>
           </div>
           
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-5">
             <button 
               onClick={() => changeFlavor("prev")}
-              className="group flex flex-col items-center gap-2 py-2 text-[10px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-2 py-2 text-[10px] font-bold tracking-[0.4em] text-white/20 hover:text-white transition-all"
             >
               <ChevronUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
               PREV
             </button>
-            <div className="w-px h-10 bg-white/10" />
+            <div className="w-px h-12 bg-white/10" />
             <button 
               onClick={() => changeFlavor("next")}
-              className="group flex flex-col items-center gap-2 py-2 text-[10px] font-bold tracking-[0.3em] text-white/30 hover:text-white transition-all"
+              className="group flex flex-col items-center gap-2 py-2 text-[10px] font-bold tracking-[0.4em] text-white/20 hover:text-white transition-all"
             >
               NEXT
               <ChevronDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
@@ -204,15 +204,15 @@ export function OlipopHero() {
         </div>
       </div>
 
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-6">
-        <Instagram className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Twitter className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
-        <Facebook className="w-4 h-4 text-white/20 hover:text-white transition-colors cursor-pointer" />
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-8">
+        <Instagram className="w-4 h-4 text-white/15 hover:text-white transition-colors cursor-pointer" />
+        <Twitter className="w-4 h-4 text-white/15 hover:text-white transition-colors cursor-pointer" />
+        <Facebook className="w-4 h-4 text-white/15 hover:text-white transition-colors cursor-pointer" />
       </div>
 
-      <div className="absolute bottom-12 right-6 md:right-24 z-30 flex flex-col items-center gap-3">
-        <div className="w-px h-10 bg-gradient-to-t from-white/20 to-transparent scroll-hint-line" />
-        <span className="text-[8px] font-bold tracking-[0.5em] uppercase text-white/20">SCROLL</span>
+      <div className="absolute bottom-12 right-6 md:right-24 z-30 flex flex-col items-center gap-4">
+        <div className="w-px h-12 bg-gradient-to-t from-white/30 to-transparent scroll-hint-line" />
+        <span className="text-[8px] font-bold tracking-[0.6em] uppercase text-white/20">SCROLL</span>
       </div>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
