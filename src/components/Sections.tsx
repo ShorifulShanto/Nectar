@@ -57,17 +57,13 @@ export function ProductCollection() {
     return collection(db, "products");
   }, [db]);
 
-  const { data: dbProducts } = useCollection(productsQuery);
+  const { data: dbProducts, isLoading } = useCollection(productsQuery);
 
-  const handleAddToCart = async (flavor: Flavor) => {
+  const handleAddToCart = async (productId: string, productName: string, price: number, isSoldOut: boolean) => {
     if (!user || !db) {
       toast({ title: "Please sign in to shop", description: "You need an account to add items to cart." });
       return;
     }
-
-    const productRecord = dbProducts?.find(p => p.id === flavor.id);
-    const price = productRecord?.price ?? 12.00;
-    const isSoldOut = productRecord?.amount === 0;
 
     if (isSoldOut) {
       toast({ variant: "destructive", title: "Sold Out", description: "This flavor is currently unavailable." });
@@ -76,7 +72,7 @@ export function ProductCollection() {
 
     try {
       const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
-      const q = query(cartItemsRef, where("productId", "==", flavor.id));
+      const q = query(cartItemsRef, where("productId", "==", productId));
       const snap = await getDocs(q);
 
       if (!snap.empty) {
@@ -88,7 +84,7 @@ export function ProductCollection() {
         const newRef = doc(cartItemsRef);
         await setDoc(newRef, {
           id: newRef.id,
-          productId: flavor.id,
+          productId: productId,
           quantity: 1,
           priceAtAddToCart: price,
           cartId: 'cart'
@@ -101,12 +97,12 @@ export function ProductCollection() {
         type: "cart_addition",
         userId: user.uid,
         userEmail: user.email,
-        payload: { productId: flavor.id, flavorName: flavor.name },
+        payload: { productId, flavorName: productName },
         timestamp: new Date().toISOString(),
         createdAt: serverTimestamp()
       });
 
-      toast({ title: `${flavor.name} added to cart.` });
+      toast({ title: `${productName} added to cart.` });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Error", description: e.message });
     }
@@ -117,52 +113,65 @@ export function ProductCollection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
           <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">our collection</p>
-          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">Seven Flavors<br />One Obsession</h2>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">Discover Our<br />Latest Batch</h2>
         </div>
         
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {flavors.map((flavor) => {
-            const productRecord = dbProducts?.find(p => p.id === flavor.id);
-            const isSoldOut = productRecord?.amount === 0;
-            const price = productRecord?.price ?? 12.00;
+        {isLoading ? (
+          <div className="flex items-center justify-center p-20">
+            <RefreshCw className="animate-spin text-white/10" size={40} />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            {dbProducts && dbProducts.length > 0 ? (
+              dbProducts.map((product) => {
+                const isSoldOut = product.amount <= 0;
+                const price = product.price || 12.00;
+                // Attempt to get extra visual data from local config if it exists
+                const flavorConfig = flavors.find(f => f.id === product.id);
 
-            return (
-              <div key={flavor.id} className="group relative">
-                 <div className="aspect-[4/5] rounded-2xl bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-4 flex flex-col items-center justify-center group-hover:border-white/10 transition-all duration-700 shadow-xl relative">
-                    {isSoldOut && (
-                      <div className="absolute top-4 left-4 z-10 bg-red-600 text-white text-[8px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest shadow-lg">
-                        Sold Out
-                      </div>
-                    )}
-                    <div className={`relative w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
-                      <Image 
-                        src={flavor.imageUrl} 
-                        alt={flavor.name} 
-                        fill 
-                        className="object-contain p-2"
-                      />
-                    </div>
-                    {!isSoldOut && (
-                      <button 
-                        onClick={() => handleAddToCart(flavor)}
-                        className="absolute bottom-4 right-4 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-2xl"
-                      >
-                        <Plus size={18} />
-                      </button>
-                    )}
-                 </div>
-                 <div className="text-center md:text-left px-2">
-                   <h4 className={`text-[10px] font-bold tracking-[0.25em] uppercase mb-1 ${isSoldOut ? 'text-white/20' : 'text-white/80'}`}>
-                     {flavor.name}
-                   </h4>
-                   <p className="text-[8px] text-white/30 uppercase tracking-widest font-medium">
-                     ${price.toFixed(2)} — 350ml
-                   </p>
-                 </div>
+                return (
+                  <div key={product.id} className="group relative">
+                     <div className="aspect-[4/5] rounded-2xl bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-4 flex flex-col items-center justify-center group-hover:border-white/10 transition-all duration-700 shadow-xl relative">
+                        {isSoldOut && (
+                          <div className="absolute top-4 left-4 z-10 bg-red-600 text-white text-[8px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest shadow-lg">
+                            Sold Out
+                          </div>
+                        )}
+                        <div className={`relative w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
+                          <Image 
+                            src={product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600'} 
+                            alt={product.name} 
+                            fill 
+                            className="object-contain p-2"
+                          />
+                        </div>
+                        {!isSoldOut && (
+                          <button 
+                            onClick={() => handleAddToCart(product.id, product.name, price, isSoldOut)}
+                            className="absolute bottom-4 right-4 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-2xl"
+                          >
+                            <Plus size={18} />
+                          </button>
+                        )}
+                     </div>
+                     <div className="text-center md:text-left px-2">
+                       <h4 className={`text-[10px] font-bold tracking-[0.25em] uppercase mb-1 ${isSoldOut ? 'text-white/20' : 'text-white/80'}`}>
+                         {product.name}
+                       </h4>
+                       <p className="text-[8px] text-white/30 uppercase tracking-widest font-medium">
+                         ${price.toFixed(2)} — 350ml
+                       </p>
+                     </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-full py-20 text-center border border-dashed border-white/5 rounded-3xl">
+                <p className="text-white/20 uppercase tracking-[0.3em] text-[10px]">No products found in catalog.</p>
               </div>
-            );
-          })}
-        </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

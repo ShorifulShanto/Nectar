@@ -1,38 +1,69 @@
 
 "use client";
 
-import { useState } from "react";
-import { useFirestore, useCollection } from "@/firebase";
+import { useState, useEffect } from "react";
+import { useFirestore, useCollection, useUser } from "@/firebase";
 import { collection, deleteDoc, doc, updateDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Search, ArrowLeft, Package, Activity, RefreshCw, AlertCircle } from "lucide-react";
+import { Trash2, Edit, Search, ArrowLeft, Package, Activity, RefreshCw, AlertCircle, Lock } from "lucide-react";
 import { useMemoFirebase } from "@/firebase/provider";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { flavors } from "@/lib/flavor-data";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useRouter } from "next/navigation";
+
+const ADMIN_EMAIL = "md.si.shanto001@gmail.com";
 
 export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
   const db = useFirestore();
+  const { user, isUserLoading } = useUser();
   const { toast } = useToast();
+  const router = useRouter();
 
   const hubQuery = useMemoFirebase(() => {
-    if (!db) return null;
+    if (!db || user?.email !== ADMIN_EMAIL) return null;
     return collection(db, "central_hub");
-  }, [db]);
+  }, [db, user]);
 
   const productsQuery = useMemoFirebase(() => {
-    if (!db) return null;
+    if (!db || user?.email !== ADMIN_EMAIL) return null;
     return collection(db, "products");
-  }, [db]);
+  }, [db, user]);
 
   const { data: entries, isLoading: isHubLoading, error: hubError } = useCollection(hubQuery);
   const { data: dbProducts, isLoading: isProductsLoading, error: productsError } = useCollection(productsQuery);
+
+  // Access Control
+  if (isUserLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <RefreshCw className="animate-spin text-white/20" size={32} />
+      </div>
+    );
+  }
+
+  if (!user || user.email !== ADMIN_EMAIL) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-20 h-20 bg-red-500/10 border border-red-500/20 rounded-full flex items-center justify-center mb-6">
+          <Lock className="text-red-500" size={32} />
+        </div>
+        <h1 className="text-2xl font-headline font-bold uppercase tracking-widest mb-2">Access Denied</h1>
+        <p className="text-white/40 text-sm max-w-xs mb-8 uppercase tracking-widest">
+          This area is restricted to authorized administrators only.
+        </p>
+        <Button asChild variant="outline" className="rounded-full px-8 border-white/10 uppercase text-[10px] tracking-widest">
+          <Link href="/">Return to Site</Link>
+        </Button>
+      </div>
+    );
+  }
 
   const filteredEntries = entries?.sort((a, b) => {
     const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
@@ -59,7 +90,7 @@ export default function AdminDashboard() {
           updatedAt: serverTimestamp()
         }, { merge: true });
       }
-      toast({ title: "Catalog Synchronized", description: "All 7 flavors have been initialized in Firestore." });
+      toast({ title: "Catalog Synchronized", description: "All flavors have been initialized in Firestore." });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Sync Failed", description: e.message });
     } finally {
@@ -100,7 +131,7 @@ export default function AdminDashboard() {
               <ArrowLeft size={12} /> Back to Site
             </Link>
             <h1 className="text-4xl font-headline font-bold tracking-tight uppercase">Admin Control</h1>
-            <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] mt-2">Inventory & Data Logs</p>
+            <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] mt-2">Authenticated as {user.email}</p>
           </div>
           
           <div className="flex gap-4 w-full md:w-auto">
@@ -125,12 +156,12 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {hubError && (
+        {(hubError || productsError) && (
           <Alert variant="destructive" className="mb-8 bg-destructive/10 border-destructive/20">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle className="uppercase tracking-widest text-[10px] font-bold">Access Warning</AlertTitle>
+            <AlertTitle className="uppercase tracking-widest text-[10px] font-bold">Data Access Error</AlertTitle>
             <AlertDescription className="text-[11px] opacity-70">
-              You may have limited permissions to view certain data. Please ensure your account has administrative access.
+              There was an issue fetching data. This may be due to administrative permission restrictions.
             </AlertDescription>
           </Alert>
         )}

@@ -12,14 +12,13 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      // Simplified for the prototype to allow the current user to manage the site.
-      // In a production environment, this would check for a specific role in a collection.
-      return isSignedIn();
+      // Restrict administrative actions to the specific owner email
+      return isSignedIn() && request.auth.token.email == "md.si.shanto001@gmail.com";
     }
 
     match /central_hub/{entryId} {
       allow create: if true;
-      allow get, list: if isSignedIn();
+      allow get, list: if isAdmin();
       allow update, delete: if isAdmin();
     }
 
