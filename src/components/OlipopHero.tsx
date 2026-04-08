@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -22,32 +21,28 @@ export function OlipopHero() {
   const { toast } = useToast();
   const currentFlavor = flavors[currentFlavorIndex];
 
+  // High-performance scroll scrubbing with direct DOM manipulation
   useEffect(() => {
-    let ticking = false;
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          const winHeight = window.innerHeight;
-          const progress = Math.min(Math.max(scrollY / (winHeight * 0.8), 0), 1);
-          
-          if (heroImageRef.current) {
-            const scale = 1 + progress * 0.15;
-            const opacity = 1 - progress * 1.5;
-            const yOffset = progress * -40;
-            heroImageRef.current.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale})`;
-            heroImageRef.current.style.opacity = opacity.toFixed(3);
-          }
+      const scrollY = window.scrollY;
+      const winHeight = window.innerHeight;
+      const progress = Math.min(Math.max(scrollY / (winHeight * 0.8), 0), 1);
+      
+      if (heroImageRef.current) {
+        // Tied scale, translation and rotation to scroll speed (scrub)
+        const scale = 1 + progress * 0.15;
+        const opacity = 1 - progress * 1.5;
+        const yOffset = progress * -60;
+        const rotation = progress * 10;
+        heroImageRef.current.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale}) rotate(${rotation}deg)`;
+        heroImageRef.current.style.opacity = opacity.toString();
+      }
 
-          if (contentRef.current) {
-            const opacity = 1 - progress * 2.2;
-            const xOffset = progress * -30;
-            contentRef.current.style.opacity = opacity.toFixed(3);
-            contentRef.current.style.transform = `translate3d(${xOffset}px, 0, 0)`;
-          }
-          ticking = false;
-        });
-        ticking = true;
+      if (contentRef.current) {
+        const opacity = 1 - progress * 2.2;
+        const xOffset = progress * -30;
+        contentRef.current.style.opacity = opacity.toString();
+        contentRef.current.style.transform = `translate3d(${xOffset}px, 0, 0)`;
       }
     };
 
@@ -85,7 +80,7 @@ export function OlipopHero() {
       
       // Central Hub Logging
       const hubRef = doc(collection(db, "central_hub"));
-      setDoc(hubRef, {
+      await setDoc(hubRef, {
         id: hubRef.id,
         type: "cart_addition",
         userId: user.uid,
@@ -144,15 +139,15 @@ export function OlipopHero() {
               OLLANHO — FRESH PRESSED
             </p>
             <h1 
-              className="text-5xl md:text-6xl lg:text-8xl font-headline font-bold leading-[0.8] tracking-tighter transition-colors duration-500 uppercase"
+              className="text-4xl md:text-5xl lg:text-7xl font-headline font-bold leading-[0.8] tracking-tighter transition-colors duration-500 uppercase"
               style={{ color: currentFlavor.accentHex }}
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-[10px] md:text-[12px] font-headline tracking-[0.3em] text-white/40 uppercase">
+            <p className="text-[10px] md:text-[11px] font-headline tracking-[0.3em] text-white/40 uppercase">
               {currentFlavor.subtitle}
             </p>
-            <p className="text-[10px] md:text-[12px] text-white/30 leading-relaxed max-w-[280px] font-light">
+            <p className="text-[10px] md:text-[11px] text-white/30 leading-relaxed max-w-[280px] font-light">
               {currentFlavor.description}
             </p>
             <div className="flex gap-4 pt-6">
@@ -171,7 +166,7 @@ export function OlipopHero() {
 
         <div className="flex flex-col items-center gap-10">
           <div className="text-center">
-             <span className="font-headline font-bold text-6xl md:text-9xl text-white/5 leading-none select-none">
+             <span className="font-headline font-bold text-6xl md:text-8xl text-white/5 leading-none select-none">
                {currentFlavor.index}
              </span>
           </div>

@@ -21,8 +21,9 @@ export const flavors: Flavor[] = [
     color: 'Green',
     hex: '#4caf50',
     accentHex: '#81c784',
+    // Swapped with Cherry: originally was mkh5o4, now hltpqk
     imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574830/Whisk_8e13f16450d1dbca76a4a21b38cf482edr_mklm4x.png',
-    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574932/Product_mid-spin_ingredient_2026040622561-ezgif.com-video-to-webp-converter_mkh5o4.webp',
+    videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574941/Product_mid-spin_ingredient_202604062252-ezgif.com-video-to-webp-converter_fvywbo.webp',
   },
   {
     id: 'WA0023',
@@ -57,6 +58,7 @@ export const flavors: Flavor[] = [
     color: 'Deep Red',
     hex: '#b71c1c',
     accentHex: '#e57373',
+    // Correctly mapped with Cherry assets
     imageUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574831/Whisk_03bddc76892ae9493a340545afadb486dr_qcfonm.png',
     videoUrl: 'https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574964/Product_mid-spin_ingredient_202604062246-ezgif.com-video-to-webp-converter_hltpqk.webp',
   },

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -81,7 +80,7 @@ export function ProductCollection() {
 
       // Central Hub Logging
       const hubRef = doc(collection(db, "central_hub"));
-      setDoc(hubRef, {
+      await setDoc(hubRef, {
         id: hubRef.id,
         type: "cart_addition",
         userId: user.uid,
@@ -102,7 +101,7 @@ export function ProductCollection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
           <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">OUR COLLECTION</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">SEVEN FLAVORS<br />ONE OBSESSION</h2>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">SEVEN FLAVORS<br />ONE OBSESSION</h2>
         </div>
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -171,7 +170,7 @@ export function NutritionSection() {
           </div>
           
           <div className="space-y-12">
-            <h2 className="text-4xl md:text-5xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">NUTRITION<br />YOU CAN FEEL.</h2>
+            <h2 className="text-3xl md:text-4xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">NUTRITION<br />YOU CAN FEEL.</h2>
             <div className="grid gap-6">
               {[
                 { num: "01", title: "Immune Support", desc: "High Vitamin C content from real fruits helps strengthen your immune system naturally." },
@@ -208,12 +207,12 @@ export function ReviewsSection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center">
           <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">WHAT PEOPLE SAY</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold uppercase">LOVED BY THOUSANDS</h2>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">LOVED BY THOUSANDS</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-black/40 p-10 rounded-3xl border border-white/5 text-center flex flex-col justify-center items-center backdrop-blur-sm shadow-xl">
-            <span className="text-5xl md:text-6xl font-headline font-bold">4.9</span>
+            <span className="text-4xl md:text-5xl font-headline font-bold">4.9</span>
             <div className="flex gap-1.5 my-3 text-white/80">
               {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
             </div>
@@ -251,7 +250,7 @@ export function FAQSection() {
       <div className="container mx-auto px-6 md:px-12 max-w-2xl">
         <div className="mb-12 text-center md:text-left">
           <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">QUESTIONS</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold uppercase">FREQUENTLY ASKED</h2>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">FREQUENTLY ASKED</h2>
         </div>
         
         <Accordion type="single" collapsible className="space-y-4">
