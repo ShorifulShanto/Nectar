@@ -10,9 +10,12 @@
         "email": { "type": "string", "format": "email" },
         "firstName": { "type": "string" },
         "lastName": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "phoneNumber": { "type": "string" },
+        "location": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "email", "createdAt"]
+      "required": ["id", "email"]
     },
     "CentralHubEntry": {
       "title": "CentralHubEntry",
@@ -20,26 +23,17 @@
       "description": "A centralized log of all user activities, form submissions, and profile updates.",
       "properties": {
         "id": { "type": "string" },
-        "type": { "type": "string", "enum": ["signup", "cart_addition", "newsletter", "profile_update"] },
+        "type": { "type": "string", "enum": ["signup", "cart_addition", "newsletter", "profile_update", "account_deletion"] },
         "userId": { "type": "string" },
         "userEmail": { "type": "string" },
         "payload": { "type": "object" },
         "timestamp": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "type", "timestamp"]
-    },
-    "Product": {
-      "title": "Product",
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "price": { "type": "number" }
-      }
     }
   },
   "auth": {
-    "providers": ["password", "anonymous", "google"]
+    "providers": ["password", "google"]
   },
   "firestore": {
     "/users/{userId}": {

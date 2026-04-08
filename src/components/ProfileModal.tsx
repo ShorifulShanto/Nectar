@@ -1,15 +1,26 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useUser, useFirestore, useDoc } from "@/firebase";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle, 
+  AlertDialogTrigger 
+} from "@/components/ui/alert-dialog";
+import { useUser, useFirestore, useDoc, useAuth, useMemoFirebase } from "@/firebase";
+import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { signOut, deleteUser } from "firebase/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { User, MapPin, Mail, LogOut, Loader2 } from "lucide-react";
-import { signOut } from "firebase/auth";
-import { useAuth, useMemoFirebase } from "@/firebase";
+import { User, MapPin, Mail, LogOut, Loader2, Phone, Trash2 } from "lucide-react";
 
 export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { user } = useUser();
@@ -29,6 +40,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     firstName: "",
     lastName: "",
     location: "",
+    phoneNumber: "",
   });
 
   useEffect(() => {
@@ -37,6 +49,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         firstName: profile.firstName || "",
         lastName: profile.lastName || "",
         location: profile.location || "",
+        phoneNumber: profile.phoneNumber || "",
       });
     }
   }, [profile]);
@@ -52,9 +65,8 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         updatedAt: serverTimestamp(),
       }, { merge: true });
 
-      // Log to central hub
-      await setDoc(doc(db, "central_hub", `profile_update_${Date.now()}`), {
-        id: `profile_update_${Date.now()}`,
+      await setDoc(doc(db, "central_hub", `profile_update_${user.uid}_${Date.now()}`), {
+        id: `profile_update_${user.uid}_${Date.now()}`,
         type: "profile_update",
         userId: user.uid,
         userEmail: user.email,
@@ -62,14 +74,10 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         timestamp: new Date().toISOString()
       });
 
-      toast({ title: "Profile updated successfully!" });
+      toast({ title: "Profile saved" });
       onClose();
     } catch (error: any) {
-      toast({ 
-        variant: "destructive", 
-        title: "Update Failed", 
-        description: error.message 
-      });
+      toast({ variant: "destructive", title: "Update Failed", description: error.message });
     } finally {
       setIsLoading(false);
     }
@@ -79,22 +87,57 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     try {
       await signOut(auth);
       onClose();
-      toast({ title: "Signed out successfully" });
+      toast({ title: "Signed out" });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Sign out failed" });
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (!user || !db) return;
+    setIsLoading(true);
+    try {
+      const uid = user.uid;
+      const email = user.email;
+
+      // Log deletion
+      await setDoc(doc(db, "central_hub", `deletion_${uid}_${Date.now()}`), {
+        id: `deletion_${uid}_${Date.now()}`,
+        type: "account_deletion",
+        userId: uid,
+        userEmail: email,
+        timestamp: new Date().toISOString()
+      });
+
+      // Delete Firestore data
+      await deleteDoc(doc(db, "users", uid));
+      
+      // Delete Auth user
+      await deleteUser(user);
+      
+      onClose();
+      toast({ title: "Account deleted" });
+    } catch (e: any) {
+      toast({ 
+        variant: "destructive", 
+        title: "Deletion Failed", 
+        description: "For security, please sign in again before deleting your account." 
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-white/10 text-white sm:max-w-[450px]">
+      <DialogContent className="bg-black border-white/10 text-white sm:max-w-[450px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex flex-col items-center space-y-4 mb-6">
             <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
               <User size={40} className="text-white/40" />
             </div>
             <DialogTitle className="text-2xl font-headline tracking-widest uppercase">
-              Customer Profile
+              Profile
             </DialogTitle>
           </div>
         </DialogHeader>
@@ -127,10 +170,23 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40">Email (Verified)</label>
+              <label className="text-[10px] uppercase tracking-widest text-white/40">Email</label>
               <div className="flex items-center gap-3 bg-neutral-900/50 border border-white/5 rounded-md px-4 h-12 opacity-60">
                 <Mail size={16} className="text-white/20" />
                 <span className="text-xs tracking-wider">{user?.email}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] uppercase tracking-widest text-white/40">Phone Number</label>
+              <div className="relative">
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                <Input 
+                  value={formData.phoneNumber}
+                  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                  className="bg-neutral-900 border-white/5 pl-12 h-12 text-sm"
+                  placeholder="+1 (555) 000-0000"
+                />
               </div>
             </div>
 
@@ -153,16 +209,48 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 disabled={isLoading}
                 className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
               >
-                {isLoading ? "Saving Changes..." : "Save Profile"}
+                {isLoading ? "Saving..." : "Save Changes"}
               </Button>
-              <button 
-                type="button"
-                onClick={handleSignOut}
-                className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest text-white/20 hover:text-white transition-colors"
-              >
-                <LogOut size={12} />
-                Sign Out
-              </button>
+              
+              <div className="flex items-center justify-between px-2 pt-2 border-t border-white/5">
+                <button 
+                  type="button"
+                  onClick={handleSignOut}
+                  className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/20 hover:text-white transition-colors"
+                >
+                  <LogOut size={12} />
+                  Sign Out
+                </button>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button 
+                      type="button"
+                      className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-destructive/60 hover:text-destructive transition-colors"
+                    >
+                      <Trash2 size={12} />
+                      Delete Account
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="bg-black border-white/10 text-white">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="uppercase tracking-widest font-headline">Permanently Delete?</AlertDialogTitle>
+                      <AlertDialogDescription className="text-white/40">
+                        This will delete your profile and all account data. This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-white/5 border-white/10 text-white hover:bg-white/10">Cancel</AlertDialogCancel>
+                      <AlertDialogAction 
+                        onClick={handleDeleteAccount}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Delete Forever
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
           </form>
         )}

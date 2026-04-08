@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useAuth } from "@/firebase";
+import { useAuth, useFirestore } from "@/firebase";
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
@@ -10,8 +11,10 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  User
 } from "firebase/auth";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -25,7 +28,37 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const auth = useAuth();
+  const db = useFirestore();
   const { toast } = useToast();
+
+  const syncUserToFirestore = async (user: User) => {
+    if (!db) return;
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    
+    if (!snap.exists()) {
+      await setDoc(userRef, {
+        id: user.uid,
+        email: user.email,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        location: ""
+      });
+
+      // Log to central hub
+      const hubRef = doc(db, "central_hub", `signup_${user.uid}_${Date.now()}`);
+      await setDoc(hubRef, {
+        id: hubRef.id,
+        type: "signup",
+        userId: user.uid,
+        userEmail: user.email,
+        timestamp: new Date().toISOString()
+      });
+    }
+  };
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,11 +72,13 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           setView("verify");
           return;
         }
+        await syncUserToFirestore(userCred.user);
         onClose();
-        toast({ title: "Welcome back to Olipop!" });
+        toast({ title: "Welcome back to Olipop" });
       } else if (view === "signup") {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(userCred.user);
+        await syncUserToFirestore(userCred.user);
         await signOut(auth);
         setView("verify");
       }
@@ -79,9 +114,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     setIsLoading(true);
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const userCred = await signInWithPopup(auth, provider);
+      await syncUserToFirestore(userCred.user);
       onClose();
-      toast({ title: "Welcome to Olipop!" });
+      toast({ title: "Welcome to Olipop" });
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
@@ -121,8 +157,8 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             </DialogHeader>
             <div className="space-y-4 px-4">
               <p className="text-[12px] text-white/40 uppercase tracking-widest leading-relaxed">
-                We have sent you a verification email to <span className="text-white">{email}</span>. 
-                verify it and log in.
+                We have sent a verification email to <span className="text-white">{email}</span>. 
+                Please verify it to continue.
               </p>
               <Button 
                 onClick={resetState}
@@ -146,7 +182,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             </DialogHeader>
             <div className="space-y-4 px-4">
               <p className="text-[12px] text-white/40 uppercase tracking-widest leading-relaxed">
-                We sent you a password change link to <span className="text-white">{email}</span>.
+                We sent a password reset link to <span className="text-white">{email}</span>.
               </p>
               <Button 
                 onClick={resetState}
@@ -213,7 +249,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                           onClick={() => setView("forgot")}
                           className="text-[9px] uppercase tracking-widest text-white/20 hover:text-white"
                         >
-                          Forgot Password?
+                          Forgot?
                         </button>
                       )}
                     </div>
@@ -240,7 +276,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   <span className="w-full border-t border-white/5"></span>
                 </div>
                 <div className="relative flex justify-center text-[10px] uppercase tracking-widest">
-                  <span className="bg-black px-4 text-white/20">Or continue with</span>
+                  <span className="bg-black px-4 text-white/20">Or</span>
                 </div>
               </div>
 
@@ -265,7 +301,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   onClick={() => setView(view === "login" ? "signup" : "login")}
                   className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white"
                 >
-                  {view === "login" ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+                  {view === "login" ? "Create Account" : "Back to Login"}
                 </button>
               </div>
             </div>
