@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -239,7 +240,7 @@ export function ReviewsSection() {
 
 export function FAQSection() {
   const faqs = [
-    { q: "Are OLLANHO juices 100% real fruit?", a: "Yes. Every bottle is cold-pressed from whole, real fruit. We never use concentrates, artificial flavoring, or fillers." },
+    { q: "Are OLIPOP juices 100% real fruit?", a: "Yes. Every bottle is cold-pressed from whole, real fruit. We never use concentrates, artificial flavoring, or fillers." },
     { q: "Is there added sugar in the juice?", a: "No added sugar at all. The sweetness in every bottle comes entirely from the natural fruit sugars." },
     { q: "How long does a bottle stay fresh?", a: "Our HPP technique extends shelf life to 60 days refrigerated. Once opened, enjoy within 3 days for best taste." },
     { q: "Do you ship nationwide?", a: "Yes! We ship cold-packed in insulated boxes across the country. Orders typically arrive within 2 business days." },
@@ -302,7 +303,7 @@ export function Footer() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid md:grid-cols-4 gap-16 mb-16 pb-16 border-b border-white/5">
           <div className="col-span-2">
-            <h2 className="text-3xl font-headline font-bold tracking-[0.3em] mb-4">OLLANHO</h2>
+            <h2 className="text-3xl font-headline font-bold tracking-[0.3em] mb-4">OLIPOP</h2>
             <p className="text-white/20 text-[10px] uppercase tracking-[0.4em] mb-8 font-medium">Fresh Cold-Pressed Juice</p>
             <div className="max-w-sm">
               <h4 className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] mb-4">Newsletter Signup</h4>
@@ -332,7 +333,7 @@ export function Footer() {
           <div>
             <h4 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em] mb-6">Contact</h4>
             <ul className="space-y-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-              <li>hello@ollanho.com</li>
+              <li>hello@olipop.com</li>
               <li>+1 (800) 555-JUICE</li>
               <li className="flex gap-4 pt-4">
                 <Instagram size={14} className="hover:text-white transition-colors cursor-pointer" />
@@ -344,7 +345,7 @@ export function Footer() {
         </div>
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] text-white/20 uppercase tracking-[0.4em] font-bold">
-          <p>© 2025 OLLANHO Fresh Juice. All rights reserved.</p>
+          <p>© 2025 Olipop Fresh Juice. All rights reserved.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>

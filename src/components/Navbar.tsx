@@ -4,8 +4,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUser, useFirestore, useCollection } from "@/firebase";
-import { collection, query, where } from "firebase/firestore";
-import { ShoppingCart, User, LogOut, Menu, X } from "lucide-react";
+import { collection } from "firebase/firestore";
+import { ShoppingCart, User } from "lucide-react";
 import { AuthModal } from "./AuthModal";
 import { CartSidebar } from "./CartSidebar";
 import { useMemoFirebase } from "@/firebase/provider";
@@ -46,7 +46,7 @@ export function Navbar() {
       <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-black/70 backdrop-blur-xl py-4 border-b border-white/5' : 'bg-transparent py-10'}`}>
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
           <Link href="/" className="text-2xl font-headline font-bold tracking-[0.3em] font-headline text-white">
-            OLLANHO
+            OLIPOP
           </Link>
           
           <div className="hidden md:flex items-center gap-12">

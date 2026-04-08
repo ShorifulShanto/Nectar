@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
     <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-1000">
       <div className="mb-12 text-center">
         <h1 className="text-5xl md:text-7xl font-headline font-bold tracking-[0.3em] text-white animate-pulse">
-          OLLANHO
+          OLIPOP
         </h1>
         <p className="text-[10px] tracking-[0.4em] uppercase text-white/30 mt-4">
           Fresh Cold-Pressed Juice
