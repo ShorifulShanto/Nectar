@@ -26,9 +26,10 @@
         "name": { "type": "string" },
         "price": { "type": "number" },
         "amount": { "type": "number", "description": "Inventory count. 0 means Sold Out." },
+        "image": { "type": "string" },
         "description": { "type": "string" }
       },
-      "required": ["id", "name", "price", "amount"]
+      "required": ["id", "name", "price", "amount", "image"]
     },
     "CentralHubEntry": {
       "title": "CentralHubEntry",

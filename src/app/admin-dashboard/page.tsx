@@ -7,7 +7,7 @@ import { collection, deleteDoc, doc, updateDoc, setDoc, serverTimestamp } from "
 import { Navbar } from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Search, ArrowLeft, Database, Package, Activity, Save, RefreshCw } from "lucide-react";
+import { Trash2, Edit, Search, ArrowLeft, Database, Package, Activity, RefreshCw } from "lucide-react";
 import { useMemoFirebase } from "@/firebase/provider";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
@@ -53,11 +53,12 @@ export default function AdminDashboard() {
           name: flavor.name,
           price: 12.00,
           amount: 50,
+          image: flavor.imageUrl,
           description: flavor.description,
           updatedAt: serverTimestamp()
         }, { merge: true });
       }
-      toast({ title: "Products Initialized", description: "All flavors have been synced to Firestore." });
+      toast({ title: "Catalog Synchronized", description: "All 7 flavors have been initialized in Firestore." });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Sync Failed", description: e.message });
     } finally {
@@ -72,7 +73,7 @@ export default function AdminDashboard() {
         [field]: value,
         updatedAt: serverTimestamp()
       });
-      toast({ title: "Product Updated", description: `${field} changed successfully.` });
+      toast({ title: "Product Updated", description: `${field} updated successfully.` });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Update Failed", description: e.message });
     }
@@ -82,7 +83,7 @@ export default function AdminDashboard() {
     if (!db) return;
     try {
       await deleteDoc(doc(db, "central_hub", id));
-      toast({ title: "Entry deleted" });
+      toast({ title: "Log entry removed" });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Delete failed", description: e.message });
     }
@@ -97,8 +98,8 @@ export default function AdminDashboard() {
             <Link href="/" className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/40 hover:text-white mb-4 transition-colors">
               <ArrowLeft size={12} /> Back to Site
             </Link>
-            <h1 className="text-4xl font-headline font-bold tracking-tight uppercase">Admin Hub</h1>
-            <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] mt-2">Data Management & Controls</p>
+            <h1 className="text-4xl font-headline font-bold tracking-tight uppercase">Admin Control</h1>
+            <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] mt-2">Inventory & Data Logs</p>
           </div>
           
           <div className="flex gap-4 w-full md:w-auto">
@@ -109,7 +110,7 @@ export default function AdminDashboard() {
               className="border-white/10 bg-white/5 uppercase tracking-widest text-[9px] h-11 px-6 rounded-full hover:bg-white hover:text-black transition-all"
             >
               <RefreshCw size={14} className={`mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
-              Sync Flavors to DB
+              Sync Products
             </Button>
             <div className="relative flex-1 md:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" size={16} />
@@ -126,22 +127,22 @@ export default function AdminDashboard() {
         <Tabs defaultValue="products" className="w-full">
           <TabsList className="bg-neutral-900/50 border border-white/5 p-1 rounded-full mb-8">
             <TabsTrigger value="products" className="rounded-full px-8 py-2 text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-black">
-              <Package size={14} className="mr-2" /> Catalog
+              <Package size={14} className="mr-2" /> Products
             </TabsTrigger>
             <TabsTrigger value="activity" className="rounded-full px-8 py-2 text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-black">
-              <Activity size={14} className="mr-2" /> Activity Log
+              <Activity size={14} className="mr-2" /> Activity
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="products">
             <div className="grid grid-cols-1 gap-4">
               {isProductsLoading ? (
-                <div className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Loading Catalog...</div>
+                <div className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Fetching Catalog...</div>
               ) : dbProducts && dbProducts.length > 0 ? (
                 dbProducts.map((product) => (
                   <div key={product.id} className="bg-neutral-950 border border-white/5 rounded-xl p-6 flex flex-col md:flex-row gap-6 items-center">
-                    <div className="w-16 h-16 bg-neutral-900 rounded-lg flex items-center justify-center font-headline font-bold text-white/20 text-xl">
-                      {product.name.slice(0, 1).toUpperCase()}
+                    <div className="w-16 h-16 bg-neutral-900 rounded-lg flex items-center justify-center overflow-hidden">
+                      <img src={product.image} alt={product.name} className="w-full h-full object-contain p-2" />
                     </div>
                     <div className="flex-1 space-y-1">
                       <h4 className="text-sm font-bold uppercase tracking-widest">{product.name}</h4>
@@ -160,7 +161,7 @@ export default function AdminDashboard() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[8px] uppercase tracking-widest text-white/20">Inventory (Qty)</label>
+                        <label className="text-[8px] uppercase tracking-widest text-white/20">Amount (Stock)</label>
                         <Input 
                           type="number"
                           defaultValue={product.amount}
@@ -171,7 +172,7 @@ export default function AdminDashboard() {
                       <div className="space-y-2 col-span-2 md:col-span-1">
                         <label className="text-[8px] uppercase tracking-widest text-white/20">Status</label>
                         <div className={`h-9 px-4 rounded-md flex items-center text-[9px] font-bold uppercase tracking-widest ${product.amount > 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
-                          {product.amount > 0 ? 'Available' : 'Sold Out'}
+                          {product.amount > 0 ? 'In Stock' : 'Sold Out'}
                         </div>
                       </div>
                     </div>
@@ -179,8 +180,8 @@ export default function AdminDashboard() {
                 ))
               ) : (
                 <div className="p-20 text-center border border-dashed border-white/10 rounded-xl bg-neutral-950">
-                  <p className="text-white/20 uppercase tracking-widest text-[10px] mb-6">Database is empty.</p>
-                  <Button onClick={handleSyncProducts} className="bg-white text-black rounded-full uppercase text-[10px] tracking-widest font-bold">Initialize Catalog</Button>
+                  <p className="text-white/20 uppercase tracking-widest text-[10px] mb-6">Product collection is empty.</p>
+                  <Button onClick={handleSyncProducts} className="bg-white text-black rounded-full uppercase text-[10px] tracking-widest font-bold">Initialize Flavors</Button>
                 </div>
               )}
             </div>
@@ -201,7 +202,7 @@ export default function AdminDashboard() {
                   <tbody className="divide-y divide-white/5">
                     {isHubLoading ? (
                       <tr>
-                        <td colSpan={4} className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Loading Logs...</td>
+                        <td colSpan={4} className="p-20 text-center text-white/20 uppercase tracking-[0.5em] text-[10px]">Loading Activity...</td>
                       </tr>
                     ) : filteredEntries && filteredEntries.length > 0 ? (
                       filteredEntries.map((entry, i) => (
@@ -215,7 +216,7 @@ export default function AdminDashboard() {
                               {entry.type}
                             </span>
                           </td>
-                          <td className="p-4 text-[10px] font-medium text-white/80">{entry.userEmail || 'ANONYMOUS'}</td>
+                          <td className="p-4 text-[10px] font-medium text-white/80">{entry.userEmail || 'GUEST'}</td>
                           <td className="p-4 text-[10px] text-white/40">
                             {entry.timestamp ? new Date(entry.timestamp).toLocaleString() : 'N/A'}
                           </td>
@@ -233,7 +234,7 @@ export default function AdminDashboard() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={4} className="p-20 text-center text-white/20 uppercase tracking-widest text-[10px]">No records found.</td>
+                        <td colSpan={4} className="p-20 text-center text-white/20 uppercase tracking-widest text-[10px]">No activity logs.</td>
                       </tr>
                     )}
                   </tbody>
