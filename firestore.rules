@@ -12,23 +12,7 @@ service cloud.firestore {
      *
      * Data Structure:
      * - /users/{userId}: Private user profile, cart, and order history.
-     * - /products/{productId}: Public product catalog and review subcollections.
-     * - /faqs/{faqId}: Publicly accessible help content.
-     *
-     * Key Security Decisions:
-     * 1. Path-Based Authorization: User data (Cart, Orders, Profile) is nested under /users/{userId}, 
-     *    allowing authorization based on the path wildcard matching the auth.uid.
-     * 2. Denormalization for Reviews: The 'userId' is stored directly inside Review documents 
-     *    to allow the author to update/delete their review without needing complex joins or extra reads.
-     * 3. Administrative Control: Public collections (Products, FAQs) are globally readable but 
-     *    restricted to administrators for all write operations via an existence check in a 'roles_admin' collection.
-     * 4. Structural Segregation: Private transactional data is strictly separated from public 
-     *    catalog data to prevent accidental exposure via list queries.
-     *
-     * Prototyping Mode: 
-     * These rules enforce "Who" can access data (Authorization) and "Relational Integrity" 
-     * (matching IDs), but they do not enforce strict field types or presence (Schema) to allow 
-     * for rapid UI development.
+     * - /central_hub/{entryId}: Log of all site data and activities (Admin only read).
      */
 
     // --- Global Helper Functions ---
@@ -56,38 +40,34 @@ service cloud.firestore {
     // --- Collection Rules ---
 
     /**
+     * @description Rules for the Central Hub logging.
+     * @path /central_hub/{entryId}
+     * @allow (create) for any signed-in user or anonymous logger.
+     * @principle Allows tracking of user actions while restricting read access to admins.
+     */
+    match /central_hub/{entryId} {
+      allow create: if true; // Allow logging from any source for analytics
+      allow get, list: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    /**
      * @description Rules for UserProfile documents.
      * @path /users/{userId}
-     * @allow (create) if request.auth.uid == userId and internal 'id' matches path.
-     * @deny (list) if request.auth.uid != userId.
-     * @principle Enforces strict ownership of personal profile data.
      */
     match /users/{userId} {
-      allow get, list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow list: if isAdmin();
       allow create: if isOwner(userId) && request.resource.data.id == userId;
       allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
       allow delete: if isExistingOwner(userId);
 
-      /**
-       * @description Rules for a user's single Cart document.
-       * @path /users/{userId}/cart/cart
-       * @allow (create) if path matches auth.uid and userId field matches path.
-       * @deny (update) if attempting to change the owner (userId field).
-       * @principle Path-based ownership for shopping carts.
-       */
       match /cart/{cartId} {
         allow get, list: if isOwner(userId);
         allow create: if isOwner(userId) && request.resource.data.userId == userId;
         allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
         allow delete: if isExistingOwner(userId);
 
-        /**
-         * @description Rules for individual items within a shopping cart.
-         * @path /users/{userId}/cart/items/{cartItemId}
-         * @allow (create) if parent path belongs to authenticated user.
-         * @deny (read) if user is not the owner of the parent cart.
-         * @principle Inherited ownership through the document path.
-         */
         match /items/{cartItemId} {
           allow get, list: if isOwner(userId);
           allow create: if isOwner(userId);
@@ -96,53 +76,18 @@ service cloud.firestore {
         }
       }
 
-      /**
-       * @description Rules for a user's Order history.
-       * @path /users/{userId}/orders/{orderId}
-       * @allow (create) if userId in data matches authenticated user.
-       * @deny (delete) if user is not the owner.
-       * @principle Relational integrity between authenticated user and order ownership.
-       */
       match /orders/{orderId} {
         allow get, list: if isOwner(userId);
         allow create: if isOwner(userId) && request.resource.data.userId == userId;
         allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
         allow delete: if isExistingOwner(userId);
-
-        /**
-         * @description Rules for items contained within a specific order.
-         * @path /users/{userId}/orders/{orderId}/items/{orderItemId}
-         * @allow (get) if user owns the parent order path.
-         * @deny (create) if user does not own the parent order path.
-         * @principle Secures nested sub-resources via parent path ownership.
-         */
-        match /items/{orderItemId} {
-          allow get, list: if isOwner(userId);
-          allow create: if isOwner(userId);
-          allow update: if isExistingOwner(userId);
-          allow delete: if isExistingOwner(userId);
-        }
       }
     }
 
-    /**
-     * @description Rules for the Product catalog.
-     * @path /products/{productId}
-     * @allow (get, list) for any user (public).
-     * @deny (write) for non-admin users.
-     * @principle Public catalog access with restricted administrative write permissions.
-     */
     match /products/{productId} {
       allow get, list: if true;
       allow create, update, delete: if isAdmin();
 
-      /**
-       * @description Rules for Product Reviews.
-       * @path /products/{productId}/reviews/{reviewId}
-       * @allow (create) if authenticated and userId in review matches auth.uid.
-       * @allow (get, list) for public consumption.
-       * @principle Public consumption with owner-only modifications using denormalized userId.
-       */
       match /reviews/{reviewId} {
         allow get, list: if true;
         allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
@@ -151,13 +96,6 @@ service cloud.firestore {
       }
     }
 
-    /**
-     * @description Rules for FAQ content.
-     * @path /faqs/{faqId}
-     * @allow (get, list) for everyone.
-     * @deny (update) for non-admins.
-     * @principle Secure public-facing support content.
-     */
     match /faqs/{faqId} {
       allow get, list: if true;
       allow create, update, delete: if isAdmin();

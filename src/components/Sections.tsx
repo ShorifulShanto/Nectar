@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -26,8 +25,8 @@ export function IngredientsSection() {
     <section id="ingredients" className="py-24 bg-neutral-900/50">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
-          <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">WHAT'S INSIDE</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">REAL INGREDIENTS<br />REAL BENEFITS</h2>
+          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what's inside</p>
+          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">Real Ingredients<br />Real Benefits</h2>
           <p className="text-white/40 mt-4 max-w-lg font-light text-[11px] md:text-sm">Every drop starts with real, whole fruits. No concentrates, no preservatives — just nature in a bottle.</p>
         </div>
         
@@ -79,7 +78,6 @@ export function ProductCollection() {
         });
       }
 
-      // Central Hub Logging
       const hubRef = doc(collection(db, "central_hub"));
       await setDoc(hubRef, {
         id: hubRef.id,
@@ -101,8 +99,8 @@ export function ProductCollection() {
     <section id="product" className="py-24 bg-black">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
-          <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">OUR COLLECTION</p>
-          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">SEVEN FLAVORS<br />ONE OBSESSION</h2>
+          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">our collection</p>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">Seven Flavors<br />One Obsession</h2>
         </div>
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -171,7 +169,7 @@ export function NutritionSection() {
           </div>
           
           <div className="space-y-12">
-            <h2 className="text-3xl md:text-4xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">NUTRITION<br />YOU CAN FEEL.</h2>
+            <h2 className="text-3xl md:text-4xl font-headline font-bold leading-[0.9] tracking-tighter uppercase">Nutrition<br />You Can Feel.</h2>
             <div className="grid gap-6">
               {[
                 { num: "01", title: "Immune Support", desc: "High Vitamin C content from real fruits helps strengthen your immune system naturally." },
@@ -207,8 +205,8 @@ export function ReviewsSection() {
     <section id="reviews" className="py-24 bg-neutral-900/20">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center">
-          <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">WHAT PEOPLE SAY</p>
-          <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">LOVED BY THOUSANDS</h2>
+          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what people say</p>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">Loved By Thousands</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -240,7 +238,7 @@ export function ReviewsSection() {
 
 export function FAQSection() {
   const faqs = [
-    { q: "Are OLIPOP juices 100% real fruit?", a: "Yes. Every bottle is cold-pressed from whole, real fruit. We never use concentrates, artificial flavoring, or fillers." },
+    { q: "Are Olipop juices 100% real fruit?", a: "Yes. Every bottle is cold-pressed from whole, real fruit. We never use concentrates, artificial flavoring, or fillers." },
     { q: "Is there added sugar in the juice?", a: "No added sugar at all. The sweetness in every bottle comes entirely from the natural fruit sugars." },
     { q: "How long does a bottle stay fresh?", a: "Our HPP technique extends shelf life to 60 days refrigerated. Once opened, enjoy within 3 days for best taste." },
     { q: "Do you ship nationwide?", a: "Yes! We ship cold-packed in insulated boxes across the country. Orders typically arrive within 2 business days." },
@@ -250,8 +248,8 @@ export function FAQSection() {
     <section id="faq" className="py-24 bg-black">
       <div className="container mx-auto px-6 md:px-12 max-w-2xl">
         <div className="mb-12 text-center md:text-left">
-          <p className="text-white/30 text-[9px] uppercase tracking-[0.4em] mb-3">QUESTIONS</p>
-          <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">FREQUENTLY ASKED</h2>
+          <p className="text-white/30 text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">questions</p>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">Frequently Asked</h2>
         </div>
         
         <Accordion type="single" collapsible className="space-y-4">
@@ -303,13 +301,13 @@ export function Footer() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid md:grid-cols-4 gap-16 mb-16 pb-16 border-b border-white/5">
           <div className="col-span-2">
-            <h2 className="text-3xl font-headline font-bold tracking-[0.3em] mb-4">OLIPOP</h2>
-            <p className="text-white/20 text-[10px] uppercase tracking-[0.4em] mb-8 font-medium">Fresh Cold-Pressed Juice</p>
+            <h2 className="text-3xl font-headline font-bold tracking-[0.3em] mb-4">Olipop</h2>
+            <p className="text-white/20 text-[10px] lowercase tracking-[0.4em] mb-8 font-medium">Fresh Cold-Pressed Juice</p>
             <div className="max-w-sm">
               <h4 className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] mb-4">Newsletter Signup</h4>
               <form onSubmit={handleNewsletter} className="flex gap-2">
                 <Input 
-                  placeholder="YOUR@EMAIL.COM" 
+                  placeholder="your@email.com" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-neutral-900 border-white/5 text-[10px] tracking-widest"
@@ -344,7 +342,7 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] text-white/20 uppercase tracking-[0.4em] font-bold">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] text-white/20 lowercase tracking-[0.4em] font-bold">
           <p>© 2025 Olipop Fresh Juice. All rights reserved.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -48,7 +47,6 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         location: ""
       });
 
-      // Log to central hub
       const hubRef = doc(db, "central_hub", `signup_${user.uid}_${Date.now()}`);
       await setDoc(hubRef, {
         id: hubRef.id,
@@ -218,6 +216,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                       onChange={(e) => setEmail(e.target.value)}
                       className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
                       required
+                      placeholder="Email address"
                     />
                   </div>
                   <Button 
@@ -238,6 +237,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                       onChange={(e) => setEmail(e.target.value)}
                       className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
                       required
+                      placeholder="Email address"
                     />
                   </div>
                   <div className="space-y-2">
@@ -259,6 +259,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                       onChange={(e) => setPassword(e.target.value)}
                       className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
                       required
+                      placeholder="Password"
                     />
                   </div>
                   <Button 

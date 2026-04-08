@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -59,12 +58,15 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     if (!user || !db) return;
     setIsLoading(true);
     try {
+      // Ensure ID is included to satisfy firestore.rules
       await setDoc(doc(db, "users", user.uid), {
+        id: user.uid,
         ...formData,
         email: user.email,
         updatedAt: serverTimestamp(),
       }, { merge: true });
 
+      // Log update to central hub
       await setDoc(doc(db, "central_hub", `profile_update_${user.uid}_${Date.now()}`), {
         id: `profile_update_${user.uid}_${Date.now()}`,
         type: "profile_update",
@@ -100,7 +102,6 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       const uid = user.uid;
       const email = user.email;
 
-      // Log deletion
       await setDoc(doc(db, "central_hub", `deletion_${uid}_${Date.now()}`), {
         id: `deletion_${uid}_${Date.now()}`,
         type: "account_deletion",
@@ -109,10 +110,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         timestamp: new Date().toISOString()
       });
 
-      // Delete Firestore data
       await deleteDoc(doc(db, "users", uid));
-      
-      // Delete Auth user
       await deleteUser(user);
       
       onClose();
@@ -121,7 +119,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       toast({ 
         variant: "destructive", 
         title: "Deletion Failed", 
-        description: "For security, please sign in again before deleting your account." 
+        description: "Please sign in again before deleting your account for security." 
       });
     } finally {
       setIsLoading(false);
@@ -155,7 +153,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                   className="bg-neutral-900 border-white/5 h-12 text-sm"
-                  placeholder="John"
+                  placeholder="First name"
                 />
               </div>
               <div className="space-y-2">
@@ -164,7 +162,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                   className="bg-neutral-900 border-white/5 h-12 text-sm"
-                  placeholder="Doe"
+                  placeholder="Last name"
                 />
               </div>
             </div>
@@ -185,7 +183,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   value={formData.phoneNumber}
                   onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                   className="bg-neutral-900 border-white/5 pl-12 h-12 text-sm"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="Phone number"
                 />
               </div>
             </div>
@@ -198,7 +196,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   className="bg-neutral-900 border-white/5 pl-12 h-12 text-sm"
-                  placeholder="Los Angeles, CA"
+                  placeholder="City, State"
                 />
               </div>
             </div>
