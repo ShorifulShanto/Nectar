@@ -5,7 +5,7 @@ import { flavors } from "@/lib/flavor-data";
 import { ChevronUp, ChevronDown, Instagram, Twitter, Facebook } from "lucide-react";
 import Image from "next/image";
 import { useUser, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
-import { collection, doc, setDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
+import { doc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { AuthModal } from "./AuthModal";
 
@@ -18,7 +18,6 @@ export function OlipopHero() {
   
   const { user } = useUser();
   const db = useFirestore();
-  const { toast } = useToast();
   const currentFlavor = flavors[currentFlavorIndex];
 
   const productRef = useMemoFirebase(() => {
@@ -124,13 +123,19 @@ export function OlipopHero() {
             <div className="flex gap-4 pt-8">
               <button 
                 onClick={handleOrderNow}
-                style={{ backgroundColor: isSoldOut ? '#333' : 'hsl(350, 60%, 40%)' }}
-                className={`px-8 py-4 text-white font-bold rounded-full uppercase tracking-widest text-[10px] transition-all active:scale-95 hover:scale-105`}
+                style={{ 
+                  backgroundColor: isSoldOut ? '#333' : currentFlavor.accentHex,
+                  color: '#000'
+                }}
+                className={`px-8 py-4 font-bold rounded-full uppercase tracking-widest text-[10px] transition-all active:scale-95 hover:scale-105 shadow-2xl`}
               >
-                ORDER NOW →
+                {isSoldOut ? "SOLD OUT" : "ORDER NOW →"}
               </button>
               <button 
-                style={{ borderColor: `hsl(350, 60%, 40%, 0.3)`, color: 'white' }}
+                style={{ 
+                  borderColor: `${currentFlavor.accentHex}40`, 
+                  color: 'white' 
+                }}
                 className="px-8 py-4 border bg-white/5 text-white font-bold rounded-full uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all backdrop-blur-sm"
               >
                 ${price.toFixed(2)}
