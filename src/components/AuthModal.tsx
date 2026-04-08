@@ -36,7 +36,6 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     const userRef = doc(db, "users", user.uid);
     const snap = await getDoc(userRef);
     
-    // Always update/create to ensure all information is present
     await setDoc(userRef, {
       id: user.uid,
       email: user.email,

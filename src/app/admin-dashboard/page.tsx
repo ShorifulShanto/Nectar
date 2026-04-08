@@ -68,7 +68,6 @@ export default function AdminDashboard() {
   const { data: entries, isLoading: isHubLoading, error: hubError } = useCollection(hubQuery);
   const { data: dbProducts, isLoading: isProductsLoading, error: productsError } = useCollection(productsQuery);
 
-  // Access Control
   if (isUserLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">

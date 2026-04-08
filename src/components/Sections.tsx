@@ -3,8 +3,8 @@
 
 import { useState } from "react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { Star, Leaf, Waves, ShieldCheck, Droplets, Zap, Wind, Plus, Send, Instagram, Twitter, Facebook } from "lucide-react";
-import { flavors, Flavor } from "@/lib/flavor-data";
+import { Star, Leaf, Waves, ShieldCheck, Droplets, Zap, Wind, Plus, Send, RefreshCw } from "lucide-react";
+import { flavors } from "@/lib/flavor-data";
 import Image from "next/image";
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
 import { collection, doc, setDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
@@ -126,7 +126,6 @@ export function ProductCollection() {
               dbProducts.map((product) => {
                 const isSoldOut = product.amount <= 0;
                 const price = product.price || 12.00;
-                // Attempt to get extra visual data from local config if it exists
                 const flavorConfig = flavors.find(f => f.id === product.id);
 
                 return (
@@ -374,21 +373,12 @@ export function Footer() {
             <ul className="space-y-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
               <li>hello@olipop.com</li>
               <li>+1 (800) 555-JUICE</li>
-              <li className="flex gap-4 pt-4">
-                <Instagram size={14} className="hover:text-white transition-colors cursor-pointer" />
-                <Twitter size={14} className="hover:text-white transition-colors cursor-pointer" />
-                <Facebook size={14} className="hover:text-white transition-colors cursor-pointer" />
-              </li>
             </ul>
           </div>
         </div>
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] text-white/20 lowercase tracking-[0.4em] font-bold">
           <p>© 2025 Olipop Fresh Juice. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-          </div>
         </div>
       </div>
     </footer>

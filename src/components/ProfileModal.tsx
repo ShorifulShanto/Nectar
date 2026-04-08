@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -58,7 +59,6 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     if (!user || !db) return;
     setIsLoading(true);
     try {
-      // Ensure ID is included to satisfy firestore.rules
       await setDoc(doc(db, "users", user.uid), {
         id: user.uid,
         ...formData,
@@ -66,7 +66,6 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         updatedAt: serverTimestamp(),
       }, { merge: true });
 
-      // Log update to central hub
       await setDoc(doc(db, "central_hub", `profile_update_${user.uid}_${Date.now()}`), {
         id: `profile_update_${user.uid}_${Date.now()}`,
         type: "profile_update",

@@ -12,7 +12,6 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      // Restrict administrative actions to the specific owner email
       return isSignedIn() && request.auth.token.email == "md.si.shanto001@gmail.com";
     }
 
