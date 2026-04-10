@@ -17,6 +17,10 @@ import {
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const scrollToProducts = () => {
+    document.getElementById('product')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       {!isLoaded && <Loader onComplete={() => setIsLoaded(true)} />}
@@ -46,10 +50,16 @@ export default function Home() {
               Order your first case today and discover why thousands have made OLLANHO their daily ritual. Real fruit. Real taste. Real good.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-10 py-4 border border-white text-white font-bold hover:bg-white hover:text-black transition-all uppercase tracking-[0.2em] text-[9px] rounded-full">
+              <button 
+                onClick={scrollToProducts}
+                className="px-10 py-4 border border-white text-white font-bold hover:bg-white hover:text-black transition-all uppercase tracking-[0.2em] text-[9px] rounded-full"
+              >
                 EXPLORE ALL
               </button>
-              <button className="px-10 py-4 bg-white text-black font-bold hover:bg-neutral-200 transition-all uppercase tracking-[0.2em] text-[9px] rounded-full">
+              <button 
+                onClick={scrollToProducts}
+                className="px-10 py-4 bg-primary text-black font-bold hover:bg-primary/80 transition-all uppercase tracking-[0.2em] text-[9px] rounded-full"
+              >
                 SHOP NOW
               </button>
             </div>
