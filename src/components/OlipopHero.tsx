@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -20,7 +19,7 @@ export function OlipopHero() {
   const db = useFirestore();
   const currentFlavor = flavors[currentFlavorIndex];
 
-  // Smart Preload Neighboring Flavors ONLY
+  // Smart Preload neighboring assets only
   useEffect(() => {
     const nextIdx = (currentFlavorIndex + 1) % flavors.length;
     const prevIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
@@ -78,7 +77,6 @@ export function OlipopHero() {
     if (dir === "next") nextIdx = (currentFlavorIndex + 1) % flavors.length;
     else nextIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
     
-    // Quick transition for responsiveness
     setTimeout(() => {
       setCurrentFlavorIndex(nextIdx);
       setIsLoadingFlavor(false);

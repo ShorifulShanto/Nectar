@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -67,7 +66,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     e.preventDefault();
     setIsLoading(true);
     try {
-      // Set persistence as requested: until user logs out or deletes the tab
+      // Set persistence: until user logs out or closes tab
       await setPersistence(auth, browserSessionPersistence);
       
       if (view === "login") {

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -73,7 +72,7 @@ export function ProductCollection() {
 
     const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
     
-    // Non-blocking log
+    // Log addition non-blocking
     const hubRef = collection(db, "central_hub");
     addDocumentNonBlocking(hubRef, {
       type: "cart_addition",
@@ -121,6 +120,7 @@ export function ProductCollection() {
                 return (
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform">
                      <div className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
+                        {/* Dynamic Flavor Glow */}
                         <div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[80px] pointer-events-none"
                           style={{ background: `radial-gradient(circle at center, ${accentColor} 0%, transparent 70%)` }}
