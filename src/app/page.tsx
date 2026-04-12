@@ -1,18 +1,15 @@
-
 "use client";
 
 import { useState } from "react";
 import { Loader } from "@/components/Loader";
 import { Navbar } from "@/components/Navbar";
 import { OlipopHero } from "@/components/OlipopHero";
-import { 
-  IngredientsSection, 
-  ProductCollection,
-  NutritionSection, 
-  ReviewsSection, 
-  FAQSection, 
-  Footer 
-} from "@/components/Sections";
+import { IngredientsSection } from "@/components/IngredientsSection";
+import { ProductCollection } from "@/components/ProductCollection";
+import { NutritionSection } from "@/components/NutritionSection";
+import { ReviewsSection } from "@/components/ReviewsSection";
+import { FAQSection } from "@/components/FAQSection";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,7 +31,7 @@ export default function Home() {
         <ReviewsSection />
         <FAQSection />
         
-        {/* Final CTA */}
+        {/* Final CTA Section */}
         <section id="cta-section" className="py-32 bg-black relative flex flex-col items-center justify-center text-center overflow-hidden border-t border-white/5">
           <div className="absolute inset-0 opacity-5 pointer-events-none select-none">
              <h2 className="text-[15rem] font-headline font-bold text-white leading-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -47,7 +44,7 @@ export default function Home() {
               TASTE THE<br />DIFFERENCE
             </h2>
             <p className="text-white/40 max-w-lg mx-auto mb-10 text-base font-light leading-relaxed">
-              Order your first case today and discover why thousands have made OLLANHO their daily ritual. Real fruit. Real taste. Real good.
+              Order your first case today and discover why thousands have made OLIPOP their daily ritual. Real fruit. Real taste. Real good.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 

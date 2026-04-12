@@ -1,0 +1,133 @@
+"use client";
+
+import { Plus, RefreshCw } from "lucide-react";
+import { flavors } from "@/lib/flavor-data";
+import Image from "next/image";
+import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { collection, doc } from "firebase/firestore";
+import { useToast } from "@/hooks/use-toast";
+import { addDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+
+export function ProductCollection() {
+  const { user } = useUser();
+  const db = useFirestore();
+  const { toast } = useToast();
+
+  const productsQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return collection(db, "products");
+  }, [db]);
+
+  const { data: dbProducts, isLoading } = useCollection(productsQuery);
+
+  const handleAddToCart = async (productId: string, productName: string, price: number, isSoldOut: boolean) => {
+    if (!user || !db) {
+      toast({ title: "Please sign in to shop", description: "You need an account to add items to cart." });
+      return;
+    }
+
+    if (isSoldOut) {
+      toast({ variant: "destructive", title: "Sold Out", description: "This flavor is currently unavailable." });
+      return;
+    }
+
+    const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
+    
+    // Log addition non-blocking
+    const hubRef = collection(db, "central_hub");
+    addDocumentNonBlocking(hubRef, {
+      type: "cart_addition",
+      userId: user.uid,
+      userEmail: user.email,
+      payload: { productId, flavorName: productName },
+      timestamp: new Date().toISOString()
+    });
+
+    toast({ title: `${productName} added to cart.` });
+    
+    const predictableId = `item_${productId}`;
+    const itemRef = doc(cartItemsRef, predictableId);
+    
+    setDocumentNonBlocking(itemRef, {
+      id: predictableId,
+      productId: productId,
+      quantity: 1, 
+      priceAtAddToCart: price,
+      cartId: 'cart'
+    }, { merge: true });
+  };
+
+  return (
+    <section id="product" className="py-24 bg-black">
+      <div className="container mx-auto px-6 md:px-12">
+        <div className="mb-16 text-center md:text-left">
+          <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">our collection</p>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">Discover Our<br />Latest Batch</h2>
+        </div>
+        
+        {isLoading ? (
+          <div className="flex items-center justify-center p-20">
+            <RefreshCw className="animate-spin text-primary/10" size={40} />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {dbProducts && dbProducts.length > 0 ? (
+              dbProducts.map((product) => {
+                const isSoldOut = product.amount <= 0;
+                const price = product.price || 12.00;
+                const flavorConfig = flavors.find(f => f.id === product.id);
+                const accentColor = flavorConfig?.accentHex || '#ffffff';
+
+                return (
+                  <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform">
+                     <div className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-4 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
+                        {/* Dynamic Flavor Glow */}
+                        <div 
+                          className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[80px] pointer-events-none"
+                          style={{ background: `radial-gradient(circle at center, ${accentColor} 0%, transparent 70%)` }}
+                        />
+                        
+                        {isSoldOut && (
+                          <div className="absolute top-4 left-4 z-10 bg-primary text-black text-[8px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                            Sold Out
+                          </div>
+                        )}
+                        <div className={`relative w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
+                          <Image 
+                            src={product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600'} 
+                            alt={product.name} 
+                            fill 
+                            className="object-contain"
+                          />
+                        </div>
+                        {!isSoldOut && (
+                          <button 
+                            onClick={() => handleAddToCart(product.id, product.name, price, isSoldOut)}
+                            className="absolute bottom-6 right-6 w-12 h-12 bg-primary text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
+                          >
+                            <Plus size={20} />
+                          </button>
+                        )}
+                     </div>
+                     <div className="text-center sm:text-left px-2">
+                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-colors ${isSoldOut ? 'text-white/20' : 'text-white/90 group-hover:text-primary'}`}>
+                         {product.name}
+                       </h4>
+                       <p className="text-[9px] text-white/30 uppercase tracking-[0.4em] font-medium font-mono">
+                         ${price.toFixed(2)} — 350ml
+                       </p>
+                     </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-[3rem] bg-neutral-950/50 opacity-40">
+                <p className="text-white uppercase tracking-[0.5em] text-[10px]">Catalog is currently empty</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
