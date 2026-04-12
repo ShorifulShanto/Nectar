@@ -41,9 +41,10 @@
   }
 }
 
-/* Anti-Glitch Performance Utilities */
+/* Hardware Acceleration & Performance */
 .will-change-transform {
   will-change: transform, opacity;
+  transform: translateZ(0); /* Force GPU layer */
 }
 
 .primary-glow-border {
@@ -91,8 +92,8 @@
 }
 
 .frosted-glass {
-  background: rgba(8, 12, 10, 0.6);
-  backdrop-filter: blur(40px) saturate(180%);
+  background: rgba(8, 12, 10, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
   border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 

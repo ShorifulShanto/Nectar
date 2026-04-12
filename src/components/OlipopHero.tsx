@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -20,10 +19,11 @@ export function OlipopHero() {
   const db = useFirestore();
   const currentFlavor = flavors[currentFlavorIndex];
 
-  // Preload neighboring flavors to warm the browser cache
+  // Smart Preload Neighboring Flavors ONLY
   useEffect(() => {
     const nextIdx = (currentFlavorIndex + 1) % flavors.length;
     const prevIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
+    
     [nextIdx, prevIdx].forEach(idx => {
       const img = new (window as any).Image();
       img.src = flavors[idx].videoUrl;
@@ -48,13 +48,13 @@ export function OlipopHero() {
       
       if (heroImageRef.current) {
         const scale = 1 + progress * 0.05;
-        const opacity = 1 - progress * 1.2;
+        const opacity = 1 - progress * 1.5;
         heroImageRef.current.style.transform = `translate3d(0, ${progress * -30}px, 0) scale(${scale})`;
         heroImageRef.current.style.opacity = opacity.toString();
       }
 
       if (contentRef.current) {
-        const opacity = 1 - progress * 2.2;
+        const opacity = 1 - progress * 2.5;
         contentRef.current.style.opacity = opacity.toString();
       }
     };
@@ -77,34 +77,27 @@ export function OlipopHero() {
     if (dir === "next") nextIdx = (currentFlavorIndex + 1) % flavors.length;
     else nextIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
     
-    // Smooth transition between flavors
+    // Quick transition for responsiveness
     setTimeout(() => {
       setCurrentFlavorIndex(nextIdx);
       setIsLoadingFlavor(false);
-    }, 300);
+    }, 200);
   };
 
   return (
     <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-black flex items-center">
-      {/* Background preloader for other flavors to keep cache warm and avoid transition lag */}
-      <div className="hidden pointer-events-none opacity-0">
-        {flavors.map(f => (
-          <img key={f.id} src={f.videoUrl} alt="preload" />
-        ))}
-      </div>
-
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-all duration-500 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+          className={`relative w-full h-full transition-all duration-300 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
         >
           <Image 
             src={currentFlavor.videoUrl} 
             alt={`${currentFlavor.name} sequence`} 
             fill 
             className="object-contain p-8 md:p-20"
-            unoptimized // Crucial for pre-rendered Cloudinary animated webp sequences
-            priority // Load this as the top priority item on the page
+            unoptimized 
+            priority 
           />
         </div>
       </div>
@@ -114,7 +107,7 @@ export function OlipopHero() {
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         <div 
           ref={contentRef}
-          className={`max-w-md transition-all duration-500 ${isLoadingFlavor ? 'opacity-0 translate-y-2 blur-sm' : 'opacity-100 translate-y-0 blur-0'}`}
+          className={`max-w-md transition-all duration-300 ${isLoadingFlavor ? 'opacity-0 translate-y-2 blur-sm' : 'opacity-100 translate-y-0 blur-0'}`}
         >
           <div className="space-y-6">
             <p className="text-white/40 font-bold tracking-[0.5em] text-[9px] uppercase">
