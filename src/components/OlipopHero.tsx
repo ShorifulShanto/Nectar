@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -6,7 +7,6 @@ import { ChevronUp, ChevronDown, Instagram, Twitter, Facebook } from "lucide-rea
 import Image from "next/image";
 import { useUser, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { doc } from "firebase/firestore";
-import { useToast } from "@/hooks/use-toast";
 import { AuthModal } from "./AuthModal";
 
 export function OlipopHero() {
@@ -19,6 +19,16 @@ export function OlipopHero() {
   const { user } = useUser();
   const db = useFirestore();
   const currentFlavor = flavors[currentFlavorIndex];
+
+  // Preload neighboring flavors to warm the browser cache
+  useEffect(() => {
+    const nextIdx = (currentFlavorIndex + 1) % flavors.length;
+    const prevIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
+    [nextIdx, prevIdx].forEach(idx => {
+      const img = new (window as any).Image();
+      img.src = flavors[idx].videoUrl;
+    });
+  }, [currentFlavorIndex]);
 
   const productRef = useMemoFirebase(() => {
     if (!db) return null;
@@ -61,31 +71,40 @@ export function OlipopHero() {
   };
 
   const changeFlavor = (dir: "next" | "prev") => {
+    if (isLoadingFlavor) return;
     setIsLoadingFlavor(true);
     let nextIdx = currentFlavorIndex;
     if (dir === "next") nextIdx = (currentFlavorIndex + 1) % flavors.length;
     else nextIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
     
+    // Smooth transition between flavors
     setTimeout(() => {
       setCurrentFlavorIndex(nextIdx);
       setIsLoadingFlavor(false);
-    }, 400);
+    }, 300);
   };
 
   return (
     <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-black flex items-center">
+      {/* Background preloader for other flavors to keep cache warm and avoid transition lag */}
+      <div className="hidden pointer-events-none opacity-0">
+        {flavors.map(f => (
+          <img key={f.id} src={f.videoUrl} alt="preload" />
+        ))}
+      </div>
+
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-all duration-700 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+          className={`relative w-full h-full transition-all duration-500 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
         >
           <Image 
             src={currentFlavor.videoUrl} 
             alt={`${currentFlavor.name} sequence`} 
             fill 
             className="object-contain p-8 md:p-20"
-            unoptimized
-            priority
+            unoptimized // Crucial for pre-rendered Cloudinary animated webp sequences
+            priority // Load this as the top priority item on the page
           />
         </div>
       </div>

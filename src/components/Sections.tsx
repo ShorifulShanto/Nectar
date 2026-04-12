@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -6,7 +7,7 @@ import { Star, Leaf, Waves, ShieldCheck, Droplets, Zap, Wind, Plus, Send, Refres
 import { flavors } from "@/lib/flavor-data";
 import Image from "next/image";
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
-import { collection, doc, query, where } from "firebase/firestore";
+import { collection, doc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -119,7 +120,7 @@ export function ProductCollection() {
 
                 return (
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform">
-                     <div className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
+                     <div className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-2 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
                         <div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 blur-[60px] pointer-events-none"
                           style={{ background: `radial-gradient(circle at center, ${accentColor} 0%, transparent 70%)` }}
@@ -130,7 +131,7 @@ export function ProductCollection() {
                             Sold Out
                           </div>
                         )}
-                        <div className={`relative w-full h-full transform group-hover:scale-110 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
+                        <div className={`relative w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
                           <Image 
                             src={product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600'} 
                             alt={product.name} 
