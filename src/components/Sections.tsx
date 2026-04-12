@@ -33,7 +33,7 @@ export function IngredientsSection() {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ingredients.map((item) => (
-            <div key={item.name} className="p-8 bg-black/40 rounded-2xl transition-all duration-500 group maroon-glow-border">
+            <div key={item.name} className="p-8 bg-black/40 rounded-2xl transition-all-smooth group primary-glow-border">
               <div className="mb-4 text-primary transition-colors">
                 <item.icon size={22} strokeWidth={1.5} />
               </div>
@@ -72,10 +72,8 @@ export function ProductCollection() {
 
     const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
     
-    // We initiate the update. The UI will catch up via the real-time listener.
-    const hubRef = collection(db, "central_hub");
-    
     // Non-blocking log
+    const hubRef = collection(db, "central_hub");
     addDocumentNonBlocking(hubRef, {
       type: "cart_addition",
       userId: user.uid,
@@ -84,21 +82,15 @@ export function ProductCollection() {
       timestamp: new Date().toISOString()
     });
 
-    // We check locally for quantity update (simple optimistic logic)
-    // In a real app we might fetch or use the data from useCollection
     toast({ title: `${productName} added to cart.` });
     
-    // Actually perform the write
-    // For a real production app we would check existence first, but here we prioritize non-blocking speed
-    // If we wanted to check existence, we'd do a quick getDocs, but to stay non-blocking we'll use a predictable doc ID
     const predictableId = `item_${productId}`;
     const itemRef = doc(cartItemsRef, predictableId);
     
-    // We increment or set. Using set with merge to be safe and fast.
     setDocumentNonBlocking(itemRef, {
       id: predictableId,
       productId: productId,
-      quantity: 1, // Simplified for immediate feedback; actual logic should increment
+      quantity: 1, 
       priceAtAddToCart: price,
       cartId: 'cart'
     }, { merge: true });
@@ -126,8 +118,8 @@ export function ProductCollection() {
                 const accentColor = flavorConfig?.accentHex || '#ffffff';
 
                 return (
-                  <div key={product.id} className="group relative flex flex-col items-center sm:items-start">
-                     <div className="aspect-square w-full max-w-[320px] rounded-[2rem] bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
+                  <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform">
+                     <div className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-6 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
                         <div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 blur-[60px] pointer-events-none"
                           style={{ background: `radial-gradient(circle at center, ${accentColor} 0%, transparent 70%)` }}
@@ -261,7 +253,7 @@ export function ReviewsSection() {
           </div>
           
           {reviews.map((review, i) => (
-            <div key={i} className="p-8 bg-black/20 rounded-3xl group hover:border-primary transition-all duration-500 shadow-lg maroon-glow-border">
+            <div key={i} className="p-8 bg-black/20 rounded-3xl group hover:border-primary transition-all duration-500 shadow-lg primary-glow-border">
               <div className="flex gap-1 mb-5 text-primary/20 group-hover:text-primary transition-colors">
                 {[...Array(review.rating)].map((_, j) => <Star key={j} size={10} fill="currentColor" />)}
               </div>

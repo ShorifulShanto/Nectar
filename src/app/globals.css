@@ -10,6 +10,7 @@
     --card-foreground: 0 0% 100%;
     --popover: 0 0% 6%;
     --popover-foreground: 0 0% 100%;
+    /* Sage Green #A1BC98 HSL Equivalent */
     --primary: 105 21% 67%;
     --primary-foreground: 0 0% 0%;
     --secondary: 0 0% 12%;
@@ -40,13 +41,18 @@
   }
 }
 
-.maroon-glow-border {
-  border: 1px solid hsla(105, 21%, 67%, 0.3);
-  box-shadow: 0 0 15px hsla(105, 21%, 67%, 0.1);
-  transition: all 0.5s ease;
+/* Anti-Glitch Performance Utilities */
+.will-change-transform {
+  will-change: transform, opacity;
 }
 
-.maroon-glow-border:hover {
+.primary-glow-border {
+  border: 1px solid hsla(105, 21%, 67%, 0.3);
+  box-shadow: 0 0 15px hsla(105, 21%, 67%, 0.1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.primary-glow-border:hover {
   border-color: hsla(105, 21%, 67%, 0.6);
   box-shadow: 0 0 25px hsla(105, 21%, 67%, 0.2);
 }
@@ -84,9 +90,9 @@
   color: transparent;
 }
 
-.forest-mirror {
+.frosted-glass {
   background: rgba(8, 12, 10, 0.6);
-  backdrop-filter: blur(50px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
   border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -111,9 +117,8 @@
   scrollbar-width: none;
 }
 
-.transition-all {
+.transition-all-smooth {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 400ms;
-  will-change: transform, opacity;
 }

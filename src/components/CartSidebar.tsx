@@ -80,7 +80,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="bg-black/60 backdrop-blur-2xl border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[300]">
+      <SheetContent className="frosted-glass border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[300]">
         <SheetHeader className="p-6 border-b border-white/5 bg-black/20">
           <SheetTitle className="text-xl font-headline font-bold tracking-widest uppercase flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -110,7 +110,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               const price = item.priceAtAddToCart || dbProduct?.price || 12.00;
 
               return (
-                <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500 will-change-transform">
                   <div className="relative w-16 h-16 bg-neutral-900/40 rounded-lg overflow-hidden flex-shrink-0">
                     <Image src={image} alt={name} fill className="object-contain p-2" />
                   </div>
