@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -19,35 +20,30 @@ export function OlipopHero() {
   const db = useFirestore();
   const currentFlavor = flavors[currentFlavorIndex];
 
-  // Manual and Auto transition logic
   const changeFlavor = useCallback((dir: "next" | "prev") => {
     if (isLoadingFlavor) return;
     setIsLoadingFlavor(true);
     
-    let nextIdx = currentFlavorIndex;
-    if (dir === "next") {
-      nextIdx = (currentFlavorIndex + 1) % flavors.length;
-    } else {
-      nextIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
-    }
-    
-    // Smooth fade transition
+    // Smooth fade out duration
     setTimeout(() => {
-      setCurrentFlavorIndex(nextIdx);
+      setCurrentFlavorIndex((prev) => {
+        if (dir === "next") return (prev + 1) % flavors.length;
+        return (prev - 1 + flavors.length) % flavors.length;
+      });
       setIsLoadingFlavor(false);
-    }, 400); // Increased slightly for smoother blend
-  }, [currentFlavorIndex, isLoadingFlavor]);
+    }, 800); // Slower, more cinematic fade
+  }, [isLoadingFlavor]);
 
   // Automatic rotation: 8s full play + 2s wait = 10s cycle
   useEffect(() => {
     const autoRotateTimer = setTimeout(() => {
       changeFlavor("next");
-    }, 10000); // 10 seconds per flavor cycle
+    }, 10000); 
 
     return () => clearTimeout(autoRotateTimer);
   }, [currentFlavorIndex, changeFlavor]);
 
-  // Preload neighboring assets
+  // Preload neighboring assets for instant playback
   useEffect(() => {
     const nextIdx = (currentFlavorIndex + 1) % flavors.length;
     const prevIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
@@ -104,9 +100,11 @@ export function OlipopHero() {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-all duration-700 ease-in-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
+          className={`relative w-full h-full transition-all duration-1000 ease-in-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-105 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
         >
+          {/* Key forces re-mount to restart the 8s WebP animation from frame 0 */}
           <Image 
+            key={currentFlavor.id}
             src={currentFlavor.videoUrl} 
             alt={`${currentFlavor.name} sequence`} 
             fill 
@@ -123,19 +121,19 @@ export function OlipopHero() {
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         <div 
           ref={contentRef}
-          className={`max-w-md transition-all duration-500 ${isLoadingFlavor ? 'opacity-0 translate-y-4 blur-md' : 'opacity-100 translate-y-0 blur-0'}`}
+          className={`max-w-md transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 translate-y-8 blur-lg' : 'opacity-100 translate-y-0 blur-0'}`}
         >
           <div className="space-y-6">
             <p className="text-white/40 font-bold tracking-[0.5em] text-[9px] uppercase">
               Olipop — real pressed
             </p>
             <h1 
-              className="text-5xl md:text-7xl lg:text-9xl font-headline font-bold leading-[0.85] tracking-tighter uppercase"
+              className="text-5xl md:text-7xl lg:text-9xl font-headline font-bold leading-[0.85] tracking-tighter uppercase transition-colors duration-1000"
               style={{ color: currentFlavor.accentHex }}
             >
               {currentFlavor.name}
             </h1>
-            <p className="text-[11px] md:text-[12px] font-accent tracking-[0.2em] italic transition-colors duration-500" style={{ color: `${currentFlavor.accentHex}80` }}>
+            <p className="text-[11px] md:text-[12px] font-accent tracking-[0.2em] italic transition-colors duration-1000" style={{ color: `${currentFlavor.accentHex}80` }}>
               {currentFlavor.subtitle}
             </p>
             <p className="text-[10px] md:text-[11px] text-white/40 leading-relaxed max-w-[300px] font-light">
@@ -185,7 +183,7 @@ export function OlipopHero() {
              >
                {currentFlavor.index}
              </span>
-             <p className="text-[9px] uppercase tracking-[0.5em] mt-2 font-bold transition-colors duration-500" style={{ color: `${currentFlavor.accentHex}40` }}>
+             <p className="text-[9px] uppercase tracking-[0.5em] mt-2 font-bold transition-colors duration-1000" style={{ color: `${currentFlavor.accentHex}40` }}>
                {currentFlavor.index} / 07
              </p>
           </div>
