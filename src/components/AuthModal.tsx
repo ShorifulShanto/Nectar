@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -11,6 +12,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  setPersistence,
+  browserSessionPersistence,
   User
 } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -64,6 +67,9 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     e.preventDefault();
     setIsLoading(true);
     try {
+      // Set persistence as requested: until user logs out or deletes the tab
+      await setPersistence(auth, browserSessionPersistence);
+      
       if (view === "login") {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         if (!userCred.user.emailVerified) {
@@ -113,16 +119,15 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     const provider = new GoogleAuthProvider();
-    // Force prompt for account selection if needed
     provider.setCustomParameters({ prompt: 'select_account' });
     
     try {
+      await setPersistence(auth, browserSessionPersistence);
       const userCred = await signInWithPopup(auth, provider);
       await syncUserToFirestore(userCred.user);
       onClose();
       toast({ title: "Welcome to Olipop" });
     } catch (error: any) {
-      console.error("Google Auth Error:", error);
       toast({ 
         variant: "destructive", 
         title: "Google Sign-In Failed", 
@@ -146,7 +151,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         setTimeout(resetState, 300);
       }
     }}>
-      <DialogContent className="bg-black border-white/10 text-white sm:max-w-[400px] overflow-hidden z-[200]">
+      <DialogContent className="bg-black border-white/10 text-white sm:max-w-[400px] overflow-hidden z-[500]">
         {view === "verify" ? (
           <div className="py-8 text-center space-y-6">
             <div className="flex justify-center">
@@ -301,7 +306,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                     <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                   </svg>
                 )}
-                {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Google"}
+                {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Continue with Google"}
               </Button>
 
               <div className="text-center">

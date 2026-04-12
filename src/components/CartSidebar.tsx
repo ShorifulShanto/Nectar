@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -80,7 +81,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="frosted-glass border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[300]">
+      <SheetContent className="bg-black/60 backdrop-blur-2xl border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[1000]">
         <SheetHeader className="p-6 border-b border-white/5 bg-black/20">
           <SheetTitle className="text-xl font-headline font-bold tracking-widest uppercase flex items-center justify-between">
             <span className="flex items-center gap-2">
