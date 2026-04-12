@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { flavors } from "@/lib/flavor-data";
 import { ChevronUp, ChevronDown, Instagram, Twitter, Facebook } from "lucide-react";
 import Image from "next/image";
@@ -19,7 +19,35 @@ export function OlipopHero() {
   const db = useFirestore();
   const currentFlavor = flavors[currentFlavorIndex];
 
-  // Smart Preload neighboring assets only
+  // Manual and Auto transition logic
+  const changeFlavor = useCallback((dir: "next" | "prev") => {
+    if (isLoadingFlavor) return;
+    setIsLoadingFlavor(true);
+    
+    let nextIdx = currentFlavorIndex;
+    if (dir === "next") {
+      nextIdx = (currentFlavorIndex + 1) % flavors.length;
+    } else {
+      nextIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
+    }
+    
+    // Smooth fade transition
+    setTimeout(() => {
+      setCurrentFlavorIndex(nextIdx);
+      setIsLoadingFlavor(false);
+    }, 400); // Increased slightly for smoother blend
+  }, [currentFlavorIndex, isLoadingFlavor]);
+
+  // Automatic rotation: 8s full play + 2s wait = 10s cycle
+  useEffect(() => {
+    const autoRotateTimer = setTimeout(() => {
+      changeFlavor("next");
+    }, 10000); // 10 seconds per flavor cycle
+
+    return () => clearTimeout(autoRotateTimer);
+  }, [currentFlavorIndex, changeFlavor]);
+
+  // Preload neighboring assets
   useEffect(() => {
     const nextIdx = (currentFlavorIndex + 1) % flavors.length;
     const prevIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
@@ -70,25 +98,13 @@ export function OlipopHero() {
     }
   };
 
-  const changeFlavor = (dir: "next" | "prev") => {
-    if (isLoadingFlavor) return;
-    setIsLoadingFlavor(true);
-    let nextIdx = currentFlavorIndex;
-    if (dir === "next") nextIdx = (currentFlavorIndex + 1) % flavors.length;
-    else nextIdx = (currentFlavorIndex - 1 + flavors.length) % flavors.length;
-    
-    setTimeout(() => {
-      setCurrentFlavorIndex(nextIdx);
-      setIsLoadingFlavor(false);
-    }, 200);
-  };
-
   return (
     <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-black flex items-center">
+      {/* Background Animated WebP */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-all duration-300 ease-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+          className={`relative w-full h-full transition-all duration-700 ease-in-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
         >
           <Image 
             src={currentFlavor.videoUrl} 
@@ -103,10 +119,11 @@ export function OlipopHero() {
 
       <div className="absolute inset-0 hero-vignette z-10 pointer-events-none" />
 
+      {/* Main Content Overlay */}
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         <div 
           ref={contentRef}
-          className={`max-w-md transition-all duration-300 ${isLoadingFlavor ? 'opacity-0 translate-y-2 blur-sm' : 'opacity-100 translate-y-0 blur-0'}`}
+          className={`max-w-md transition-all duration-500 ${isLoadingFlavor ? 'opacity-0 translate-y-4 blur-md' : 'opacity-100 translate-y-0 blur-0'}`}
         >
           <div className="space-y-6">
             <p className="text-white/40 font-bold tracking-[0.5em] text-[9px] uppercase">
@@ -155,14 +172,15 @@ export function OlipopHero() {
           </div>
         </div>
 
+        {/* Navigation and Flavor Counter */}
         <div className="flex flex-col items-center gap-12">
           <div className="text-center relative">
              <span 
-               className="font-headline font-bold text-7xl md:text-[10rem] leading-none select-none transition-all duration-700 inline-block"
+               className="font-headline font-bold text-7xl md:text-[10rem] leading-none select-none transition-all duration-1000 inline-block"
                style={{ 
                  color: 'transparent', 
                  WebkitTextStroke: `1px ${currentFlavor.accentHex}20`,
-                 transform: isLoadingFlavor ? 'scale(0.9) translateY(10px)' : 'scale(1) translateY(0)'
+                 transform: isLoadingFlavor ? 'scale(0.8) rotate(-5deg)' : 'scale(1) rotate(0deg)'
                }}
              >
                {currentFlavor.index}
@@ -192,15 +210,11 @@ export function OlipopHero() {
         </div>
       </div>
 
+      {/* Social Links */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-8">
         <Instagram className="w-4 h-4 text-white/15 hover:text-primary transition-colors cursor-pointer" />
         <Twitter className="w-4 h-4 text-white/15 hover:text-primary transition-colors cursor-pointer" />
         <Facebook className="w-4 h-4 text-white/15 hover:text-primary transition-colors cursor-pointer" />
-      </div>
-
-      <div className="absolute bottom-12 right-6 md:right-24 z-30 flex flex-col items-center gap-4">
-        <div className="w-px h-12 bg-gradient-to-t from-primary/30 to-transparent scroll-hint-line" />
-        <span className="text-[8px] font-bold tracking-[0.6em] uppercase text-white/20">SCROLL</span>
       </div>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
