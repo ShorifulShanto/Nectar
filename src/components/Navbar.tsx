@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useUser, useFirestore, useCollection } from "@/firebase";
 import { collection } from "firebase/firestore";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
@@ -9,6 +9,35 @@ import { AuthModal } from "./AuthModal";
 import { CartSidebar } from "./CartSidebar";
 import { ProfileModal } from "./ProfileModal";
 import { useMemoFirebase } from "@/firebase/provider";
+
+function RainEffect() {
+  const drops = useMemo(() => {
+    return Array.from({ length: 20 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      duration: `${0.5 + Math.random() * 1}s`,
+      delay: `${Math.random() * 2}s`,
+      opacity: 0.1 + Math.random() * 0.3
+    }));
+  }, []);
+
+  return (
+    <div className="rain-container">
+      {drops.map((drop) => (
+        <div 
+          key={drop.id} 
+          className="rain-drop" 
+          style={{ 
+            left: drop.left, 
+            animationDuration: drop.duration, 
+            animationDelay: drop.delay,
+            opacity: drop.opacity
+          }} 
+        />
+      ))}
+    </div>
+  );
+}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -94,44 +123,45 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Compact Side Navigation Overlay */}
+      {/* Frosted Side Navigation Overlay with Rain Effect */}
       <div className={`fixed inset-0 z-[110] transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <div className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
-        <div className={`absolute top-0 right-0 h-full w-full sm:max-w-[380px] forest-mirror transition-transform duration-500 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl overflow-hidden`}>
-          <div className="h-full flex flex-col p-8 md:p-12 relative">
-             {/* Decorative Background Element */}
-            <div className="absolute top-[-10%] right-[-20%] w-80 h-80 rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
-            
-            <div className="flex justify-between items-center mb-16 relative z-10">
-              <span className="text-xs font-headline font-bold tracking-[0.3em] text-white/40 uppercase">Navigation</span>
+        <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
+        <div className={`absolute top-0 right-0 h-full w-full sm:max-w-[400px] frosted-glass transition-transform duration-700 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl overflow-hidden`}>
+          
+          {/* Subtle Rain Animation Background */}
+          {isMenuOpen && <RainEffect />}
+
+          <div className="h-full flex flex-col p-8 md:p-16 relative z-10">
+            <div className="flex justify-between items-center mb-24">
+              <span className="text-[10px] font-bold tracking-[0.4em] text-white/20 uppercase">Navigation</span>
               <button onClick={() => setIsMenuOpen(false)} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
                 <X size={18} className="text-white/40" />
               </button>
             </div>
 
-            <div className="flex flex-col gap-6 relative z-10">
+            <div className="flex flex-col gap-8">
               {navLinks.map((link, i) => (
                 <Link 
                   key={link.name} 
                   href={link.href} 
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-3xl font-headline font-bold text-white/40 hover:text-primary transition-all hover:translate-x-3 flex items-center gap-4 group"
+                  className="text-4xl md:text-5xl font-headline font-bold text-white/30 hover:text-primary transition-all duration-500 hover:translate-x-4 flex items-center gap-6 group"
                   style={{ transitionDelay: `${i * 50}ms` }}
                 >
-                  <span className="text-[10px] font-mono text-white/10 group-hover:text-primary/40">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="text-[9px] font-mono text-white/10 group-hover:text-primary/40 tracking-tighter">{String(i + 1).padStart(2, '0')}</span>
                   {link.name}
                 </Link>
               ))}
             </div>
 
-            <div className="mt-auto relative z-10">
-               <div className="h-px w-full bg-white/10 mb-8" />
-               <div className="flex flex-col gap-4">
-                 <p className="text-[9px] uppercase tracking-[0.4em] text-white/20 font-bold">Follow Olipop</p>
-                 <div className="flex gap-6 text-[10px] uppercase tracking-widest font-bold text-white/40">
-                   <a href="#" className="hover:text-primary transition-colors">IG</a>
-                   <a href="#" className="hover:text-primary transition-colors">TW</a>
-                   <a href="#" className="hover:text-primary transition-colors">FB</a>
+            <div className="mt-auto space-y-8">
+               <div className="h-px w-full bg-white/5" />
+               <div className="flex flex-col gap-6">
+                 <p className="text-[9px] uppercase tracking-[0.5em] text-white/20 font-bold">Follow Our Journey</p>
+                 <div className="flex gap-8 text-[11px] uppercase tracking-widest font-bold text-white/40">
+                   <a href="#" className="hover:text-primary transition-colors">Instagram</a>
+                   <a href="#" className="hover:text-primary transition-colors">Twitter</a>
+                   <a href="#" className="hover:text-primary transition-colors">Discord</a>
                  </div>
                </div>
             </div>

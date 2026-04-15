@@ -63,51 +63,41 @@
               linear-gradient(to right, rgba(0,0,0,.7) 0%, transparent 60%, rgba(0,0,0,.5) 100%);
 }
 
-.scroll-hint-line {
-  animation: scrollPulse 2s ease infinite;
-}
-
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.2; transform: scaleY(1); }
-  50% { opacity: 0.8; transform: scaleY(1.4); }
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-}
-::-webkit-scrollbar-track {
-  background: #000;
-}
-::-webkit-scrollbar-thumb {
-  background: #1a1a1a;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #252525;
-}
-
-.text-stroke {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-  color: transparent;
-}
-
 .frosted-glass {
-  background: rgba(8, 12, 10, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(40px) saturate(150%);
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.grain-texture::before {
-  content: "";
-  position: fixed;
+/* Rain Effect */
+.rain-container {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   pointer-events: none;
-  z-index: 50;
-  opacity: 0.03;
-  background-image: url("https://res.cloudinary.com/drmpjeatm/image/upload/v1775574830/grain_texture.png");
+  z-index: 0;
+}
+
+.rain-drop {
+  position: absolute;
+  width: 1px;
+  height: 100px;
+  background: linear-gradient(to bottom, rgba(161, 188, 152, 0), rgba(161, 188, 152, 0.4));
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-120px); }
+  to { transform: translateY(100vh); }
+}
+
+.transition-all-smooth {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 400ms;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -116,10 +106,4 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-.transition-all-smooth {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 400ms;
 }
