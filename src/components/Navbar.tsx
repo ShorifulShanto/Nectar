@@ -126,26 +126,26 @@ export function Navbar() {
       {/* Frosted Side Navigation Overlay with Rain Effect */}
       <div className={`fixed inset-0 z-[110] transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
         <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
-        <div className={`absolute top-0 right-0 h-full w-full sm:max-w-[400px] frosted-glass transition-transform duration-700 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl overflow-hidden`}>
+        <div className={`absolute top-0 right-0 h-full w-full sm:max-w-[320px] frosted-glass transition-transform duration-700 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl overflow-hidden`}>
           
           {/* Subtle Rain Animation Background */}
           {isMenuOpen && <RainEffect />}
 
-          <div className="h-full flex flex-col p-8 md:p-16 relative z-10">
-            <div className="flex justify-between items-center mb-24">
+          <div className="h-full flex flex-col p-8 md:p-12 relative z-10 overflow-y-auto scrollbar-hide">
+            <div className="flex justify-between items-center mb-16">
               <span className="text-[10px] font-bold tracking-[0.4em] text-white/20 uppercase">Navigation</span>
               <button onClick={() => setIsMenuOpen(false)} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
                 <X size={18} className="text-white/40" />
               </button>
             </div>
 
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               {navLinks.map((link, i) => (
                 <Link 
                   key={link.name} 
                   href={link.href} 
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-4xl md:text-5xl font-headline font-bold text-white/30 hover:text-primary transition-all duration-500 hover:translate-x-4 flex items-center gap-6 group"
+                  className="text-3xl md:text-4xl font-headline font-bold text-white/30 hover:text-primary transition-all duration-500 hover:translate-x-4 flex items-center gap-6 group"
                   style={{ transitionDelay: `${i * 50}ms` }}
                 >
                   <span className="text-[9px] font-mono text-white/10 group-hover:text-primary/40 tracking-tighter">{String(i + 1).padStart(2, '0')}</span>
@@ -154,11 +154,11 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="mt-auto space-y-8">
+            <div className="mt-auto pt-16 space-y-8">
                <div className="h-px w-full bg-white/5" />
                <div className="flex flex-col gap-6">
                  <p className="text-[9px] uppercase tracking-[0.5em] text-white/20 font-bold">Follow Our Journey</p>
-                 <div className="flex gap-8 text-[11px] uppercase tracking-widest font-bold text-white/40">
+                 <div className="flex flex-col gap-4 text-[10px] uppercase tracking-widest font-bold text-white/40">
                    <a href="#" className="hover:text-primary transition-colors">Instagram</a>
                    <a href="#" className="hover:text-primary transition-colors">Twitter</a>
                    <a href="#" className="hover:text-primary transition-colors">Discord</a>
