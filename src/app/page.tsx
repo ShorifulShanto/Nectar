@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Loader } from "@/components/Loader";
 import { Navbar } from "@/components/Navbar";
-import { OlipopHero } from "@/components/OlipopHero";
+import { NectarHero } from "@/components/NectarHero";
 import { IngredientsSection } from "@/components/IngredientsSection";
 import { ProductCollection } from "@/components/ProductCollection";
 import { NutritionSection } from "@/components/NutritionSection";
@@ -15,7 +15,10 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const scrollToProducts = () => {
-    document.getElementById('product')?.scrollIntoView({ behavior: 'smooth' });
+    const section = document.getElementById('product');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -24,7 +27,7 @@ export default function Home() {
       
       <main className={`transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <Navbar />
-        <OlipopHero />
+        <NectarHero />
         <ProductCollection />
         <IngredientsSection />
         <NutritionSection />
@@ -44,7 +47,7 @@ export default function Home() {
               TASTE THE<br />DIFFERENCE
             </h2>
             <p className="text-white/40 max-w-lg mx-auto mb-10 text-base font-light leading-relaxed">
-              Order your first case today and discover why thousands have made OLIPOP their daily ritual. Real fruit. Real taste. Real good.
+              Order your first case today and discover why thousands have made NECTAR their daily ritual. Real fruit. Real taste. Real good.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 

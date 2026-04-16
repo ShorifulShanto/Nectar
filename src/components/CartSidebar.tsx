@@ -105,7 +105,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               const dbProduct = dbProducts?.find(p => p.id === item.productId);
               const flavorConfig = flavors.find(f => f.id === item.productId);
               
-              const name = dbProduct?.name || flavorConfig?.name || "Olipop Flavor";
+              const name = dbProduct?.name || flavorConfig?.name || "NECTAR Flavor";
               const image = dbProduct?.image || flavorConfig?.imageUrl || "https://picsum.photos/seed/juice/400/600";
               const price = item.priceAtAddToCart || dbProduct?.price || 12.00;
 

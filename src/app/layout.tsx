@@ -4,8 +4,8 @@ import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Olipop — Fresh Cold-Pressed Juice',
-  description: 'A modern functional soda brand inspired by classic flavors with healthier ingredients',
+  title: 'NECTAR — Fresh Cold-Pressed Juice',
+  description: 'A luxury functional beverage brand inspired by classic flavors with healthier ingredients',
 };
 
 export default function RootLayout({

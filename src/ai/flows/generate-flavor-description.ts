@@ -31,7 +31,7 @@ const prompt = ai.definePrompt({
   name: 'generateFlavorDescriptionPrompt',
   input: {schema: GenerateFlavorDescriptionInputSchema},
   output: {schema: GenerateFlavorDescriptionOutputSchema},
-  prompt: `You are a creative copywriter for Olipop, a modern functional soda brand.
+  prompt: `You are a creative copywriter for NECTAR, a luxury functional beverage brand.
 Your task is to generate a captivating and unique short narrative description for a drink flavor.
 
 The description should be 1-3 lines long and evoke the essence of the flavor, making it sound appealing and fresh.

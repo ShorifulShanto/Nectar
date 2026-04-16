@@ -66,7 +66,6 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     e.preventDefault();
     setIsLoading(true);
     try {
-      // Set persistence: until user logs out or closes tab
       await setPersistence(auth, browserSessionPersistence);
       
       if (view === "login") {
@@ -79,7 +78,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         }
         await syncUserToFirestore(userCred.user);
         onClose();
-        toast({ title: "Welcome back to Olipop" });
+        toast({ title: "Welcome back to NECTAR" });
       } else if (view === "signup") {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(userCred.user);
@@ -125,7 +124,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       const userCred = await signInWithPopup(auth, provider);
       await syncUserToFirestore(userCred.user);
       onClose();
-      toast({ title: "Welcome to Olipop" });
+      toast({ title: "Welcome to NECTAR" });
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
