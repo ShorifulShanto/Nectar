@@ -160,7 +160,7 @@ export default function NectarAuthPage() {
 
               <div className="relative group">
                 <button 
-                  type="button"
+                  type="button" 
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-0 top-3 text-white/40 hover:text-white transition-colors z-10"
                 >
@@ -223,9 +223,8 @@ export default function NectarAuthPage() {
               onClick={() => setIsLogin(!isLogin)}
               className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/60 hover:text-white transition-all group"
             >
-              {isLogin ? "Don't have an Account?" : "Already have an Account?"}
+              {isLogin ? "If you don't have an account, sign up" : "Already have an account? Sign in"}
               <span className="block h-px w-0 group-hover:w-full bg-white/40 transition-all duration-500 mx-auto mt-1" />
-              <span className="text-white mt-1 block tracking-[0.5em]">{isLogin ? "Register" : "Login"}</span>
             </button>
           </div>
         </div>
