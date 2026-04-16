@@ -111,12 +111,12 @@ export default function NectarAuthPage() {
         <div className="absolute bottom-[-10%] right-[-5%] w-[70%] h-[70%] rounded-full bg-[#f83a7c] blur-[120px] opacity-30" />
         
         {/* Realistic Liquid Splashes (SVGs) */}
-        <div className="absolute top-[10%] left-[15%] w-64 h-64 opacity-20 blur-2xl animate-spin-slow">
+        <div className="absolute top-[15%] left-[10%] w-64 h-64 opacity-20 blur-2xl animate-spin-slow">
            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="#FFFFFF" d="M47.1,-63.3C61.4,-56.3,73.5,-42.6,78.8,-26.8C84.1,-11.1,82.5,6.6,76.5,22.2C70.4,37.8,59.8,51.3,46.1,60.8C32.4,70.3,15.6,75.8,-0.9,77.3C-17.3,78.8,-34.7,76.4,-49.2,67.3C-63.7,58.3,-75.4,42.5,-80.6,25.3C-85.8,8.2,-84.6,-10.3,-77.3,-26.7C-70.1,-43.1,-56.9,-57.4,-41.4,-64C-25.9,-70.7,-8.1,-69.6,9.2,-82.2C26.4,-94.8,47.1,-63.3,47.1,-63.3Z" transform="translate(100 100)" />
           </svg>
         </div>
-        <div className="absolute bottom-[15%] right-[20%] w-96 h-96 opacity-10 blur-3xl animate-bounce-slow">
+        <div className="absolute bottom-[10%] right-[15%] w-96 h-96 opacity-10 blur-3xl animate-bounce-slow">
            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="#FFFFFF" d="M38.5,-52.1C50.6,-44.8,61.4,-34.5,67.8,-21.7C74.3,-8.9,76.4,6.4,72.3,19.9C68.2,33.4,57.9,45.2,45.2,53.4C32.5,61.6,17.4,66.2,2.3,63.1C-12.8,59.9,-27.9,49.1,-40.1,38.1C-52.3,27.1,-61.6,15.9,-64.5,2.9C-67.4,-10.1,-63.9,-25.1,-54.6,-36.8C-45.3,-48.5,-30.2,-56.9,-16.1,-60.7C-1.9,-64.5,13.8,-63.7,26.4,-59.4C39,-55.1,50.6,-52.1,38.5,-52.1Z" transform="translate(100 100)" />
           </svg>
@@ -127,17 +127,18 @@ export default function NectarAuthPage() {
       </div>
 
       {/* Main Luxury Auth Card */}
-      <div className="relative z-10 w-full max-w-[440px] px-6">
-        <div className="backdrop-blur-[60px] bg-white/10 border border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.1),inset_0_0_20px_rgba(255,255,255,0.2)] rounded-[3rem] p-10 md:p-14 relative overflow-hidden transition-all duration-700">
+      <div className="relative z-10 w-full max-w-[460px] px-6">
+        <div className="backdrop-blur-[80px] bg-white/10 border border-white/40 shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_0_30px_rgba(255,255,255,0.2)] rounded-[3.5rem] p-10 md:p-16 relative overflow-hidden transition-all duration-700 group">
           
           {/* Rim Light / Glow Effect */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
           
           <div className="text-center space-y-3 mb-12">
-            <h1 className="text-5xl font-headline font-bold tracking-[0.2em] uppercase text-white drop-shadow-md">
+            <h1 className="text-5xl font-headline font-bold tracking-[0.3em] uppercase text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.2)]">
               NECTAR
             </h1>
-            <p className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-medium">
+            <p className="text-[10px] uppercase tracking-[0.5em] text-white/70 font-bold">
               {isLogin ? "Taste Perfection" : "Join the Harvest"}
             </p>
           </div>
@@ -151,7 +152,7 @@ export default function NectarAuthPage() {
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
+                  placeholder="Email Address"
                   className="bg-transparent border-0 border-b border-white/20 rounded-none px-0 h-12 focus-visible:ring-0 focus-visible:border-white placeholder:text-white/30 text-white text-base transition-all"
                   required
                 />
@@ -169,13 +170,13 @@ export default function NectarAuthPage() {
                   type={showPassword ? "text" : "password"} 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
+                  placeholder="Secure Password"
                   className="bg-transparent border-0 border-b border-white/20 rounded-none px-0 h-12 focus-visible:ring-0 focus-visible:border-white placeholder:text-white/30 text-white text-base transition-all pr-10"
                   required
                 />
                 {isLogin && (
                   <div className="flex justify-end mt-2">
-                    <button type="button" className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors">
+                    <button type="button" className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors font-bold">
                       Forgot Password?
                     </button>
                   </div>
@@ -187,11 +188,11 @@ export default function NectarAuthPage() {
                <Button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-14 bg-white text-[#f83a7c] hover:bg-[#fff0f5] font-bold uppercase tracking-[0.2em] text-[11px] rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300"
+                className="w-full h-14 bg-white text-[#f83a7c] hover:bg-neutral-50 font-bold uppercase tracking-[0.2em] text-[11px] rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 active:scale-95"
               >
                 {isLoading ? <Loader2 className="animate-spin" size={20} /> : (
                   <span className="flex items-center justify-center gap-2">
-                    {isLogin ? "Login" : "Register"}
+                    {isLogin ? "Sign In" : "Register"}
                   </span>
                 )}
               </Button>
@@ -200,13 +201,13 @@ export default function NectarAuthPage() {
 
           <div className="mt-10 relative flex items-center justify-center">
             <div className="absolute w-full border-t border-white/10" />
-            <span className="relative bg-transparent px-4 text-[10px] uppercase tracking-[0.4em] text-white/30">Or</span>
+            <span className="relative bg-transparent px-4 text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">Or</span>
           </div>
 
           <Button 
             onClick={handleGoogleSignIn}
             variant="outline"
-            className="w-full mt-8 h-14 border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-[0.2em] text-[10px] rounded-2xl transition-all flex items-center justify-center gap-3 backdrop-blur-md"
+            className="w-full mt-8 h-14 border-white/30 bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-[0.2em] text-[10px] rounded-2xl transition-all flex items-center justify-center gap-3 backdrop-blur-md active:scale-95"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">
               <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -220,7 +221,7 @@ export default function NectarAuthPage() {
           <div className="mt-12 text-center">
             <button 
               onClick={() => setIsLogin(!isLogin)}
-              className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/50 hover:text-white transition-all group"
+              className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/60 hover:text-white transition-all group"
             >
               {isLogin ? "Don't have an Account?" : "Already have an Account?"}
               <span className="block h-px w-0 group-hover:w-full bg-white/40 transition-all duration-500 mx-auto mt-1" />
@@ -230,9 +231,9 @@ export default function NectarAuthPage() {
         </div>
         
         <div className="mt-10 text-center">
-          <Link href="/" className="text-[9px] uppercase tracking-[0.6em] text-white/30 hover:text-white transition-all font-bold group inline-flex items-center gap-2">
-            <ArrowRight size={10} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-            Return to Grove
+          <Link href="/" className="text-[10px] uppercase tracking-[0.6em] text-white/40 hover:text-white transition-all font-bold group inline-flex items-center gap-2">
+            <ArrowRight size={12} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+            Return to the Grove
           </Link>
         </div>
       </div>
@@ -244,13 +245,13 @@ export default function NectarAuthPage() {
         }
         @keyframes bounce-slow {
           0%, 100% { transform: translateY(0) scale(1); }
-          50% { transform: translateY(-30px) scale(1.05); }
+          50% { transform: translateY(-40px) scale(1.08); }
         }
         .animate-spin-slow {
-          animation: spin-slow 30s linear infinite;
+          animation: spin-slow 40s linear infinite;
         }
         .animate-bounce-slow {
-          animation: bounce-slow 15s ease-in-out infinite;
+          animation: bounce-slow 20s ease-in-out infinite;
         }
       `}</style>
     </div>

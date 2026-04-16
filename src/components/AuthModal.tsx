@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -149,27 +150,27 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         setTimeout(resetState, 300);
       }
     }}>
-      <DialogContent className="bg-black border-white/10 text-white sm:max-w-[400px] overflow-hidden z-[500]">
+      <DialogContent className="bg-black/80 backdrop-blur-[60px] border-white/10 text-white sm:max-w-[420px] overflow-hidden z-[500] rounded-[3rem] shadow-2xl">
         {view === "verify" ? (
           <div className="py-8 text-center space-y-6">
             <div className="flex justify-center">
-              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
-                <Mail className="text-white/60" size={32} />
+              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center border border-white/10 shadow-inner">
+                <Mail className="text-white/60" size={36} />
               </div>
             </div>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-headline tracking-widest text-center uppercase">
+              <DialogTitle className="text-2xl font-headline tracking-[0.2em] text-center uppercase">
                 Verify Email
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 px-4">
-              <p className="text-[12px] text-white/40 uppercase tracking-widest leading-relaxed">
+              <p className="text-[11px] text-white/50 uppercase tracking-widest leading-relaxed">
                 We have sent a verification email to <span className="text-white">{email}</span>. 
                 Please verify it to continue.
               </p>
               <Button 
                 onClick={resetState}
-                className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full mt-4"
+                className="w-full bg-white text-black hover:bg-neutral-100 uppercase tracking-widest font-bold h-14 rounded-full mt-4"
               >
                 Go to Login
               </Button>
@@ -178,22 +179,22 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         ) : view === "reset_sent" ? (
           <div className="py-8 text-center space-y-6">
             <div className="flex justify-center">
-              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
-                <ShieldCheck className="text-white/60" size={32} />
+              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center border border-white/10 shadow-inner">
+                <ShieldCheck className="text-white/60" size={36} />
               </div>
             </div>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-headline tracking-widest text-center uppercase">
+              <DialogTitle className="text-2xl font-headline tracking-[0.2em] text-center uppercase">
                 Reset Sent
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 px-4">
-              <p className="text-[12px] text-white/40 uppercase tracking-widest leading-relaxed">
+              <p className="text-[11px] text-white/50 uppercase tracking-widest leading-relaxed">
                 We sent a password reset link to <span className="text-white">{email}</span>.
               </p>
               <Button 
                 onClick={resetState}
-                className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full mt-4"
+                className="w-full bg-white text-black hover:bg-neutral-100 uppercase tracking-widest font-bold h-14 rounded-full mt-4"
               >
                 Sign In
               </Button>
@@ -202,56 +203,59 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         ) : (
           <>
             <DialogHeader>
-              <div className="flex items-center justify-center relative mb-4">
+              <div className="flex items-center justify-center relative mb-6">
                 {(view === "forgot" || view === "signup") && (
                    <button onClick={() => setView("login")} className="absolute left-0 text-white/40 hover:text-white transition-colors">
-                     <ArrowLeft size={16} />
+                     <ArrowLeft size={20} />
                    </button>
                 )}
-                <DialogTitle className="text-2xl font-headline tracking-widest text-center uppercase">
-                  {view === "login" ? "Sign In" : view === "signup" ? "Create Account" : "Reset Password"}
+                <DialogTitle className="text-3xl font-headline tracking-[0.3em] text-center uppercase">
+                  {view === "login" ? "NECTAR" : view === "signup" ? "JOIN US" : "RESET"}
                 </DialogTitle>
               </div>
+              <p className="text-center text-[10px] uppercase tracking-[0.4em] text-white/30 -mt-2">
+                {view === "login" ? "Taste Perfection" : view === "signup" ? "The Grove Awaits" : "Recovery"}
+              </p>
             </DialogHeader>
             
-            <div className="space-y-6 pt-4">
+            <div className="space-y-6 pt-6">
               {view === "forgot" ? (
                 <form onSubmit={handleForgotPassword} className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest text-white/40">Email Address</label>
+                    <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Email Address</label>
                     <Input 
                       type="email" 
                       value={email} 
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
+                      className="bg-neutral-900/50 border-white/10 focus:ring-white/20 text-white h-12 rounded-xl"
                       required
-                      placeholder="Email address"
+                      placeholder="email@example.com"
                     />
                   </div>
                   <Button 
                     type="submit" 
                     disabled={isLoading}
-                    className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
+                    className="w-full bg-white text-black hover:bg-neutral-100 uppercase tracking-widest font-bold h-14 rounded-full shadow-lg"
                   >
-                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Get Reset Link"}
+                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Send Link"}
                   </Button>
                 </form>
               ) : (
                 <form onSubmit={handleAuth} className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest text-white/40">Email Address</label>
+                    <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Email Address</label>
                     <Input 
                       type="email" 
                       value={email} 
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
+                      className="bg-neutral-900/50 border-white/10 focus:ring-white/20 text-white h-12 rounded-xl"
                       required
-                      placeholder="Email address"
+                      placeholder="email@example.com"
                     />
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <label className="text-[10px] uppercase tracking-widest text-white/40">Secure Password</label>
+                      <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Password</label>
                       {view === "login" && (
                         <button 
                           type="button" 
@@ -266,17 +270,17 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                       type="password" 
                       value={password} 
                       onChange={(e) => setPassword(e.target.value)}
-                      className="bg-neutral-900 border-white/5 focus:ring-white/20 text-white h-12"
+                      className="bg-neutral-900/50 border-white/10 focus:ring-white/20 text-white h-12 rounded-xl"
                       required
-                      placeholder="Password"
+                      placeholder="••••••••"
                     />
                   </div>
                   <Button 
                     type="submit" 
                     disabled={isLoading}
-                    className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
+                    className="w-full bg-white text-black hover:bg-neutral-100 uppercase tracking-widest font-bold h-14 rounded-full shadow-lg active:scale-95 transition-all"
                   >
-                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : view === "login" ? "Sign In" : "Join Now"}
+                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : view === "login" ? "Sign In" : "Register"}
                   </Button>
                 </form>
               )}
@@ -286,7 +290,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   <span className="w-full border-t border-white/5"></span>
                 </div>
                 <div className="relative flex justify-center text-[10px] uppercase tracking-widest">
-                  <span className="bg-black px-4 text-white/20">Or</span>
+                  <span className="bg-black/0 px-4 text-white/20">Or</span>
                 </div>
               </div>
 
@@ -294,7 +298,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 onClick={handleGoogleSignIn}
                 variant="outline"
                 disabled={isLoading}
-                className="w-full border-white/10 hover:bg-white/5 uppercase tracking-widest font-bold h-14 rounded-full flex gap-3"
+                className="w-full border-white/10 bg-white/5 hover:bg-white/10 text-white uppercase tracking-widest font-bold h-14 rounded-full flex gap-3 backdrop-blur-md active:scale-95 transition-all"
               >
                 {!isLoading && (
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -307,13 +311,13 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Continue with Google"}
               </Button>
 
-              <div className="text-center">
+              <div className="text-center pb-4">
                 <button 
                   type="button"
                   onClick={() => setView(view === "login" ? "signup" : "login")}
-                  className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white"
+                  className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-all font-bold"
                 >
-                  {view === "login" ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+                  {view === "login" ? "Join the Grove" : "Back to Sign In"}
                 </button>
               </div>
             </div>
