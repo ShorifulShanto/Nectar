@@ -34,7 +34,7 @@
     "Order": {
       "title": "Order",
       "type": "object",
-      "description": "Represents a customer's placed order.",
+      "description": "Represents a customer's placed order stored at the top level.",
       "properties": {
         "id": { "type": "string" },
         "userId": { "type": "string" },
@@ -75,7 +75,7 @@
     "Review": {
       "title": "Review",
       "type": "object",
-      "description": "A user's review for a product or the brand.",
+      "description": "A user's review stored at the top level.",
       "properties": {
         "id": { "type": "string" },
         "productId": { "type": "string", "description": "Optional. If null, it is a brand review." },
@@ -110,7 +110,7 @@
     },
     "/reviews/{reviewId}": {
       "schema": { "$ref": "#/backend/entities/Review" },
-      "description": "Public reviews collection."
+      "description": "Global public reviews collection."
     }
   }
 }

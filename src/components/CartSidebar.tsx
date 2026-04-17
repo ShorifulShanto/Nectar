@@ -5,17 +5,15 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useUser, useFirestore, useCollection } from "@/firebase";
 import { collection, doc } from "firebase/firestore";
 import { flavors } from "@/lib/flavor-data";
-import { Plus, Minus, Info, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useMemoFirebase } from "@/firebase/provider";
-import { useToast } from "@/hooks/use-toast";
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { useRouter } from "next/navigation";
 
 export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { user } = useUser();
   const db = useFirestore();
-  const { toast } = useToast();
   const router = useRouter();
 
   const cartQuery = useMemoFirebase(() => {
@@ -41,7 +39,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     updateDocumentNonBlocking(itemRef, { quantity: newQty });
   };
 
-  const handleProceedToSummary = () => {
+  const handleOrderNow = () => {
     if (!items || items.length === 0) return;
     onClose();
     router.push("/checkout");
@@ -118,7 +116,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         {items && items.length > 0 && (
           <div className="p-8 border-t border-white/10 bg-black/40 backdrop-blur-xl">
             <button 
-              onClick={handleProceedToSummary}
+              onClick={handleOrderNow}
               className="w-full h-14 bg-primary text-black font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:bg-primary/80 transition-all active:scale-95 shadow-2xl flex items-center justify-center gap-2"
             >
               Order Now
