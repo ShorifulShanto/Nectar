@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
@@ -14,7 +13,8 @@ import {
   Loader2, 
   ArrowLeft,
   Star,
-  MessageSquare
+  MessageSquare,
+  Sparkles
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,6 +31,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { generateReview } from "@/ai/flows/generate-review-flow";
 
 export default function OrdersPage() {
   const { user, isUserLoading } = useUser();
@@ -41,6 +42,7 @@ export default function OrdersPage() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
 
   const ordersQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -52,6 +54,23 @@ export default function OrdersPage() {
   }, [db, user]);
 
   const { data: orders, isLoading } = useCollection(ordersQuery);
+
+  const handleAiDraft = async () => {
+    if (!selectedProduct) return;
+    setIsAiGenerating(true);
+    try {
+      const response = await generateReview({
+        productName: selectedProduct.name,
+        rating: rating
+      });
+      setComment(response.review);
+      toast({ title: "AI Draft Complete", description: "Tasting notes generated based on your rating." });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "AI Draft Failed", description: "Could not connect to NECTAR AI." });
+    } finally {
+      setIsAiGenerating(false);
+    }
+  };
 
   const handleReviewSubmit = () => {
     if (!user || !db || !selectedProduct) return;
@@ -217,6 +236,7 @@ export default function OrdersPage() {
             <DialogTitle className="text-xl font-headline uppercase tracking-widest mb-2">
               Rate {selectedProduct?.name}
             </DialogTitle>
+            <p className="text-[10px] text-white/40 uppercase tracking-widest">Share your harvest experience</p>
           </DialogHeader>
 
           <div className="py-6 space-y-6">
@@ -234,21 +254,41 @@ export default function OrdersPage() {
               ))}
             </div>
 
-            <Textarea 
-              placeholder="Share your tasting notes..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              className="bg-white/5 border-white/10 text-sm min-h-[120px] rounded-2xl"
-            />
+            <div className="relative group">
+              <Textarea 
+                placeholder="Share your tasting notes..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                className="bg-white/5 border-white/10 text-sm min-h-[120px] rounded-2xl pr-12 focus:border-primary/50"
+              />
+              <button
+                type="button"
+                onClick={handleAiDraft}
+                disabled={isAiGenerating}
+                className="absolute bottom-4 right-4 text-primary/40 hover:text-primary transition-colors disabled:opacity-30"
+                title="Draft with NECTAR AI"
+              >
+                {isAiGenerating ? <Loader2 className="animate-spin" size={18} /> : <Sparkles size={18} />}
+              </button>
+            </div>
           </div>
 
-          <DialogFooter className="sm:justify-center">
+          <DialogFooter className="sm:flex-col gap-3">
             <Button 
               onClick={handleReviewSubmit}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !comment.trim()}
               className="w-full bg-white text-black hover:bg-neutral-200 rounded-full uppercase tracking-widest text-[11px] font-bold h-12"
             >
               {isSubmitting ? <Loader2 className="animate-spin" size={16} /> : "Submit Review"}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={handleAiDraft}
+              disabled={isAiGenerating}
+              className="w-full text-primary uppercase tracking-widest text-[9px] font-bold flex items-center justify-center gap-2 hover:bg-primary/5 rounded-full"
+            >
+              <Sparkles size={14} />
+              {isAiGenerating ? "Brewing Draft..." : "Draft with AI"}
             </Button>
           </DialogFooter>
         </DialogContent>
