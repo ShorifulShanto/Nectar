@@ -2,15 +2,14 @@
 "use client";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useUser, useFirestore, useCollection, useDoc } from "@/firebase";
-import { collection, doc, deleteDoc, writeBatch, serverTimestamp } from "firebase/firestore";
+import { useUser, useFirestore, useCollection } from "@/firebase";
+import { collection, doc } from "firebase/firestore";
 import { flavors } from "@/lib/flavor-data";
-import { Trash2, Plus, Minus, Truck, Info, ShoppingBag, Loader2 } from "lucide-react";
+import { Plus, Minus, Info, ShoppingBag, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useMemoFirebase } from "@/firebase/provider";
 import { useToast } from "@/hooks/use-toast";
-import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking, addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
-import { useState } from "react";
+import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { useRouter } from "next/navigation";
 
 export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -18,7 +17,6 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const db = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const cartQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -30,14 +28,8 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     return collection(db, "products");
   }, [db]);
 
-  const userRef = useMemoFirebase(() => {
-    if (!db || !user) return null;
-    return doc(db, "users", user.uid);
-  }, [db, user]);
-
   const { data: items, isLoading } = useCollection(cartQuery);
   const { data: dbProducts } = useCollection(productsQuery);
-  const { data: profile } = useDoc(userRef);
 
   const updateQty = (id: string, newQty: number) => {
     if (!user || !db) return;
@@ -49,107 +41,20 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     updateDocumentNonBlocking(itemRef, { quantity: newQty });
   };
 
-  const removeItem = (id: string) => {
-    if (!user || !db) return;
-    const itemRef = doc(db, "users", user.uid, "cart", "cart", "items", id);
-    deleteDocumentNonBlocking(itemRef);
-    toast({ title: "Item removed from cart" });
+  const handleProceedToSummary = () => {
+    if (!items || items.length === 0) return;
+    onClose();
+    router.push("/checkout");
   };
-
-  const handleCheckout = async () => {
-    if (!user || !db || !items || items.length === 0) return;
-
-    const isProfileIncomplete = !profile?.firstName || !profile?.lastName || !profile?.location;
-    
-    if (isProfileIncomplete) {
-      toast({
-        title: "Profile Incomplete",
-        description: "Please fill in your delivery details in your profile before checking out.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsProcessing(true);
-    try {
-      const orderId = `ORD_${Date.now()}`;
-      const ordersRef = collection(db, "users", user.uid, "orders");
-      const orderRef = doc(ordersRef, orderId);
-
-      const orderItems = items.map(item => {
-        const dbProduct = dbProducts?.find(p => p.id === item.productId);
-        const flavorConfig = flavors.find(f => f.id === item.productId);
-        return {
-          productId: item.productId,
-          name: dbProduct?.name || flavorConfig?.name || "NECTAR Flavor",
-          quantity: item.quantity,
-          price: item.priceAtAddToCart || dbProduct?.price || 12.00,
-          image: dbProduct?.image || flavorConfig?.imageUrl || ""
-        };
-      });
-
-      const subtotal = orderItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-      const SHIPPING_FEE = 5.00;
-      const totalAmount = subtotal + SHIPPING_FEE;
-
-      // Create the order
-      await setDocumentNonBlocking(orderRef, {
-        id: orderId,
-        userId: user.uid,
-        items: orderItems,
-        totalAmount,
-        status: "pending",
-        shippingAddress: {
-          firstName: profile.firstName,
-          lastName: profile.lastName,
-          location: profile.location,
-          phoneNumber: profile.phoneNumber || ""
-        },
-        createdAt: new Date().toISOString()
-      }, { merge: true });
-
-      // Log the order
-      const hubRef = collection(db, "central_hub");
-      addDocumentNonBlocking(hubRef, {
-        type: "order_placed",
-        userId: user.uid,
-        userEmail: user.email,
-        payload: { orderId, totalAmount },
-        timestamp: new Date().toISOString()
-      });
-
-      // Clear the cart
-      const batch = writeBatch(db);
-      items.forEach((item) => {
-        const itemRef = doc(db, "users", user.uid, "cart", "cart", "items", item.id);
-        batch.delete(itemRef);
-      });
-      await batch.commit();
-
-      toast({ title: "Order Placed Successfully", description: "The NECTAR team is now preparing your harvest." });
-      onClose();
-      // Navigate to orders page where details are shown
-      router.push("/orders");
-    } catch (e: any) {
-      toast({ variant: "destructive", title: "Checkout Failed", description: e.message });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const SHIPPING_FEE = 5.00;
-  const subtotal = items?.reduce((acc, item) => {
-    const itemPrice = item.priceAtAddToCart || 12.00;
-    return acc + (itemPrice * item.quantity);
-  }, 0) || 0;
-
-  const total = subtotal > 0 ? subtotal + SHIPPING_FEE : 0;
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="bg-black/60 backdrop-blur-2xl border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[1000]">
         <SheetHeader className="p-6 border-b border-white/5 bg-black/20">
           <SheetTitle className="text-xl font-headline font-bold tracking-widest uppercase flex items-center justify-between">
+            <button onClick={onClose} className="text-white/40 hover:text-white transition-colors">
+              <ArrowLeft size={18} />
+            </button>
             <span className="flex items-center gap-2">
               <ShoppingBag size={20} className="text-primary" />
               Your Selection
@@ -194,9 +99,6 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                           <Plus size={10} />
                         </button>
                       </div>
-                      <button onClick={() => removeItem(item.id)} className="text-white/20 hover:text-destructive transition-colors ml-auto group">
-                        <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -215,29 +117,13 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
         {items && items.length > 0 && (
           <div className="p-8 border-t border-white/10 bg-black/40 backdrop-blur-xl">
-            <div className="space-y-4 mb-8">
-              <div className="flex justify-between items-center opacity-40">
-                <span className="text-[10px] uppercase tracking-widest font-bold">Logistics Fee</span>
-                <span className="text-xs font-mono">${SHIPPING_FEE.toFixed(2)}</span>
-              </div>
-              <div className="h-px w-full bg-white/5" />
-              <div className="flex justify-between items-end">
-                <span className="text-[11px] font-bold uppercase tracking-widest text-primary">Harvest Value</span>
-                <span className="text-3xl font-headline font-bold">${total.toFixed(2)}</span>
-              </div>
-            </div>
-            
             <button 
-              onClick={handleCheckout}
-              disabled={isProcessing}
+              onClick={handleProceedToSummary}
               className="w-full h-14 bg-primary text-black font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:bg-primary/80 transition-all active:scale-95 shadow-2xl flex items-center justify-center gap-2"
             >
-              {isProcessing ? <Loader2 className="animate-spin" size={16} /> : "Order Now"}
+              Order Now
             </button>
-            <div className="mt-6 flex items-center justify-center gap-2 opacity-30">
-              <Truck size={12} />
-              <p className="text-[8px] uppercase tracking-[0.4em] font-bold">Express Cold-Chain Delivery</p>
-            </div>
+            <p className="mt-4 text-[8px] uppercase tracking-[0.4em] text-center text-white/20 font-bold">Review full summary in next step</p>
           </div>
         )}
       </SheetContent>
