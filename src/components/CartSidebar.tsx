@@ -4,7 +4,6 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useUser, useFirestore, useCollection } from "@/firebase";
 import { collection, doc } from "firebase/firestore";
-import { flavors } from "@/lib/flavor-data";
 import { Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useMemoFirebase } from "@/firebase/provider";
@@ -18,20 +17,14 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   const cartQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
-    return collection(db, "users", user.uid, "cart", "cart", "items");
+    return collection(db, "users", user.uid, "cart");
   }, [db, user]);
 
-  const productsQuery = useMemoFirebase(() => {
-    if (!db) return null;
-    return collection(db, "products");
-  }, [db]);
-
   const { data: items, isLoading } = useCollection(cartQuery);
-  const { data: dbProducts } = useCollection(productsQuery);
 
-  const updateQty = (id: string, newQty: number) => {
+  const updateQty = (productId: string, newQty: number) => {
     if (!user || !db) return;
-    const itemRef = doc(db, "users", user.uid, "cart", "cart", "items", id);
+    const itemRef = doc(db, "users", user.uid, "cart", productId);
     if (newQty < 1) {
       deleteDocumentNonBlocking(itemRef);
       return;
@@ -72,12 +65,9 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             </div>
           ) : items && items.length > 0 ? (
             items.map((item) => {
-              const dbProduct = dbProducts?.find(p => p.id === item.productId);
-              const flavorConfig = flavors.find(f => f.id === item.productId);
-              
-              const name = dbProduct?.name || flavorConfig?.name || "NECTAR Flavor";
-              const image = dbProduct?.image || flavorConfig?.imageUrl || "https://picsum.photos/seed/juice/400/600";
-              const price = item.priceAtAddToCart || dbProduct?.price || 12.00;
+              const name = item.name || "NECTAR Flavor";
+              const image = item.image || "https://picsum.photos/seed/juice/400/600";
+              const price = item.priceAtAddToCart || 12.00;
 
               return (
                 <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500 will-change-transform">

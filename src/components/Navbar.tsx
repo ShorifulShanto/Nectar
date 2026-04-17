@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import { useUser, useFirestore, useCollection } from "@/firebase";
 import { collection } from "firebase/firestore";
-import { ShoppingCart, User, Menu, X, Package } from "lucide-react";
+import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { AuthModal } from "./AuthModal";
 import { CartSidebar } from "./CartSidebar";
 import { ProfileModal } from "./ProfileModal";
@@ -59,7 +59,7 @@ export function Navbar() {
 
   const cartQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
-    return collection(db, "users", user.uid, "cart", "cart", "items");
+    return collection(db, "users", user.uid, "cart");
   }, [db, user]);
 
   const { data: cartItems } = useCollection(cartQuery);
@@ -128,12 +128,10 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Frosted Side Navigation Overlay with Rain Effect */}
       <div className={`fixed inset-0 z-[110] transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
         <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
         <div className={`absolute top-0 right-0 h-full w-full sm:max-w-[320px] frosted-glass transition-transform duration-700 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl overflow-hidden`}>
           
-          {/* Subtle Rain Animation Background */}
           {isMenuOpen && <RainEffect />}
 
           <div className="h-full flex flex-col p-8 md:p-12 relative z-10 overflow-y-auto scrollbar-hide">

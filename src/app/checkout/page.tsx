@@ -4,7 +4,6 @@
 import { useState } from "react";
 import { useUser, useFirestore, useCollection, useDoc, useMemoFirebase } from "@/firebase";
 import { collection, doc, writeBatch } from "firebase/firestore";
-import { flavors } from "@/lib/flavor-data";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,9 +11,7 @@ import {
   ShoppingBag, 
   ArrowLeft, 
   MapPin, 
-  Truck, 
-  Loader2, 
-  ShieldCheck 
+  Loader2
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,13 +28,8 @@ export default function CheckoutPage() {
 
   const cartQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
-    return collection(db, "users", user.uid, "cart", "cart", "items");
+    return collection(db, "users", user.uid, "cart");
   }, [db, user]);
-
-  const productsQuery = useMemoFirebase(() => {
-    if (!db) return null;
-    return collection(db, "products");
-  }, [db]);
 
   const userRef = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -45,7 +37,6 @@ export default function CheckoutPage() {
   }, [db, user]);
 
   const { data: items, isLoading: isCartLoading } = useCollection(cartQuery);
-  const { data: dbProducts } = useCollection(productsQuery);
   const { data: profile } = useDoc(userRef);
 
   const handlePlaceOrder = async () => {
@@ -68,23 +59,18 @@ export default function CheckoutPage() {
       const ordersRef = collection(db, "orders");
       const orderRef = doc(ordersRef, orderId);
 
-      const orderItems = items.map(item => {
-        const dbProduct = dbProducts?.find(p => p.id === item.productId);
-        const flavorConfig = flavors.find(f => f.id === item.productId);
-        return {
-          productId: item.productId,
-          name: dbProduct?.name || flavorConfig?.name || "NECTAR Flavor",
-          quantity: item.quantity,
-          price: item.priceAtAddToCart || dbProduct?.price || 12.00,
-          image: dbProduct?.image || flavorConfig?.imageUrl || ""
-        };
-      });
+      const orderItems = items.map(item => ({
+        productId: item.productId,
+        name: item.name || "NECTAR Flavor",
+        quantity: item.quantity,
+        price: item.priceAtAddToCart || 12.00,
+        image: item.image || ""
+      }));
 
       const subtotal = orderItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
       const SHIPPING_FEE = 5.00;
       const totalAmount = subtotal + SHIPPING_FEE;
 
-      // Create order in global collection
       setDocumentNonBlocking(orderRef, {
         id: orderId,
         userId: user.uid,
@@ -100,7 +86,6 @@ export default function CheckoutPage() {
         createdAt: new Date().toISOString()
       }, { merge: true });
 
-      // Log activity
       const hubRef = collection(db, "central_hub");
       addDocumentNonBlocking(hubRef, {
         type: "order_placed",
@@ -110,10 +95,9 @@ export default function CheckoutPage() {
         timestamp: new Date().toISOString()
       });
 
-      // Clear cart
       const batch = writeBatch(db);
       items.forEach((item) => {
-        const itemRef = doc(db, "users", user.uid, "cart", "cart", "items", item.id);
+        const itemRef = doc(db, "users", user.uid, "cart", item.id);
         batch.delete(itemRef);
       });
       await batch.commit();
@@ -158,29 +142,25 @@ export default function CheckoutPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-            {/* Items List */}
             <div className="lg:col-span-2 space-y-8">
               <div className="space-y-4">
                 <p className="text-[9px] text-white/20 uppercase tracking-[0.4em] font-bold">Included Flavors</p>
                 {items && items.length > 0 ? (
                   items.map((item) => {
-                    const dbProduct = dbProducts?.find(p => p.id === item.productId);
-                    const flavorConfig = flavors.find(f => f.id === item.productId);
                     const price = item.priceAtAddToCart || 12.00;
                     
                     return (
                       <div key={item.id} className="bg-white/5 border border-white/5 rounded-2xl p-6 flex items-center gap-6">
                         <div className="relative w-20 h-20 bg-black/40 rounded-xl overflow-hidden flex-shrink-0">
                           <Image 
-                            src={dbProduct?.image || flavorConfig?.imageUrl || ""} 
-                            alt={dbProduct?.name || ""} 
+                            src={item.image || ""} 
+                            alt={item.name || ""} 
                             fill 
                             className="object-contain p-2" 
                           />
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-sm font-bold uppercase tracking-widest">{dbProduct?.name || flavorConfig?.name}</h4>
-                          <p className="text-[10px] text-white/30 uppercase tracking-[0.2em] mt-1 font-bold">Batch No. {flavorConfig?.index || '01'}</p>
+                          <h4 className="text-sm font-bold uppercase tracking-widest">{item.name}</h4>
                           <div className="flex justify-between items-end mt-4">
                             <p className="text-[10px] font-mono text-white/40">Qty: {item.quantity}</p>
                             <p className="text-sm font-bold text-primary">${(price * item.quantity).toFixed(2)}</p>
@@ -197,7 +177,6 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              {/* Shipping Review */}
               <div className="space-y-4">
                 <p className="text-[9px] text-white/20 uppercase tracking-[0.4em] font-bold">Delivery Protocol</p>
                 <div className="bg-white/5 border border-white/5 rounded-2xl p-8 flex items-start gap-6">
@@ -224,7 +203,6 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Price Card */}
             <div className="lg:col-span-1">
               <div className="sticky top-32 bg-white/5 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-xl">
                 <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] mb-8 border-b border-white/5 pb-4">Order Value</h3>

@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { addDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { Button } from "@/components/ui/button";
 
 export default function ProductDetailPage() {
@@ -90,16 +90,18 @@ export default function ProductDetailPage() {
       return;
     }
 
-    const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
-    const predictableId = `item_${productId}`;
-    const itemRef = doc(cartItemsRef, predictableId);
+    const itemRef = doc(db, "users", user.uid, "cart", productId);
     
     setDocumentNonBlocking(itemRef, {
-      id: predictableId,
+      id: productId,
       productId: productId,
+      userId: user.uid,
+      cartId: 'default_cart',
       quantity: quantity, 
       priceAtAddToCart: price,
-      cartId: 'cart'
+      name,
+      image,
+      updatedAt: new Date().toISOString()
     }, { merge: true });
 
     toast({ title: `${quantity}x ${name} added to cart.` });
@@ -163,7 +165,6 @@ export default function ProductDetailPage() {
               </Button>
             </div>
 
-            {/* Reviews Subsection */}
             {reviews && reviews.length > 0 && (
               <div className="pt-10 border-t border-white/5">
                 <h4 className="text-[10px] uppercase tracking-[0.4em] text-white/20 font-bold mb-6">Tasting Notes</h4>
