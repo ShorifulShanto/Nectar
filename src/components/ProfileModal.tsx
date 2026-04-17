@@ -20,7 +20,8 @@ import { signOut, deleteUser } from "firebase/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { User, MapPin, Mail, LogOut, Loader2, Phone, Trash2 } from "lucide-react";
+import { User, MapPin, Mail, LogOut, Loader2, Phone, Trash2, Package } from "lucide-react";
+import Link from "next/link";
 
 export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { user } = useUser();
@@ -201,13 +202,25 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             </div>
 
             <div className="flex flex-col gap-4 pt-4">
-              <Button 
-                type="submit" 
-                disabled={isLoading}
-                className="w-full bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
-              >
-                {isLoading ? "Saving..." : "Save Changes"}
-              </Button>
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  type="submit" 
+                  disabled={isLoading}
+                  className="bg-white text-black hover:bg-neutral-200 uppercase tracking-widest font-bold h-14 rounded-full"
+                >
+                  {isLoading ? "Saving..." : "Save Changes"}
+                </Button>
+                <Button 
+                  asChild
+                  variant="outline"
+                  className="border-white/10 bg-white/5 hover:bg-white/10 uppercase tracking-widest font-bold h-14 rounded-full"
+                >
+                  <Link href="/orders" onClick={onClose}>
+                    <Package size={16} className="mr-2" />
+                    Orders
+                  </Link>
+                </Button>
+              </div>
               
               <div className="flex items-center justify-between px-2 pt-2 border-t border-white/5">
                 <button 

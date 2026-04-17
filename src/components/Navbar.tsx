@@ -1,10 +1,11 @@
+
 "use client";
 
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import { useUser, useFirestore, useCollection } from "@/firebase";
 import { collection } from "firebase/firestore";
-import { ShoppingCart, User, Menu, X } from "lucide-react";
+import { ShoppingCart, User, Menu, X, Package } from "lucide-react";
 import { AuthModal } from "./AuthModal";
 import { CartSidebar } from "./CartSidebar";
 import { ProfileModal } from "./ProfileModal";
@@ -65,12 +66,16 @@ export function Navbar() {
   const cartCount = cartItems?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
 
   const navLinks = [
-    { name: "Product", href: "#product" },
-    { name: "Ingredients", href: "#ingredients" },
-    { name: "Nutrition", href: "#nutrition" },
-    { name: "Reviews", href: "#reviews" },
-    { name: "FAQ", href: "#faq" },
+    { name: "Product", href: "/#product" },
+    { name: "Ingredients", href: "/#ingredients" },
+    { name: "Nutrition", href: "/#nutrition" },
+    { name: "Reviews", href: "/#reviews" },
+    { name: "FAQ", href: "/#faq" },
   ];
+
+  if (user) {
+    navLinks.push({ name: "My Orders", href: "/orders" });
+  }
 
   return (
     <>

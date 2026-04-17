@@ -31,13 +31,40 @@
       },
       "required": ["id", "name", "price", "amount", "image"]
     },
+    "Order": {
+      "title": "Order",
+      "type": "object",
+      "description": "Represents a customer's placed order.",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "items": { 
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "productId": { "type": "string" },
+              "name": { "type": "string" },
+              "quantity": { "type": "number" },
+              "price": { "type": "number" },
+              "image": { "type": "string" }
+            }
+          }
+        },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "processing", "shipped", "delivered"] },
+        "shippingAddress": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "items", "totalAmount", "status", "createdAt"]
+    },
     "CentralHubEntry": {
       "title": "CentralHubEntry",
       "type": "object",
       "description": "A centralized log of all user activities and site data.",
       "properties": {
         "id": { "type": "string" },
-        "type": { "type": "string", "enum": ["signup", "cart_addition", "newsletter", "profile_update", "account_deletion"] },
+        "type": { "type": "string", "enum": ["signup", "cart_addition", "newsletter", "profile_update", "account_deletion", "order_placed"] },
         "userId": { "type": "string" },
         "userEmail": { "type": "string" },
         "payload": { "type": "object" },
@@ -53,6 +80,10 @@
     "/users/{userId}": {
       "schema": { "$ref": "#/backend/entities/UserProfile" },
       "description": "Private user profiles."
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "schema": { "$ref": "#/backend/entities/Order" },
+      "description": "User's individual orders."
     },
     "/products/{productId}": {
       "schema": { "$ref": "#/backend/entities/Product" },

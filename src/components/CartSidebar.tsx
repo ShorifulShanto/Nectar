@@ -1,19 +1,24 @@
+
 "use client";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useUser, useFirestore, useCollection, useDoc } from "@/firebase";
-import { collection, doc } from "firebase/firestore";
+import { collection, doc, deleteDoc, writeBatch, serverTimestamp } from "firebase/firestore";
 import { flavors } from "@/lib/flavor-data";
-import { Trash2, Plus, Minus, Truck, Info, ShoppingBag } from "lucide-react";
+import { Trash2, Plus, Minus, Truck, Info, ShoppingBag, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useMemoFirebase } from "@/firebase/provider";
 import { useToast } from "@/hooks/use-toast";
-import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking, addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { user } = useUser();
   const db = useFirestore();
   const { toast } = useToast();
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const cartQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -51,7 +56,9 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     toast({ title: "Item removed from cart" });
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
+    if (!user || !db || !items || items.length === 0) return;
+
     const isProfileIncomplete = !profile?.firstName || !profile?.lastName || !profile?.location;
     
     if (isProfileIncomplete) {
@@ -63,11 +70,70 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       return;
     }
 
-    toast({
-      title: "Checkout Information",
-      description: "Note: We currently don't have a payment gateway integrated. This is a prototype.",
-      action: <Info className="h-4 w-4" />
-    });
+    setIsProcessing(true);
+    try {
+      const orderId = `ORD_${Date.now()}`;
+      const ordersRef = collection(db, "users", user.uid, "orders");
+      const orderRef = doc(ordersRef, orderId);
+
+      const orderItems = items.map(item => {
+        const dbProduct = dbProducts?.find(p => p.id === item.productId);
+        const flavorConfig = flavors.find(f => f.id === item.productId);
+        return {
+          productId: item.productId,
+          name: dbProduct?.name || flavorConfig?.name || "NECTAR Flavor",
+          quantity: item.quantity,
+          price: item.priceAtAddToCart || dbProduct?.price || 12.00,
+          image: dbProduct?.image || flavorConfig?.imageUrl || ""
+        };
+      });
+
+      const subtotal = orderItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      const SHIPPING_FEE = 5.00;
+      const totalAmount = subtotal + SHIPPING_FEE;
+
+      // Create the order
+      await setDocumentNonBlocking(orderRef, {
+        id: orderId,
+        userId: user.uid,
+        items: orderItems,
+        totalAmount,
+        status: "pending",
+        shippingAddress: {
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          location: profile.location,
+          phoneNumber: profile.phoneNumber || ""
+        },
+        createdAt: new Date().toISOString()
+      }, { merge: true });
+
+      // Log the order
+      const hubRef = collection(db, "central_hub");
+      addDocumentNonBlocking(hubRef, {
+        type: "order_placed",
+        userId: user.uid,
+        userEmail: user.email,
+        payload: { orderId, totalAmount },
+        timestamp: new Date().toISOString()
+      });
+
+      // Clear the cart
+      const batch = writeBatch(db);
+      items.forEach((item) => {
+        const itemRef = doc(db, "users", user.uid, "cart", "cart", "items", item.id);
+        batch.delete(itemRef);
+      });
+      await batch.commit();
+
+      toast({ title: "Order Placed Successfully", description: "The NECTAR team is now preparing your harvest." });
+      onClose();
+      router.push("/checkout/success");
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "Checkout Failed", description: e.message });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const SHIPPING_FEE = 5.00;
@@ -173,9 +239,10 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             
             <button 
               onClick={handleCheckout}
-              className="w-full h-14 bg-primary text-black font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:bg-primary/80 transition-all active:scale-95 shadow-2xl"
+              disabled={isProcessing}
+              className="w-full h-14 bg-primary text-black font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:bg-primary/80 transition-all active:scale-95 shadow-2xl flex items-center justify-center gap-2"
             >
-              Proceed to Checkout
+              {isProcessing ? <Loader2 className="animate-spin" size={16} /> : "Proceed to Checkout"}
             </button>
             <div className="mt-6 flex items-center justify-center gap-2 opacity-30">
               <Truck size={12} />
