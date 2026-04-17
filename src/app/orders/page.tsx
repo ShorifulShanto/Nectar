@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
-import { collection, query, where, orderBy } from "firebase/firestore";
+import { collection, query, where } from "firebase/firestore";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { 
@@ -20,7 +21,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { 
   Dialog, 
   DialogContent, 
@@ -44,16 +45,26 @@ export default function OrdersPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAiGenerating, setIsAiGenerating] = useState(false);
 
+  // Removed server-side orderBy to avoid potential permission/index issues
   const ordersQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
     return query(
       collection(db, "orders"),
-      where("userId", "==", user.uid),
-      orderBy("createdAt", "desc")
+      where("userId", "==", user.uid)
     );
   }, [db, user]);
 
-  const { data: orders, isLoading } = useCollection(ordersQuery);
+  const { data: rawOrders, isLoading } = useCollection(ordersQuery);
+
+  // Perform sorting in memory for reliable real-time updates without index requirements
+  const sortedOrders = useMemo(() => {
+    if (!rawOrders) return null;
+    return [...rawOrders].sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
+    });
+  }, [rawOrders]);
 
   const handleAiDraft = async () => {
     if (!selectedProduct) return;
@@ -86,7 +97,6 @@ export default function OrdersPage() {
       timestamp: new Date().toISOString()
     });
 
-    // Log the review activity
     const hubRef = collection(db, "central_hub");
     addDocumentNonBlocking(hubRef, {
       type: "review_submitted",
@@ -98,7 +108,6 @@ export default function OrdersPage() {
 
     toast({ title: "Review Submitted", description: `Thank you for sharing your thoughts on ${selectedProduct.name}!` });
     
-    // Reset state
     setSelectedProduct(null);
     setRating(5);
     setComment("");
@@ -142,9 +151,9 @@ export default function OrdersPage() {
           </div>
         </div>
 
-        {orders && orders.length > 0 ? (
+        {sortedOrders && sortedOrders.length > 0 ? (
           <div className="space-y-8">
-            {orders.map((order) => (
+            {sortedOrders.map((order) => (
               <div key={order.id} className="bg-neutral-900/40 border border-white/5 rounded-3xl overflow-hidden backdrop-blur-sm group">
                 <div className="p-6 md:p-10 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white/2">
                   <div className="space-y-1">
@@ -229,7 +238,6 @@ export default function OrdersPage() {
 
       <Footer />
 
-      {/* Review Dialog */}
       <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
         <DialogContent className="bg-black/80 backdrop-blur-2xl border-white/10 text-white rounded-[2rem] sm:max-w-md">
           <DialogHeader>
