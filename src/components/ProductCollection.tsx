@@ -1,8 +1,9 @@
 "use client";
 
-import { Plus, RefreshCw } from "lucide-react";
+import { Plus, RefreshCw, Eye } from "lucide-react";
 import { flavors } from "@/lib/flavor-data";
 import Image from "next/image";
+import Link from "next/link";
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
 import { collection, doc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
@@ -20,7 +21,10 @@ export function ProductCollection() {
 
   const { data: dbProducts, isLoading } = useCollection(productsQuery);
 
-  const handleAddToCart = async (productId: string, productName: string, price: number, isSoldOut: boolean) => {
+  const handleAddToCart = (e: React.MouseEvent, productId: string, productName: string, price: number, isSoldOut: boolean) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!user || !db) {
       toast({ title: "Please sign in to shop", description: "You need an account to add items to cart." });
       return;
@@ -80,7 +84,10 @@ export function ProductCollection() {
 
                 return (
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform">
-                     <div className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-4 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative">
+                     <Link 
+                       href={`/product/${product.id}`}
+                       className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-4 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative cursor-pointer"
+                     >
                         {/* Dynamic Flavor Glow */}
                         <div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[80px] pointer-events-none"
@@ -100,15 +107,21 @@ export function ProductCollection() {
                             className="object-contain"
                           />
                         </div>
+
+                        {/* View Details Overlay Icon */}
+                        <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-white/20">
+                          <Eye size={18} />
+                        </div>
+
                         {!isSoldOut && (
                           <button 
-                            onClick={() => handleAddToCart(product.id, product.name, price, isSoldOut)}
+                            onClick={(e) => handleAddToCart(e, product.id, product.name, price, isSoldOut)}
                             className="absolute bottom-6 right-6 w-12 h-12 bg-primary text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
                           >
                             <Plus size={20} />
                           </button>
                         )}
-                     </div>
+                     </Link>
                      <div className="text-center sm:text-left px-2">
                        <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-colors ${isSoldOut ? 'text-white/20' : 'text-white/90 group-hover:text-primary'}`}>
                          {product.name}
