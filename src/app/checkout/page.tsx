@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useUser, useFirestore, useCollection, useDoc, useMemoFirebase } from "@/firebase";
-import { collection, doc, writeBatch, serverTimestamp } from "firebase/firestore";
+import { collection, doc, writeBatch } from "firebase/firestore";
 import { flavors } from "@/lib/flavor-data";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -65,7 +65,7 @@ export default function CheckoutPage() {
     setIsProcessing(true);
     try {
       const orderId = `ORD_${Date.now()}`;
-      const ordersRef = collection(db, "users", user.uid, "orders");
+      const ordersRef = collection(db, "orders");
       const orderRef = doc(ordersRef, orderId);
 
       const orderItems = items.map(item => {
@@ -84,8 +84,8 @@ export default function CheckoutPage() {
       const SHIPPING_FEE = 5.00;
       const totalAmount = subtotal + SHIPPING_FEE;
 
-      // Create order
-      await setDocumentNonBlocking(orderRef, {
+      // Create order in global collection
+      setDocumentNonBlocking(orderRef, {
         id: orderId,
         userId: user.uid,
         items: orderItems,
@@ -257,17 +257,6 @@ export default function CheckoutPage() {
                   <Button asChild variant="ghost" className="w-full h-12 text-white/30 hover:text-white uppercase tracking-widest text-[9px]">
                     <Link href="/">Continue Shopping</Link>
                   </Button>
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
-                  <div className="flex items-center gap-3 opacity-30">
-                    <Truck size={14} className="text-primary" />
-                    <span className="text-[8px] uppercase tracking-widest font-bold">Express Cold-Chain Delivery</span>
-                  </div>
-                  <div className="flex items-center gap-3 opacity-30">
-                    <ShieldCheck size={14} className="text-primary" />
-                    <span className="text-[8px] uppercase tracking-widest font-bold">100% Secure Checkout</span>
-                  </div>
                 </div>
               </div>
             </div>

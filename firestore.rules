@@ -32,6 +32,12 @@ service cloud.firestore {
       allow update, delete: if isSignedIn() && request.auth.uid == resource.data.userId;
     }
 
+    match /orders/{orderId} {
+      allow create: if isSignedIn();
+      allow read: if isSignedIn() && (request.auth.uid == resource.data.userId || isAdmin());
+      allow update, delete: if isAdmin();
+    }
+
     match /users/{userId} {
       allow get: if isOwner(userId);
       allow list: if isAdmin();
@@ -44,12 +50,6 @@ service cloud.firestore {
         match /items/{itemId} {
           allow read, write: if isOwner(userId);
         }
-      }
-
-      match /orders/{orderId} {
-        allow read: if isOwner(userId);
-        allow create: if isOwner(userId);
-        allow update, delete: if isAdmin();
       }
     }
   }

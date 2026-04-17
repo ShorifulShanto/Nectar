@@ -2,7 +2,7 @@
 "use client";
 
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
-import { collection, doc, query, orderBy } from "firebase/firestore";
+import { collection, query, where, orderBy } from "firebase/firestore";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { 
@@ -11,7 +11,6 @@ import {
   Truck, 
   CheckCircle, 
   Clock, 
-  ArrowRight, 
   Loader2, 
   ArrowLeft,
   Star,
@@ -45,7 +44,11 @@ export default function OrdersPage() {
 
   const ordersQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
-    return collection(db, "users", user.uid, "orders");
+    return query(
+      collection(db, "orders"),
+      where("userId", "==", user.uid),
+      orderBy("createdAt", "desc")
+    );
   }, [db, user]);
 
   const { data: orders, isLoading } = useCollection(ordersQuery);
@@ -122,12 +125,12 @@ export default function OrdersPage() {
 
         {orders && orders.length > 0 ? (
           <div className="space-y-8">
-            {orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((order) => (
+            {orders.map((order) => (
               <div key={order.id} className="bg-neutral-900/40 border border-white/5 rounded-3xl overflow-hidden backdrop-blur-sm group">
                 <div className="p-6 md:p-10 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white/2">
                   <div className="space-y-1">
                     <p className="text-[10px] text-white/30 uppercase tracking-widest font-mono">{order.id}</p>
-                    <p className="text-sm font-bold">{format(new Date(order.createdAt), "MMMM dd, yyyy 'at' h:mm a")}</p>
+                    <p className="text-sm font-bold">{order.createdAt ? format(new Date(order.createdAt), "MMMM dd, yyyy 'at' h:mm a") : 'N/A'}</p>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
@@ -148,7 +151,7 @@ export default function OrdersPage() {
                     <div className="h-10 w-px bg-white/5 hidden md:block" />
                     <div className="text-right">
                       <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">Total</p>
-                      <p className="text-xl font-headline font-bold text-primary">${order.totalAmount.toFixed(2)}</p>
+                      <p className="text-xl font-headline font-bold text-primary">${(order.totalAmount || 0).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
@@ -158,7 +161,7 @@ export default function OrdersPage() {
                     <div className="space-y-6">
                       <p className="text-[9px] text-white/20 uppercase tracking-[0.4em] font-bold">Included Items</p>
                       <div className="space-y-4">
-                        {order.items.map((item: any, idx: number) => (
+                        {order.items?.map((item: any, idx: number) => (
                           <div key={idx} className="flex items-center gap-4 group/item">
                             <div className="w-12 h-12 bg-black/40 border border-white/5 rounded-xl overflow-hidden relative">
                               <Image src={item.image} alt={item.name} fill className="object-contain p-2" />
@@ -184,9 +187,9 @@ export default function OrdersPage() {
                     <div className="space-y-6">
                       <p className="text-[9px] text-white/20 uppercase tracking-[0.4em] font-bold">Shipping To</p>
                       <div className="bg-black/20 p-6 rounded-2xl border border-white/5 space-y-2">
-                        <p className="text-[12px] font-bold uppercase tracking-widest">{order.shippingAddress.firstName} {order.shippingAddress.lastName}</p>
-                        <p className="text-[11px] text-white/40 font-light leading-relaxed">{order.shippingAddress.location}</p>
-                        <p className="text-[11px] text-white/30 font-mono">{order.shippingAddress.phoneNumber}</p>
+                        <p className="text-[12px] font-bold uppercase tracking-widest">{order.shippingAddress?.firstName} {order.shippingAddress?.lastName}</p>
+                        <p className="text-[11px] text-white/40 font-light leading-relaxed">{order.shippingAddress?.location}</p>
+                        <p className="text-[11px] text-white/30 font-mono">{order.shippingAddress?.phoneNumber}</p>
                       </div>
                     </div>
                   </div>
@@ -196,11 +199,8 @@ export default function OrdersPage() {
           </div>
         ) : (
           <div className="py-32 flex flex-col items-center justify-center text-center opacity-40">
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-8 border border-white/10">
-              <ShoppingBag size={32} />
-            </div>
+            <ShoppingBag size={32} className="mb-6" />
             <h3 className="text-xl font-headline font-bold uppercase tracking-widest mb-4">No Orders Found</h3>
-            <p className="text-[10px] uppercase tracking-widest mb-10">Your harvest journey hasn't started yet.</p>
             <Button asChild variant="outline" className="rounded-full px-12 uppercase tracking-widest text-[10px]">
               <Link href="/">Explore Flavors</Link>
             </Button>
@@ -217,7 +217,6 @@ export default function OrdersPage() {
             <DialogTitle className="text-xl font-headline uppercase tracking-widest mb-2">
               Rate {selectedProduct?.name}
             </DialogTitle>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">How was your cold-pressed experience?</p>
           </DialogHeader>
 
           <div className="py-6 space-y-6">
@@ -226,32 +225,28 @@ export default function OrdersPage() {
                 <button
                   key={star}
                   onClick={() => setRating(star)}
-                  className="transition-transform active:scale-90"
                 >
                   <Star 
                     size={32} 
-                    className={`${star <= rating ? 'text-primary fill-primary' : 'text-white/10'} transition-colors`} 
+                    className={`${star <= rating ? 'text-primary fill-primary' : 'text-white/10'}`} 
                   />
                 </button>
               ))}
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[9px] uppercase tracking-widest text-white/20 font-bold px-1">Your Review</label>
-              <Textarea 
-                placeholder="Share your tasting notes..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                className="bg-white/5 border-white/10 text-sm min-h-[120px] rounded-2xl resize-none"
-              />
-            </div>
+            <Textarea 
+              placeholder="Share your tasting notes..."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="bg-white/5 border-white/10 text-sm min-h-[120px] rounded-2xl"
+            />
           </div>
 
           <DialogFooter className="sm:justify-center">
             <Button 
               onClick={handleReviewSubmit}
               disabled={isSubmitting}
-              className="w-full bg-white text-black hover:bg-neutral-200 rounded-full uppercase tracking-widest text-[11px] font-bold h-12 shadow-2xl"
+              className="w-full bg-white text-black hover:bg-neutral-200 rounded-full uppercase tracking-widest text-[11px] font-bold h-12"
             >
               {isSubmitting ? <Loader2 className="animate-spin" size={16} /> : "Submit Review"}
             </Button>

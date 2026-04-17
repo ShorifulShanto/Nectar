@@ -96,9 +96,9 @@
       "schema": { "$ref": "#/backend/entities/UserProfile" },
       "description": "Private user profiles."
     },
-    "/users/{userId}/orders/{orderId}": {
+    "/orders/{orderId}": {
       "schema": { "$ref": "#/backend/entities/Order" },
-      "description": "User's individual orders."
+      "description": "Global order collection."
     },
     "/products/{productId}": {
       "schema": { "$ref": "#/backend/entities/Product" },
