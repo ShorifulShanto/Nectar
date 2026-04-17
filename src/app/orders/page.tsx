@@ -2,18 +2,46 @@
 "use client";
 
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
-import { collection, query, orderBy } from "firebase/firestore";
+import { collection, doc, query, orderBy } from "firebase/firestore";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { ShoppingBag, Package, Truck, CheckCircle, Clock, ArrowRight, Loader2 } from "lucide-react";
+import { 
+  ShoppingBag, 
+  Package, 
+  Truck, 
+  CheckCircle, 
+  Clock, 
+  ArrowRight, 
+  Loader2, 
+  ArrowLeft,
+  Star,
+  MessageSquare
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter 
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 export default function OrdersPage() {
   const { user, isUserLoading } = useUser();
   const db = useFirestore();
+  const { toast } = useToast();
+  
+  const [selectedProduct, setSelectedProduct] = useState<{id: string, name: string} | null>(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const ordersQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -21,6 +49,39 @@ export default function OrdersPage() {
   }, [db, user]);
 
   const { data: orders, isLoading } = useCollection(ordersQuery);
+
+  const handleReviewSubmit = () => {
+    if (!user || !db || !selectedProduct) return;
+    setIsSubmitting(true);
+
+    const reviewRef = collection(db, "reviews");
+    addDocumentNonBlocking(reviewRef, {
+      productId: selectedProduct.id,
+      userId: user.uid,
+      userName: user.email?.split('@')[0] || "Anonymous User",
+      rating,
+      comment,
+      timestamp: new Date().toISOString()
+    });
+
+    // Log the review activity
+    const hubRef = collection(db, "central_hub");
+    addDocumentNonBlocking(hubRef, {
+      type: "review_submitted",
+      userId: user.uid,
+      userEmail: user.email,
+      payload: { productId: selectedProduct.id, productName: selectedProduct.name, rating },
+      timestamp: new Date().toISOString()
+    });
+
+    toast({ title: "Review Submitted", description: `Thank you for sharing your thoughts on ${selectedProduct.name}!` });
+    
+    // Reset state
+    setSelectedProduct(null);
+    setRating(5);
+    setComment("");
+    setIsSubmitting(false);
+  };
 
   if (isUserLoading || isLoading) {
     return (
@@ -48,9 +109,15 @@ export default function OrdersPage() {
       <Navbar />
       
       <div className="container mx-auto px-6 pt-32 pb-20">
-        <div className="mb-16">
-          <p className="text-primary text-[9px] uppercase tracking-[0.5em] mb-4 font-bold">Your History</p>
-          <h1 className="text-5xl font-headline font-bold uppercase tracking-tighter">My Orders</h1>
+        <div className="mb-12">
+          <Link href="/" className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-white/30 hover:text-white transition-all mb-8 group">
+            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+            Back to the Grove
+          </Link>
+          <div>
+            <p className="text-primary text-[9px] uppercase tracking-[0.5em] mb-4 font-bold">Your History</p>
+            <h1 className="text-5xl font-headline font-bold uppercase tracking-tighter">My Orders</h1>
+          </div>
         </div>
 
         {orders && orders.length > 0 ? (
@@ -100,6 +167,15 @@ export default function OrdersPage() {
                               <p className="text-[11px] font-bold uppercase tracking-widest">{item.name}</p>
                               <p className="text-[10px] text-white/30 font-mono">Qty: {item.quantity} • ${item.price.toFixed(2)}</p>
                             </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => setSelectedProduct({ id: item.productId, name: item.name })}
+                              className="text-[9px] uppercase tracking-widest text-white/20 hover:text-primary hover:bg-primary/10 rounded-full h-8"
+                            >
+                              <MessageSquare size={12} className="mr-2" />
+                              Rate
+                            </Button>
                           </div>
                         ))}
                       </div>
@@ -133,6 +209,55 @@ export default function OrdersPage() {
       </div>
 
       <Footer />
+
+      {/* Review Dialog */}
+      <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
+        <DialogContent className="bg-black/80 backdrop-blur-2xl border-white/10 text-white rounded-[2rem] sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-headline uppercase tracking-widest mb-2">
+              Rate {selectedProduct?.name}
+            </DialogTitle>
+            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">How was your cold-pressed experience?</p>
+          </DialogHeader>
+
+          <div className="py-6 space-y-6">
+            <div className="flex justify-center gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => setRating(star)}
+                  className="transition-transform active:scale-90"
+                >
+                  <Star 
+                    size={32} 
+                    className={`${star <= rating ? 'text-primary fill-primary' : 'text-white/10'} transition-colors`} 
+                  />
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[9px] uppercase tracking-widest text-white/20 font-bold px-1">Your Review</label>
+              <Textarea 
+                placeholder="Share your tasting notes..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                className="bg-white/5 border-white/10 text-sm min-h-[120px] rounded-2xl resize-none"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="sm:justify-center">
+            <Button 
+              onClick={handleReviewSubmit}
+              disabled={isSubmitting}
+              className="w-full bg-white text-black hover:bg-neutral-200 rounded-full uppercase tracking-widest text-[11px] font-bold h-12 shadow-2xl"
+            >
+              {isSubmitting ? <Loader2 className="animate-spin" size={16} /> : "Submit Review"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

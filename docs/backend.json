@@ -64,13 +64,28 @@
       "description": "A centralized log of all user activities and site data.",
       "properties": {
         "id": { "type": "string" },
-        "type": { "type": "string", "enum": ["signup", "cart_addition", "newsletter", "profile_update", "account_deletion", "order_placed"] },
+        "type": { "type": "string", "enum": ["signup", "cart_addition", "newsletter", "profile_update", "account_deletion", "order_placed", "review_submitted"] },
         "userId": { "type": "string" },
         "userEmail": { "type": "string" },
         "payload": { "type": "object" },
         "timestamp": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "type", "timestamp"]
+    },
+    "Review": {
+      "title": "Review",
+      "type": "object",
+      "description": "A user's review for a product.",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "productId", "userId", "rating", "timestamp"]
     }
   },
   "auth": {
@@ -92,6 +107,10 @@
     "/central_hub/{entryId}": {
       "schema": { "$ref": "#/backend/entities/CentralHubEntry" },
       "description": "Centralized repository for all site activities."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/backend/entities/Review" },
+      "description": "Public product reviews."
     }
   }
 }
