@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Plus, RefreshCw, Eye } from "lucide-react";
@@ -21,7 +22,7 @@ export function ProductCollection() {
 
   const { data: dbProducts, isLoading } = useCollection(productsQuery);
 
-  const handleAddToCart = (e: React.MouseEvent, productId: string, productName: string, price: number, isSoldOut: boolean) => {
+  const handleAddToCart = (e: React.MouseEvent, productId: string, productName: string, price: number, image: string, isSoldOut: boolean) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -35,7 +36,7 @@ export function ProductCollection() {
       return;
     }
 
-    const cartItemsRef = collection(db, "users", user.uid, "cart", "cart", "items");
+    const itemRef = doc(db, "users", user.uid, "cart", productId);
     
     // Log addition non-blocking
     const hubRef = collection(db, "central_hub");
@@ -49,15 +50,16 @@ export function ProductCollection() {
 
     toast({ title: `${productName} added to cart.` });
     
-    const predictableId = `item_${productId}`;
-    const itemRef = doc(cartItemsRef, predictableId);
-    
     setDocumentNonBlocking(itemRef, {
-      id: predictableId,
+      id: productId,
       productId: productId,
+      userId: user.uid,
+      cartId: 'default_cart',
       quantity: 1, 
       priceAtAddToCart: price,
-      cartId: 'cart'
+      name: productName,
+      image: image,
+      updatedAt: new Date().toISOString()
     }, { merge: true });
   };
 
@@ -81,6 +83,7 @@ export function ProductCollection() {
                 const price = product.price || 12.00;
                 const flavorConfig = flavors.find(f => f.id === product.id);
                 const accentColor = flavorConfig?.accentHex || '#ffffff';
+                const productImage = product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600';
 
                 return (
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform">
@@ -101,7 +104,7 @@ export function ProductCollection() {
                         )}
                         <div className={`relative w-full h-full transform group-hover:scale-105 transition-transform duration-700 ${isSoldOut ? 'grayscale opacity-50' : ''}`}>
                           <Image 
-                            src={product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600'} 
+                            src={productImage} 
                             alt={product.name} 
                             fill 
                             className="object-contain"
@@ -115,7 +118,7 @@ export function ProductCollection() {
 
                         {!isSoldOut && (
                           <button 
-                            onClick={(e) => handleAddToCart(e, product.id, product.name, price, isSoldOut)}
+                            onClick={(e) => handleAddToCart(e, product.id, product.name, price, productImage, isSoldOut)}
                             className="absolute bottom-6 right-6 w-12 h-12 bg-primary text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl z-20 hover:scale-110"
                           >
                             <Plus size={20} />
