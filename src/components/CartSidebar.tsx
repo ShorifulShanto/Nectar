@@ -128,7 +128,8 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
       toast({ title: "Order Placed Successfully", description: "The NECTAR team is now preparing your harvest." });
       onClose();
-      router.push("/checkout/success");
+      // Navigate to orders page where details are shown
+      router.push("/orders");
     } catch (e: any) {
       toast({ variant: "destructive", title: "Checkout Failed", description: e.message });
     } finally {
@@ -151,7 +152,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
           <SheetTitle className="text-xl font-headline font-bold tracking-widest uppercase flex items-center justify-between">
             <span className="flex items-center gap-2">
               <ShoppingBag size={20} className="text-primary" />
-              Your Cart
+              Your Selection
             </span>
             {items && items.length > 0 && (
               <span className="text-[10px] bg-primary text-black px-2 py-0.5 rounded-full font-mono font-bold">
@@ -164,7 +165,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
           {isLoading ? (
             <div className="h-full flex items-center justify-center">
-              <p className="text-white/20 uppercase tracking-[0.3em] text-[10px] animate-pulse">Syncing Cart...</p>
+              <p className="text-white/20 uppercase tracking-[0.3em] text-[10px] animate-pulse">Syncing selection...</p>
             </div>
           ) : items && items.length > 0 ? (
             items.map((item) => {
@@ -173,7 +174,6 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               
               const name = dbProduct?.name || flavorConfig?.name || "NECTAR Flavor";
               const image = dbProduct?.image || flavorConfig?.imageUrl || "https://picsum.photos/seed/juice/400/600";
-              const price = item.priceAtAddToCart || dbProduct?.price || 12.00;
 
               return (
                 <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500 will-change-transform">
@@ -182,10 +182,9 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="text-[11px] font-bold uppercase tracking-widest truncate">{name}</h4>
-                    <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5 font-mono">
-                      ${price.toFixed(2)}
-                    </p>
-                    <div className="flex items-center gap-3 mt-3">
+                    <p className="text-[9px] text-white/20 uppercase tracking-[0.3em] mt-1 font-bold">Pure Cold Pressed</p>
+                    
+                    <div className="flex items-center gap-3 mt-4">
                       <div className="flex items-center border border-white/10 rounded-full px-2 py-0.5 bg-black/40">
                         <button onClick={() => updateQty(item.id, item.quantity - 1)} className="p-1 text-white/40 hover:text-white transition-colors">
                           <Minus size={10} />
@@ -200,11 +199,6 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                       </button>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-[11px] font-bold font-mono text-primary">
-                      ${(price * item.quantity).toFixed(2)}
-                    </p>
-                  </div>
                 </div>
               );
             })
@@ -213,26 +207,22 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 border border-white/10">
                  <ShoppingBag size={20} />
               </div>
-              <p className="text-white uppercase tracking-[0.3em] text-[10px] mb-4">Cart is empty</p>
-              <button onClick={onClose} className="text-[10px] font-bold uppercase tracking-widest border-b border-primary hover:text-primary transition-all pb-1">Continue Shopping</button>
+              <p className="text-white uppercase tracking-[0.3em] text-[10px] mb-4">No flavors selected</p>
+              <button onClick={onClose} className="text-[10px] font-bold uppercase tracking-widest border-b border-primary hover:text-primary transition-all pb-1">Explore the collection</button>
             </div>
           )}
         </div>
 
         {items && items.length > 0 && (
           <div className="p-8 border-t border-white/10 bg-black/40 backdrop-blur-xl">
-            <div className="space-y-3 mb-8">
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Subtotal</span>
-                <span className="text-xs font-mono">${subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Shipping</span>
+            <div className="space-y-4 mb-8">
+              <div className="flex justify-between items-center opacity-40">
+                <span className="text-[10px] uppercase tracking-widest font-bold">Logistics Fee</span>
                 <span className="text-xs font-mono">${SHIPPING_FEE.toFixed(2)}</span>
               </div>
-              <div className="h-px w-full bg-white/5 my-2" />
+              <div className="h-px w-full bg-white/5" />
               <div className="flex justify-between items-end">
-                <span className="text-[11px] font-bold uppercase tracking-widest text-primary">Total Amount</span>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-primary">Harvest Value</span>
                 <span className="text-3xl font-headline font-bold">${total.toFixed(2)}</span>
               </div>
             </div>
@@ -242,11 +232,11 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               disabled={isProcessing}
               className="w-full h-14 bg-primary text-black font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:bg-primary/80 transition-all active:scale-95 shadow-2xl flex items-center justify-center gap-2"
             >
-              {isProcessing ? <Loader2 className="animate-spin" size={16} /> : "Proceed to Checkout"}
+              {isProcessing ? <Loader2 className="animate-spin" size={16} /> : "Order Now"}
             </button>
             <div className="mt-6 flex items-center justify-center gap-2 opacity-30">
               <Truck size={12} />
-              <p className="text-[8px] uppercase tracking-[0.4em] font-bold">Standard Delivery: 2-3 Days</p>
+              <p className="text-[8px] uppercase tracking-[0.4em] font-bold">Express Cold-Chain Delivery</p>
             </div>
           </div>
         )}
