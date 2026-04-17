@@ -77,6 +77,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               
               const name = dbProduct?.name || flavorConfig?.name || "NECTAR Flavor";
               const image = dbProduct?.image || flavorConfig?.imageUrl || "https://picsum.photos/seed/juice/400/600";
+              const price = item.priceAtAddToCart || dbProduct?.price || 12.00;
 
               return (
                 <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500 will-change-transform">
@@ -84,8 +85,13 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                     <Image src={image} alt={name} fill className="object-contain p-2" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-[11px] font-bold uppercase tracking-widest truncate">{name}</h4>
-                    <p className="text-[9px] text-white/20 uppercase tracking-[0.3em] mt-1 font-bold">Pure Cold Pressed</p>
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[11px] font-bold uppercase tracking-widest truncate">{name}</h4>
+                        <p className="text-[9px] text-white/20 uppercase tracking-[0.3em] mt-1 font-bold">Pure Cold Pressed</p>
+                      </div>
+                      <p className="text-[10px] font-mono text-primary mt-0.5">${price.toFixed(2)}</p>
+                    </div>
                     
                     <div className="flex items-center gap-3 mt-4">
                       <div className="flex items-center border border-white/10 rounded-full px-2 py-0.5 bg-black/40">
