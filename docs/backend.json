@@ -75,17 +75,17 @@
     "Review": {
       "title": "Review",
       "type": "object",
-      "description": "A user's review for a product.",
+      "description": "A user's review for a product or the brand.",
       "properties": {
         "id": { "type": "string" },
-        "productId": { "type": "string" },
+        "productId": { "type": "string", "description": "Optional. If null, it is a brand review." },
         "userId": { "type": "string" },
         "userName": { "type": "string" },
         "rating": { "type": "number" },
         "comment": { "type": "string" },
         "timestamp": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "productId", "userId", "rating", "timestamp"]
+      "required": ["id", "userId", "rating", "timestamp"]
     }
   },
   "auth": {
@@ -110,7 +110,7 @@
     },
     "/reviews/{reviewId}": {
       "schema": { "$ref": "#/backend/entities/Review" },
-      "description": "Public product reviews."
+      "description": "Public reviews collection."
     }
   }
 }

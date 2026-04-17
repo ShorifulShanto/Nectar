@@ -1,13 +1,19 @@
+
 "use client";
 
-import { useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { useState } from "react";
+import { useFirestore, useCollection, useMemoFirebase, useUser } from "@/firebase";
 import { collection, query, limit, orderBy } from "firebase/firestore";
 import { Star, Loader2, MessageSquare, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { ReviewDialog } from "./ReviewDialog";
+import { AuthModal } from "./AuthModal";
 
 export function ReviewsSection() {
   const db = useFirestore();
+  const { user } = useUser();
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const latestReviewsQuery = useMemoFirebase(() => {
     if (!db) return null;
@@ -20,7 +26,14 @@ export function ReviewsSection() {
 
   const { data: reviews, isLoading } = useCollection(latestReviewsQuery);
 
-  // Fallback high-quality AI generated reviews if collection is empty
+  const handleShareStory = () => {
+    if (!user) {
+      setIsAuthOpen(true);
+      return;
+    }
+    setIsReviewOpen(true);
+  };
+
   const aiFallbackReviews = [
     {
       id: 'ai-1',
@@ -58,11 +71,13 @@ export function ReviewsSection() {
             <h2 className="text-2xl md:text-4xl font-headline font-bold uppercase leading-tight">Community Stories</h2>
           </div>
           
-          <Button asChild variant="outline" className="rounded-full border-white/10 bg-white/5 uppercase tracking-widest text-[9px] px-8 h-12 hover:bg-white hover:text-black transition-all group">
-            <Link href="/orders">
-              <MessageSquare size={14} className="mr-2 group-hover:scale-110 transition-transform" />
-              Share Your Story
-            </Link>
+          <Button 
+            onClick={handleShareStory}
+            variant="outline" 
+            className="rounded-full border-white/10 bg-white/5 uppercase tracking-widest text-[9px] px-8 h-12 hover:bg-white hover:text-black transition-all group"
+          >
+            <MessageSquare size={14} className="mr-2 group-hover:scale-110 transition-transform" />
+            Share Your Story
           </Button>
         </div>
         
@@ -100,6 +115,16 @@ export function ReviewsSection() {
           </div>
         )}
       </div>
+
+      <ReviewDialog 
+        isOpen={isReviewOpen} 
+        onClose={() => setIsReviewOpen(false)} 
+        product={null} 
+      />
+      <AuthModal 
+        isOpen={isAuthOpen} 
+        onClose={() => setIsAuthOpen(false)} 
+      />
     </section>
   );
 }
