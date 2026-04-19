@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useAuth, useFirestore } from "@/firebase";
 import { 
   signInWithEmailAndPassword, 
@@ -180,10 +180,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   <Mail className="text-white/60" size={32} />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-headline font-bold tracking-[0.2em] uppercase">Verify Email</h3>
-                  <p className="text-[10px] text-white/50 uppercase tracking-widest leading-relaxed px-4">
+                  <DialogTitle className="text-2xl font-headline font-bold tracking-[0.2em] uppercase">Verify Email</DialogTitle>
+                  <DialogDescription className="text-[10px] text-white/50 uppercase tracking-widest leading-relaxed px-4">
                     Check your inbox at <span className="text-white font-bold">{email}</span> to continue your harvest.
-                  </p>
+                  </DialogDescription>
                 </div>
                 <Button 
                   onClick={resetState}
@@ -198,10 +198,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   <ShieldCheck className="text-white/60" size={32} />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-headline font-bold tracking-[0.2em] uppercase">Reset Sent</h3>
-                  <p className="text-[10px] text-white/50 uppercase tracking-widest leading-relaxed">
+                  <DialogTitle className="text-2xl font-headline font-bold tracking-[0.2em] uppercase">Reset Sent</DialogTitle>
+                  <DialogDescription className="text-[10px] text-white/50 uppercase tracking-widest leading-relaxed">
                     Check your email for the magic link.
-                  </p>
+                  </DialogDescription>
                 </div>
                 <Button 
                   onClick={resetState}
@@ -220,10 +220,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                        </button>
                     )}
                     <div className="flex-1 text-center">
-                       <h2 className="text-3xl font-headline font-bold tracking-[0.3em] uppercase">NECTAR</h2>
-                       <p className="text-[9px] uppercase tracking-[0.4em] text-white/30 mt-1">
+                       <DialogTitle className="text-3xl font-headline font-bold tracking-[0.3em] uppercase">NECTAR</DialogTitle>
+                       <DialogDescription className="text-[9px] uppercase tracking-[0.4em] text-white/30 mt-1">
                         {view === "login" ? "Taste Perfection" : view === "signup" ? "Join the Grove" : "Recovery"}
-                       </p>
+                       </DialogDescription>
                     </div>
                     {(view === "forgot" || view === "signup") && <div className="w-[18px]" />}
                   </div>
