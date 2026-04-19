@@ -93,7 +93,6 @@ export default function ProductDetailPage() {
     const itemRef = doc(db, "users", user.uid, "cart", productId);
     
     setDocumentNonBlocking(itemRef, {
-      id: productId,
       productId: productId,
       userId: user.uid,
       cartId: 'default_cart',

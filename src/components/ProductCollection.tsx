@@ -51,7 +51,6 @@ export function ProductCollection() {
     toast({ title: `${productName} added to cart.` });
     
     setDocumentNonBlocking(itemRef, {
-      id: productId,
       productId: productId,
       userId: user.uid,
       cartId: 'default_cart',
