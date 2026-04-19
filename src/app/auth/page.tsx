@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, ArrowRight, Mail, Lock, User as UserIcon, Eye, EyeOff, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function NectarAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -100,88 +102,79 @@ export default function NectarAuthPage() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden flex items-center justify-center font-body bg-[#f83a7c] selection:bg-orange-200">
-      {/* Vibrant Blurred Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* Warm Liquid Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f83a7c] via-[#ff7c5c] to-[#ffba42] animate-pulse duration-[10s]" />
-        
-        {/* Animated Ambient Blobs */}
-        <div className="absolute top-[-10%] left-[-5%] w-[120%] h-[120%] rounded-full bg-[#ffcd3c] blur-[180px] opacity-40 animate-slow-float" />
-        <div className="absolute bottom-[-15%] right-[-10%] w-[100%] h-[100%] rounded-full bg-[#f83a7c] blur-[150px] opacity-30 animate-slow-float-reverse" />
-        
-        {/* Sparkles Overlay */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <Sparkles className="absolute top-[20%] left-[10%] text-white animate-pulse" size={40} />
-          <Sparkles className="absolute bottom-[30%] right-[15%] text-white animate-pulse delay-700" size={30} />
-          <Sparkles className="absolute top-[60%] right-[25%] text-white animate-pulse delay-1000" size={20} />
-        </div>
-
-        {/* Decorative Floating Fruits (Simulated with Blur Effects) */}
-        <div className="absolute top-[10%] left-[15%] w-32 h-32 bg-orange-400/20 blur-2xl rounded-full" />
-        <div className="absolute bottom-[20%] left-[20%] w-48 h-48 bg-yellow-300/10 blur-3xl rounded-full" />
-        <div className="absolute top-[30%] right-[10%] w-40 h-40 bg-pink-400/20 blur-2xl rounded-full" />
+    <div className="min-h-screen w-full relative overflow-hidden flex items-center justify-center font-body bg-black selection:bg-orange-200">
+      {/* Dynamic Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1776608949/WhatsApp_Image_2026-04-19_at_8.24.59_PM_e78hs8.jpg"
+          alt="NECTAR background"
+          fill
+          className="object-cover"
+          priority
+          data-ai-hint="fresh fruit"
+        />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
       </div>
 
-      {/* Main Glassmorphism Auth Card */}
-      <div className="relative z-10 w-full max-w-[480px] px-6 animate-in fade-in zoom-in duration-700">
-        <div className="glass-card rounded-[3.5rem] p-10 md:p-14 relative overflow-hidden transition-all duration-700 group border-white/40">
+      {/* Main Container for Depth */}
+      <div className="relative z-10 w-full max-w-[460px] px-6 animate-in fade-in zoom-in duration-1000">
+        {/* Main See-Through Glass Card */}
+        <div className="bg-white/5 backdrop-blur-[40px] border border-white/20 rounded-[3rem] p-10 md:p-14 shadow-2xl relative overflow-hidden group">
+          {/* Internal Reflection Edge */}
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
           
-          {/* Internal Glows */}
-          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-          
-          <div className="text-center space-y-3 mb-12">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md shadow-lg border border-white/20">
+          <div className="text-center space-y-3 mb-10">
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md shadow-inner border border-white/10">
                 <span className="text-3xl">🧃</span>
               </div>
             </div>
-            <h1 className="text-4xl font-headline font-bold tracking-[0.2em] uppercase text-white drop-shadow-md">
+            <h1 className="text-4xl font-headline font-bold tracking-[0.25em] uppercase text-white drop-shadow-lg">
               NECTAR
             </h1>
-            <h2 className="text-xl font-headline font-bold text-white/90">
-              {isLogin ? "Welcome Back!" : "Create Account"}
+            <h2 className="text-xl font-headline font-bold text-white/90 tracking-tight">
+              {isLogin ? "Welcome Back" : "Create Account"}
             </h2>
-            <p className="text-[11px] uppercase tracking-[0.3em] text-white/60 font-bold">
-              {isLogin ? "Login to enjoy the freshest experience" : "Sign up and start your healthy journey"}
+            <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold">
+              {isLogin ? "Taste perfection again" : "Join the fruit revolution"}
             </p>
           </div>
 
           <form onSubmit={handleAuth} className="space-y-6">
             <div className="space-y-4">
               {!isLogin && (
-                <div className="relative group">
-                  <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors" size={18} />
+                <div className="relative">
+                  <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" size={18} />
                   <Input 
                     type="text" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Full Name"
-                    className="bg-white/10 border-white/10 rounded-2xl h-14 pl-12 focus:bg-white/20 focus:ring-0 focus:border-white placeholder:text-white/30 text-white text-base transition-all"
+                    className="bg-white/5 border-white/10 rounded-2xl h-14 pl-12 focus:bg-white/10 focus:ring-0 focus:border-white/40 placeholder:text-white/20 text-white text-base transition-all"
                     required
                   />
                 </div>
               )}
 
-              <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors" size={18} />
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" size={18} />
                 <Input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email Address"
-                  className="bg-white/10 border-white/10 rounded-2xl h-14 pl-12 focus:bg-white/20 focus:ring-0 focus:border-white placeholder:text-white/30 text-white text-base transition-all"
+                  className="bg-white/5 border-white/10 rounded-2xl h-14 pl-12 focus:bg-white/10 focus:ring-0 focus:border-white/40 placeholder:text-white/20 text-white text-base transition-all"
                   required
                 />
               </div>
 
-              <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors" size={18} />
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" size={18} />
                 <button 
                   type="button" 
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors z-10"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors z-10"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -189,15 +182,15 @@ export default function NectarAuthPage() {
                   type={showPassword ? "text" : "password"} 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={isLogin ? "Password" : "Create Password"}
-                  className="bg-white/10 border-white/10 rounded-2xl h-14 pl-12 pr-12 focus:bg-white/20 focus:ring-0 focus:border-white placeholder:text-white/30 text-white text-base transition-all"
+                  placeholder="Password"
+                  className="bg-white/5 border-white/10 rounded-2xl h-14 pl-12 pr-12 focus:bg-white/10 focus:ring-0 focus:border-white/40 placeholder:text-white/20 text-white text-base transition-all"
                   required
                 />
               </div>
 
               {isLogin && (
                 <div className="flex justify-end">
-                  <button type="button" className="text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors font-bold">
+                  <button type="button" className="text-[9px] uppercase tracking-widest text-white/30 hover:text-white transition-colors font-bold">
                     Forgot Password?
                   </button>
                 </div>
@@ -208,10 +201,10 @@ export default function NectarAuthPage() {
                <Button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-14 btn-green-gradient text-white font-bold uppercase tracking-[0.2em] text-[11px] rounded-full transition-all duration-300 active:scale-95"
+                className="w-full h-14 bg-gradient-to-r from-[#00c853] to-[#64dd17] text-black font-bold uppercase tracking-[0.2em] text-[11px] rounded-full transition-all duration-300 active:scale-95 shadow-[0_10px_30px_-5px_rgba(0,200,83,0.5)] hover:shadow-[0_15px_40px_-5px_rgba(0,200,83,0.6)]"
               >
                 {isLoading ? <Loader2 className="animate-spin" size={20} /> : (
-                  <span>{isLogin ? "Login" : "Sign Up"}</span>
+                  <span>{isLogin ? "Sign In" : "Sign Up"}</span>
                 )}
               </Button>
             </div>
@@ -219,14 +212,14 @@ export default function NectarAuthPage() {
 
           <div className="mt-10 relative flex items-center justify-center">
             <div className="absolute w-full border-t border-white/10" />
-            <span className="relative bg-transparent px-4 text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">or continue with</span>
+            <span className="relative bg-transparent px-4 text-[10px] uppercase tracking-[0.4em] text-white/20 font-bold">OR</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-8">
+          <div className="mt-8">
             <Button 
               onClick={handleGoogleSignIn}
               variant="outline"
-              className="h-14 border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-[0.1em] text-[10px] rounded-2xl transition-all flex items-center justify-center gap-2"
+              className="w-full h-14 border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-[0.1em] text-[10px] rounded-2xl transition-all flex items-center justify-center gap-3 backdrop-blur-md"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -236,58 +229,37 @@ export default function NectarAuthPage() {
               </svg>
               Google
             </Button>
-            <Button 
-              variant="outline"
-              className="h-14 border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-[0.1em] text-[10px] rounded-2xl transition-all flex items-center justify-center gap-2"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M12 2.04c-5.5 0-10 4.5-10 10 0 4.97 3.64 9.09 8.44 9.84v-6.96h-2.53v-2.88h2.53v-2.2c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.77l-.44 2.88h-2.33v6.96c4.8-.75 8.44-4.87 8.44-9.84 0-5.5-4.5-10-10-10z" />
-              </svg>
-              Facebook
-            </Button>
           </div>
 
           <div className="mt-12 text-center">
             <button 
               onClick={() => setIsLogin(!isLogin)}
-              className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/60 hover:text-white transition-all group"
+              className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/30 hover:text-white transition-all group"
             >
               {isLogin ? (
-                <>Don't have an account? <span className="text-white">Sign Up</span></>
+                <>New to the Grove? <span className="text-white">Create Account</span></>
               ) : (
-                <>Already have an account? <span className="text-white">Login</span></>
+                <>Already a member? <span className="text-white">Sign In</span></>
               )}
             </button>
           </div>
         </div>
         
-        {/* Mirror Reflection */}
-        <div className="reflection-soft -mt-8 mx-auto w-[90%] glass-card rounded-[3.5rem] h-64" />
+        {/* Soft Mirror Reflection */}
+        <div className="mt-4 mx-auto w-[85%] h-32 bg-white/5 backdrop-blur-[60px] rounded-[3rem] opacity-20 pointer-events-none transform -scale-y-100 mask-reflection" />
 
         <div className="mt-10 text-center">
           <Link href="/" className="text-[10px] uppercase tracking-[0.6em] text-white/40 hover:text-white transition-all font-bold group inline-flex items-center gap-2">
             <ArrowRight size={12} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-            Return to the Grove
+            Back to Selection
           </Link>
         </div>
       </div>
 
       <style jsx global>{`
-        @keyframes slow-float {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 40px) scale(0.9); }
-        }
-        @keyframes slow-float-reverse {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-40px, 30px) scale(0.9); }
-          66% { transform: translate(30px, -20px) scale(1.1); }
-        }
-        .animate-slow-float {
-          animation: slow-float 25s ease-in-out infinite;
-        }
-        .animate-slow-float-reverse {
-          animation: slow-float-reverse 30s ease-in-out infinite;
+        .mask-reflection {
+          mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+          filter: blur(8px);
         }
       `}</style>
     </div>

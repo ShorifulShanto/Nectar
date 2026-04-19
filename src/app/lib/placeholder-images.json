@@ -1,3 +1,4 @@
+
 {
   "placeholderImages": [
     {
@@ -41,6 +42,12 @@
       "description": "Rich purple grape juice bottle",
       "imageUrl": "https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1775574836/Whisk_5680db65a5a5a4685174bce120d48be3dr_e9wmrf.png",
       "imageHint": "grape juice"
+    },
+    {
+      "id": "AUTH_BG",
+      "description": "Vibrant fruit background for auth",
+      "imageUrl": "https://res.cloudinary.com/drmpjeatm/image/upload/q_auto/f_auto/v1776608949/WhatsApp_Image_2026-04-19_at_8.24.59_PM_e78hs8.jpg",
+      "imageHint": "fresh fruit"
     }
   ]
 }
