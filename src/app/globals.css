@@ -25,6 +25,14 @@
     --input: 0 0% 15%;
     --ring: 105 21% 67%;
     --radius: 1rem;
+    
+    /* New Auth Tokens from snippet */
+    --nectar-purple: #8040c0;
+    --nectar-btn-grad: linear-gradient(90deg, #9a306e 0%, #d96020 100%);
+    --nectar-card-bg: rgba(255, 238, 218, 0.26);
+    --nectar-input-bg: rgba(255, 248, 238, 0.48);
+    --nectar-text-dark: #3d1a5e;
+    --nectar-text-mid: #7a5a9a;
   }
 }
 
@@ -54,77 +62,49 @@
   filter: brightness(1.1);
 }
 
-.btn-green-gradient:active {
-  transform: scale(0.98);
+.btn-nectar-grad {
+  background: var(--nectar-btn-grad);
+  box-shadow: 0 3px 14px rgba(154, 48, 110, 0.28);
+  transition: transform .15s, opacity .2s;
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(40px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+.btn-nectar-grad:hover {
+  transform: translateY(-1px);
 }
 
-.reflection-soft {
-  transform: scaleY(-1);
-  mask-image: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.05));
-  filter: blur(20px);
-  opacity: 0.1;
-  pointer-events: none;
+.glass-card-nectar {
+  background: var(--nectar-card-bg);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: 0 6px 32px rgba(80, 20, 120, 0.14), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
-/* Hardware Acceleration & Performance */
-.will-change-transform {
-  will-change: transform, opacity;
-  transform: translateZ(0); /* Force GPU layer */
+/* Animations from snippet */
+@keyframes floatF {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-14px) rotate(3deg); }
 }
 
-.primary-glow-border {
-  border: 1px solid hsla(105, 21%, 67%, 0.3);
-  box-shadow: 0 0 15px hsla(105, 21%, 67%, 0.1);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(.93) translateY(16px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-float {
+  animation: floatF 6s ease-in-out infinite;
+}
+
+.animate-card-in {
+  animation: cardIn .45s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+
+.fruit-emoji {
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.15));
 }
 
 .hero-vignette {
   background: radial-gradient(ellipse 75% 100% at 35% 50%, transparent 20%, rgba(0,0,0,.8) 100%),
               linear-gradient(to right, rgba(0,0,0,.7) 0%, transparent 60%, rgba(0,0,0,.5) 100%);
-}
-
-.frosted-glass {
-  background: rgba(10, 10, 10, 0.6);
-  backdrop-filter: blur(40px) saturate(150%);
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Rain Effect */
-.rain-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.rain-drop {
-  position: absolute;
-  width: 1px;
-  height: 100px;
-  background: linear-gradient(to bottom, rgba(161, 188, 152, 0), rgba(161, 188, 152, 0.4));
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  from { transform: translateY(-120px); }
-  to { transform: translateY(100vh); }
-}
-
-.transition-all-smooth {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 400ms;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
