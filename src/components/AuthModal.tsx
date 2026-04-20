@@ -144,7 +144,6 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           ) : (
             <>
               <div className="text-center mb-4">
-                <span className="text-[40px] block drop-shadow-md mb-1">{view === "login" ? "🍊" : "🥤"}</span>
                 <DialogTitle className="font-headline font-black text-[30px] leading-none tracking-[3px] bg-gradient-to-br from-[#7030b0] to-[#a03070] bg-clip-text text-transparent">
                   NECTAR
                 </DialogTitle>

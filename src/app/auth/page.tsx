@@ -24,9 +24,9 @@ export default function NectarAuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const auth = useAuth();
   const db = useFirestore();
@@ -140,7 +140,6 @@ export default function NectarAuthPage() {
         <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in">
           
           <div className="text-center mb-4">
-            <span className="text-[40px] block drop-shadow-md mb-1">{isLogin ? "🍊" : "🥤"}</span>
             <div className="font-headline font-black text-[30px] leading-none tracking-[3px] bg-gradient-to-br from-[#7030b0] to-[#a03070] bg-clip-text text-transparent">
               NECTAR
             </div>
@@ -200,7 +199,7 @@ export default function NectarAuthPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] text-[#7a5a9a] cursor-pointer z-10"
                 >
-                  👁️
+                  {showPassword ? "🙈" : "👁️"}
                 </button>
                 <Input 
                   type={showPassword ? "text" : "password"} 
