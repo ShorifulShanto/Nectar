@@ -176,7 +176,8 @@ export function NectarHero() {
                className="font-headline font-bold text-7xl md:text-[10rem] leading-none select-none transition-all duration-1000 inline-block"
                style={{ 
                  color: 'transparent', 
-                 WebkitTextStroke: `1px ${currentFlavor.accentHex}20`,
+                 WebkitTextStroke: `1px ${currentFlavor.accentHex}`,
+                 filter: `drop-shadow(0 0 15px ${currentFlavor.accentHex}40)`,
                  transform: isLoadingFlavor ? 'scale(0.8) rotate(-5deg)' : 'scale(1) rotate(0deg)'
                }}
              >
