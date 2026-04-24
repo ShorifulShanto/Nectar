@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -37,7 +38,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     if (!user || !db) return;
     const itemRef = doc(db, "users", user.uid, "cart", productId);
     deleteDocumentNonBlocking(itemRef);
-    toast({ title: "Item removed from selection" });
+    toast({ title: "Flavor removed from selection" });
   };
 
   const handleOrderNow = () => {
