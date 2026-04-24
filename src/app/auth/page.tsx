@@ -105,24 +105,24 @@ export default function NectarAuthPage() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
-      <div className="relative w-full max-w-[1000px] aspect-[16/10] bg-black border-[12px] border-white/5 shadow-2xl rounded-[3rem] overflow-hidden flex">
+      <div className="relative w-full max-w-[900px] aspect-[16/10] bg-black border-[3px] border-primary shadow-[0_0_40px_rgba(29,205,159,0.2)] rounded-[3rem] overflow-hidden flex">
         
-        {/* Left Side: 55% Image */}
-        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden rounded-[2.2rem] bg-black p-4">
+        {/* Left Side: 55% Image with right border */}
+        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden bg-black p-8 border-r border-primary/30">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"
             fill
-            className="object-contain"
+            className="object-contain p-4"
             priority
           />
         </div>
 
         {/* Right Side: 45% Form */}
-        <div className="flex-[0.45] bg-black flex flex-col items-center justify-center p-8 md:p-12 relative">
-          <div className="w-full max-w-[300px] space-y-6">
+        <div className="flex-[0.45] bg-black flex flex-col items-center justify-center p-8 md:p-10 relative">
+          <div className="w-full max-w-[280px] space-y-6">
             <div className="text-center">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-2">Welcome to Nectar</p>
+              <p className="text-[9px] uppercase tracking-[0.3em] text-white/40 font-bold mb-2">Welcome to Nectar</p>
               <h2 className="text-3xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
                 {isLogin ? "Login" : "Sign Up"}
               </h2>
@@ -170,7 +170,7 @@ export default function NectarAuthPage() {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-11 bg-primary text-black font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#7AE2CF] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(29,205,159,0.2)]"
+                className="w-full h-11 bg-primary text-black font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#7AE2CF] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(29,205,159,0.3)]"
               >
                 {isLoading ? <Loader2 className="animate-spin" size={16} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
               </button>
