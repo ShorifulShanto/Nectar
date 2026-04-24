@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { AuthSocial } from "@/components/auth/AuthSocial";
 
 export default function NectarAuthPage() {
@@ -107,15 +108,14 @@ export default function NectarAuthPage() {
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
       <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-primary/10 border-[12px] border-primary/5 shadow-2xl rounded-[3rem] overflow-hidden flex">
         
-        <div className="hidden lg:flex flex-1 bg-black relative overflow-hidden items-center justify-center rounded-[2.2rem]">
-          <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
-            <div className="w-[80%] aspect-square border-[40px] border-primary/20 rounded-full flex items-center justify-center">
-              <div className="w-[60%] aspect-square border-[40px] border-primary/20 rounded-full" />
-            </div>
-          </div>
-          <div className="relative z-10 text-center">
-            <h1 className="text-primary font-headline font-black text-6xl tracking-[0.2em] opacity-30 hover:opacity-100 transition-opacity duration-500 hover:[text-shadow:0_0_20px_#7AE2CF]">NECTAR</h1>
-          </div>
+        <div className="hidden lg:flex flex-1 relative overflow-hidden rounded-[2.2rem]">
+          <Image 
+            src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
+            alt="NECTAR Brand Experience"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
         <div className="flex-1 bg-black flex flex-col items-center justify-center p-8 md:p-16 relative">

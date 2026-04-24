@@ -17,7 +17,8 @@ import {
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 import { AuthSocial } from "@/components/auth/AuthSocial";
 
 type AuthView = "login" | "signup";
@@ -104,18 +105,17 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <DialogContent className="p-0 border-none bg-black max-w-[900px] h-auto overflow-hidden rounded-[2rem] flex sm:min-h-[500px]">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         
-        <div className="hidden md:flex flex-1 bg-neutral-900 items-center justify-center p-12 relative overflow-hidden">
-           <div className="absolute inset-0 opacity-5 pointer-events-none">
-             <div className="w-[150%] aspect-square border-[80px] border-primary rounded-full -translate-x-1/2" />
-           </div>
-           <h1 className="text-primary font-headline font-black text-4xl tracking-widest opacity-30 z-10 hover:opacity-100 transition-opacity duration-500 hover:[text-shadow:0_0_20px_#7AE2CF]">NECTAR</h1>
+        <div className="hidden md:flex flex-1 relative overflow-hidden rounded-l-[2rem]">
+          <Image 
+            src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
+            alt="NECTAR Brand Experience"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
         <div className="flex-1 p-10 md:p-14 relative flex flex-col justify-center bg-black">
-          <button onClick={onClose} className="absolute top-6 right-6 text-white/20 hover:text-primary transition-colors">
-            <X size={20} />
-          </button>
-          
           <div className="max-w-[300px] mx-auto w-full space-y-6">
             <div className="text-center">
               <h2 className="text-3xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
