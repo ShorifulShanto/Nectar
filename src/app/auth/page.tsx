@@ -105,64 +105,64 @@ export default function NectarAuthPage() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
-      <div className="relative w-full max-w-[900px] aspect-[16/10] bg-black border-[3px] border-primary shadow-[0_0_40px_rgba(29,205,159,0.2)] rounded-[3rem] overflow-hidden flex">
+      <div className="relative w-full max-w-[1100px] aspect-[16/9] bg-black border-[3px] border-primary shadow-[0_0_60px_rgba(29,205,159,0.15)] rounded-[3rem] overflow-hidden flex">
         
-        {/* Left Side: 55% Image with right border */}
-        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden bg-black p-8 border-r border-primary/30">
+        {/* Left Side: 55% Image - Filling the section entirely */}
+        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden bg-black border-r border-primary/30">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"
             fill
-            className="object-contain p-4"
+            className="object-cover"
             priority
           />
         </div>
 
         {/* Right Side: 45% Form */}
-        <div className="flex-[0.45] bg-black flex flex-col items-center justify-center p-8 md:p-10 relative">
-          <div className="w-full max-w-[280px] space-y-6">
+        <div className="flex-1 lg:flex-[0.45] bg-black flex flex-col items-center justify-center p-12 relative">
+          <div className="w-full max-w-[320px] space-y-8">
             <div className="text-center">
-              <p className="text-[9px] uppercase tracking-[0.3em] text-white/40 font-bold mb-2">Welcome to Nectar</p>
-              <h2 className="text-3xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
+              <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold mb-3">Welcome to Nectar</p>
+              <h2 className="text-4xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_20px_#7AE2CF] transition-all">
                 {isLogin ? "Login" : "Sign Up"}
               </h2>
             </div>
 
-            <form onSubmit={handleAuth} className="space-y-4">
+            <form onSubmit={handleAuth} className="space-y-5">
               {!isLogin && (
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold uppercase tracking-widest text-white/40 ml-1">Full Name</label>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Full Name</label>
                   <Input 
                     type="text" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
+                    className="h-12 bg-white/5 border-none rounded-xl text-white px-5 focus:ring-2 focus:ring-primary text-sm"
                     required
                   />
                 </div>
               )}
 
-              <div className="space-y-1">
-                <label className="text-[9px] font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
                 <Input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@email.com"
-                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
+                  className="h-12 bg-white/5 border-none rounded-xl text-white px-5 focus:ring-2 focus:ring-primary text-sm"
                   required
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="text-[9px] font-bold uppercase tracking-widest text-white/40 ml-1">Password</label>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Password</label>
                 <Input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
+                  className="h-12 bg-white/5 border-none rounded-xl text-white px-5 focus:ring-2 focus:ring-primary text-sm"
                   required
                 />
               </div>
@@ -170,15 +170,15 @@ export default function NectarAuthPage() {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-11 bg-primary text-black font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#7AE2CF] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(29,205,159,0.3)]"
+                className="w-full h-12 bg-primary text-black font-bold rounded-xl text-[12px] uppercase tracking-widest hover:bg-[#7AE2CF] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(29,205,159,0.3)] mt-2"
               >
-                {isLoading ? <Loader2 className="animate-spin" size={16} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
+                {isLoading ? <Loader2 className="animate-spin" size={18} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
               </button>
             </form>
 
             <div className="relative flex items-center gap-4">
               <div className="flex-1 h-[1px] bg-white/10" />
-              <span className="text-[9px] text-white/20 font-bold uppercase tracking-widest">or</span>
+              <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest">or</span>
               <div className="flex-1 h-[1px] bg-white/10" />
             </div>
 
@@ -187,7 +187,7 @@ export default function NectarAuthPage() {
             <div className="text-center pt-2">
               <button 
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-[10px] font-bold text-white/40 hover:text-primary transition-colors uppercase tracking-widest hover:[text-shadow:0_0_10px_#7AE2CF]"
+                className="text-[11px] font-bold text-white/40 hover:text-primary transition-colors uppercase tracking-widest hover:[text-shadow:0_0_10px_#7AE2CF]"
               >
                 {isLogin ? "Need an account? Sign Up" : "Already a member? Sign In"}
               </button>
@@ -196,8 +196,8 @@ export default function NectarAuthPage() {
         </div>
       </div>
 
-      <Link href="/" className="fixed bottom-8 text-[10px] uppercase tracking-[0.5em] text-white/40 hover:text-primary transition-all font-bold flex items-center gap-2 z-50">
-        <ArrowRight size={14} className="rotate-180" /> Back to Selection
+      <Link href="/" className="fixed bottom-8 text-[11px] uppercase tracking-[0.5em] text-white/40 hover:text-primary transition-all font-bold flex items-center gap-2 z-50">
+        <ArrowRight size={16} className="rotate-180" /> Back to Selection
       </Link>
     </div>
   );
