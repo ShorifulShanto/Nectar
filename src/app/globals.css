@@ -12,35 +12,36 @@
     --card-foreground: 59 100% 91%;
     --popover: 0 0% 10%;
     --popover-foreground: 59 100% 91%;
-    /* Primary: Orange #FF7F11 -> HSL(28, 100%, 53%) */
-    --primary: 28 100% 53%;
+    /* Primary: Teal #1DCD9F -> HSL(164, 75%, 46%) */
+    --primary: 164 75% 46%;
     --primary-foreground: 0 0% 0%;
     --secondary: 0 0% 20%;
     --secondary-foreground: 59 100% 91%;
     --muted: 0 0% 20%;
     --muted-foreground: 0 0% 60%;
-    --accent: 28 100% 53%;
+    /* Accent: Teal #1DCD9F */
+    --accent: 164 75% 46%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 25%;
     --input: 0 0% 25%;
-    --ring: 28 100% 53%;
+    --ring: 164 75% 46%;
     --radius: 1rem;
     
     --nectar-burgundy: #280905;
     --nectar-red: #740A03;
     --nectar-red-hover: #C3110C;
     --nectar-peach: #FFC193;
-    --nectar-orange: #FF7F11;
+    --nectar-teal: #1DCD9F;
     --nectar-cream: #FFFDD0;
-    --nectar-glow: #FFB399;
+    --nectar-glow: #7AE2CF;
 
-    /* Custom Color Request: #FFF1D3 -> HSL(41, 100%, 91%) */
+    /* Custom Highlight Label: #FFF1D3 -> HSL(41, 100%, 91%) */
     --highlight-label: 41 100% 91%;
 
-    /* Default interactive glow color */
-    --hover-glow: #FFB399;
+    /* Default interactive glow color: Mint #7AE2CF */
+    --hover-glow: #7AE2CF;
   }
 }
 
@@ -72,7 +73,7 @@
 .glass-card-nectar {
   background: rgba(34, 34, 34, 0.4);
   backdrop-filter: blur(24px) saturate(140%);
-  border: 1px solid rgba(255, 127, 17, 0.2);
+  border: 1px solid rgba(29, 205, 159, 0.2);
   box-shadow: 0 6px 32px rgba(0, 0, 0, 0.4);
 }
 
@@ -89,13 +90,13 @@
 }
 
 .primary-glow-border {
-  border: 1px solid rgba(255, 127, 17, 0.1);
+  border: 1px solid rgba(29, 205, 159, 0.1);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .primary-glow-border:hover {
-  border-color: rgba(255, 179, 153, 0.4);
-  box-shadow: 0 0 40px rgba(255, 179, 153, 0.2);
+  border-color: rgba(122, 226, 207, 0.4);
+  box-shadow: 0 0 40px rgba(122, 226, 207, 0.2);
 }
 
 .product-card-glow:hover {
