@@ -34,6 +34,7 @@
     --nectar-peach: #FFC193;
     --nectar-orange: #FF7F11;
     --nectar-cream: #FFFDD0;
+    --nectar-glow: #FFB399;
   }
 }
 
@@ -46,13 +47,18 @@
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline tracking-tighter uppercase transition-colors duration-300;
+    @apply font-headline tracking-tighter uppercase transition-all duration-300;
   }
   h1, h2 {
-    @apply text-primary hover:opacity-80;
+    @apply text-primary;
   }
   h3, h4, h5, h6 {
     @apply text-foreground;
+  }
+
+  /* Global Text Hover Glow */
+  h1:hover, h2:hover, h3:hover, h4:hover, p:hover, span:hover, a:hover, button:hover {
+    text-shadow: 0 0 15px #FFB399;
   }
 }
 
@@ -82,6 +88,10 @@
 }
 
 .primary-glow-border:hover {
-  border-color: rgba(255, 127, 17, 0.4);
-  box-shadow: 0 0 30px rgba(255, 127, 17, 0.1);
+  border-color: rgba(255, 179, 153, 0.4);
+  box-shadow: 0 0 40px rgba(255, 179, 153, 0.2);
+}
+
+.product-card-glow:hover {
+  filter: drop-shadow(0 0 20px rgba(255, 179, 153, 0.3));
 }
