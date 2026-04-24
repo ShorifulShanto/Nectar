@@ -3,10 +3,9 @@
 import React from "react";
 
 export function AuthLogo() {
-  // CONFIG: LOGO COLORS AND SIZING
-  const primaryColor = "#7030b0";
-  const secondaryColor = "#a03070";
-  const taglineColor = "#7a5a9a";
+  const primaryColor = "#740A03";
+  const secondaryColor = "#C3110C";
+  const taglineColor = "#FEFFD3";
 
   return (
     <div className="text-center mb-4 relative">
@@ -17,7 +16,7 @@ export function AuthLogo() {
         NECTAR
       </div>
       <p 
-        className="text-[11px] tracking-[1.8px] mt-1 font-medium"
+        className="text-[11px] tracking-[1.8px] mt-1 font-medium opacity-60"
         style={{ color: taglineColor }}
       >
         Fresh Fruit Juice

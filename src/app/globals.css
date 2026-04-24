@@ -4,35 +4,33 @@
 
 @layer base {
   :root {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 100%;
-    /* Sage Green #A1BC98 HSL Equivalent: 105 21% 67% */
-    --primary: 105 21% 67%;
-    --primary-foreground: 0 0% 0%;
+    --background: 0 0% 0%;
+    /* Creamy Off-White #FEFFD3 -> HSL(61, 100%, 91%) */
+    --foreground: 61 100% 91%;
+    --card: 0 0% 4%;
+    --card-foreground: 61 100% 91%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 61 100% 91%;
+    /* Deep Red #740A03 -> HSL(4, 95%, 23%) */
+    --primary: 4 95% 23%;
+    --primary-foreground: 61 100% 91%;
     --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary-foreground: 61 100% 91%;
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 60%;
-    --accent: 105 21% 67%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 4 95% 23%;
+    --accent-foreground: 61 100% 91%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 105 21% 67%;
+    --ring: 4 95% 23%;
     --radius: 1rem;
     
-    /* New Auth Tokens from snippet */
-    --nectar-purple: #8040c0;
-    --nectar-btn-grad: linear-gradient(90deg, #9a306e 0%, #d96020 100%);
-    --nectar-card-bg: rgba(255, 238, 218, 0.26);
-    --nectar-input-bg: rgba(255, 248, 238, 0.48);
-    --nectar-text-dark: #3d1a5e;
-    --nectar-text-mid: #7a5a9a;
+    --nectar-burgundy: #280905;
+    --nectar-red: #740A03;
+    --nectar-red-hover: #C3110C;
+    --nectar-cream: #FEFFD3;
   }
 }
 
@@ -41,70 +39,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-black text-white selection:bg-primary selection:text-black antialiased overflow-x-hidden;
+    @apply bg-black text-foreground selection:bg-primary selection:text-white antialiased overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline tracking-tighter uppercase;
+    @apply font-headline tracking-tighter uppercase transition-colors duration-300;
+  }
+  h1, h2 {
+    @apply text-primary hover:text-[#C3110C];
   }
 }
 
 /* Custom UI Effects */
-.btn-green-gradient {
-  background: linear-gradient(135deg, #00c853 0%, #64dd17 100%);
-  box-shadow: 0 10px 30px -5px rgba(0, 200, 83, 0.4);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-green-gradient:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 15px 35px -5px rgba(0, 200, 83, 0.6);
-  filter: brightness(1.1);
-}
-
-.btn-nectar-grad {
-  background: var(--nectar-btn-grad);
-  box-shadow: 0 3px 14px rgba(154, 48, 110, 0.28);
-  transition: transform .15s, opacity .2s;
-}
-
-.btn-nectar-grad:hover {
-  transform: translateY(-1px);
-}
-
 .glass-card-nectar {
-  background: var(--nectar-card-bg);
+  background: rgba(40, 9, 5, 0.4);
   backdrop-filter: blur(24px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.38);
-  box-shadow: 0 6px 32px rgba(80, 20, 120, 0.14), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
-}
-
-/* Animations from snippet */
-@keyframes floatF {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-14px) rotate(3deg); }
-}
-
-@keyframes cardIn {
-  from { opacity: 0; transform: scale(.93) translateY(16px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.animate-float {
-  animation: floatF 6s ease-in-out infinite;
-}
-
-.animate-card-in {
-  animation: cardIn .45s cubic-bezier(.34, 1.56, .64, 1) both;
-}
-
-.fruit-emoji {
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,.15));
-}
-
-.hero-vignette {
-  background: radial-gradient(ellipse 75% 100% at 35% 50%, transparent 20%, rgba(0,0,0,.8) 100%),
-              linear-gradient(to right, rgba(0,0,0,.7) 0%, transparent 60%, rgba(0,0,0,.5) 100%);
+  border: 1px solid rgba(116, 10, 3, 0.2);
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.4);
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -113,4 +64,8 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.hero-vignette {
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
 }

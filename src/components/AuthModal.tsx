@@ -1,8 +1,7 @@
-
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useAuth, useFirestore } from "@/firebase";
 import { 
   signInWithEmailAndPassword, 
@@ -18,7 +17,6 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, X } from "lucide-react";
-
 import { AuthSocial } from "@/components/auth/AuthSocial";
 
 type AuthView = "login" | "signup";
@@ -102,24 +100,24 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="p-0 border-none bg-white max-w-[900px] h-auto overflow-hidden rounded-[2rem] flex sm:min-h-[500px]">
-        {/* Left Side: Illustration Area */}
-        <div className="hidden md:flex flex-1 bg-[#1a1a1a] items-center justify-center p-12 relative overflow-hidden">
+      <DialogContent className="p-0 border-none bg-[#280905] max-w-[900px] h-auto overflow-hidden rounded-[2rem] flex sm:min-h-[500px]">
+        <DialogTitle className="sr-only">Authentication</DialogTitle>
+        
+        <div className="hidden md:flex flex-1 bg-black items-center justify-center p-12 relative overflow-hidden">
            <div className="absolute inset-0 opacity-5 pointer-events-none">
-             <div className="w-[150%] aspect-square border-[80px] border-white rounded-full -translate-x-1/2" />
+             <div className="w-[150%] aspect-square border-[80px] border-[#740A03] rounded-full -translate-x-1/2" />
            </div>
-           <h1 className="text-white font-headline font-black text-4xl tracking-widest opacity-20 z-10">NECTAR</h1>
+           <h1 className="text-[#740A03] font-headline font-black text-4xl tracking-widest opacity-30 z-10">NECTAR</h1>
         </div>
 
-        {/* Right Side: Form Area */}
         <div className="flex-1 p-10 md:p-14 relative flex flex-col justify-center">
-          <button onClick={onClose} className="absolute top-6 right-6 text-neutral-200 hover:text-black transition-colors">
+          <button onClick={onClose} className="absolute top-6 right-6 text-[#FEFFD3]/20 hover:text-[#FEFFD3] transition-colors">
             <X size={20} />
           </button>
           
           <div className="max-w-[300px] mx-auto w-full space-y-6">
             <div className="text-center">
-              <h2 className="text-3xl font-headline font-black text-black uppercase tracking-tight">
+              <h2 className="text-3xl font-headline font-black text-[#740A03] uppercase tracking-tight">
                 {view === "login" ? "Login" : "Sign Up"}
               </h2>
             </div>
@@ -130,7 +128,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
-                  className="h-11 bg-neutral-50 border-none rounded-xl text-black px-4"
+                  className="h-11 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4"
                   required
                 />
               )}
@@ -139,7 +137,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
-                className="h-11 bg-neutral-50 border-none rounded-xl text-black px-4"
+                className="h-11 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4"
                 required
               />
               <Input 
@@ -147,22 +145,22 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                className="h-11 bg-neutral-50 border-none rounded-xl text-black px-4"
+                className="h-11 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4"
                 required
               />
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-11 bg-black text-white font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-neutral-800 transition-all"
+                className="w-full h-11 bg-[#740A03] text-[#FEFFD3] font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#C3110C] transition-all"
               >
                 {isLoading ? <Loader2 className="animate-spin mx-auto" size={18} /> : <span>{view === "login" ? "Sign In" : "Create Account"}</span>}
               </button>
             </form>
 
             <div className="relative flex items-center gap-4">
-              <div className="flex-1 h-[1px] bg-neutral-100" />
-              <span className="text-[9px] text-neutral-300 font-bold uppercase tracking-widest">or</span>
-              <div className="flex-1 h-[1px] bg-neutral-100" />
+              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
+              <span className="text-[9px] text-[#FEFFD3]/20 font-bold uppercase tracking-widest">or</span>
+              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
             </div>
 
             <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
@@ -170,7 +168,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             <div className="text-center pt-2">
               <button 
                 onClick={() => setView(view === "login" ? "signup" : "login")}
-                className="text-[10px] font-bold text-neutral-400 hover:text-black transition-colors uppercase tracking-widest"
+                className="text-[10px] font-bold text-[#FEFFD3]/40 hover:text-[#FEFFD3] transition-colors uppercase tracking-widest"
               >
                 {view === "login" ? "Need an account? Sign Up" : "Already a member? Sign In"}
               </button>

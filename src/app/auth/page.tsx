@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,9 +17,6 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
-
-// MODULAR IMPORTS
-import { AuthBackground } from "@/components/auth/AuthBackground";
 import { AuthSocial } from "@/components/auth/AuthSocial";
 
 export default function NectarAuthPage() {
@@ -107,71 +103,64 @@ export default function NectarAuthPage() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen w-full bg-[#121212] flex items-center justify-center p-4 sm:p-10 font-body">
-      {/* Main Outer Container with White Border */}
-      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-white border-[12px] border-white shadow-2xl rounded-[3rem] overflow-hidden flex">
+    <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
+      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-[#FEFFD3] border-[12px] border-[#FEFFD3] shadow-2xl rounded-[3rem] overflow-hidden flex">
         
-        {/* Left Panel: Brand Illustration / Dark Space */}
-        <div className="hidden lg:flex flex-1 bg-[#1a1a1a] relative overflow-hidden items-center justify-center rounded-[2.2rem]">
-          {/* Subtle Watermark Logo Placeholder */}
+        <div className="hidden lg:flex flex-1 bg-black relative overflow-hidden items-center justify-center rounded-[2.2rem]">
           <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
-            <div className="w-[80%] aspect-square border-[40px] border-white/20 rounded-full flex items-center justify-center">
-              <div className="w-[60%] aspect-square border-[40px] border-white/20 rounded-full" />
+            <div className="w-[80%] aspect-square border-[40px] border-[#740A03]/20 rounded-full flex items-center justify-center">
+              <div className="w-[60%] aspect-square border-[40px] border-[#740A03]/20 rounded-full" />
             </div>
           </div>
-          
           <div className="relative z-10 text-center">
-            <h1 className="text-white font-headline font-black text-6xl tracking-[0.2em] opacity-20">NECTAR</h1>
+            <h1 className="text-[#740A03] font-headline font-black text-6xl tracking-[0.2em] opacity-30">NECTAR</h1>
           </div>
         </div>
 
-        {/* Right Panel: White Authentication Form */}
-        <div className="flex-1 bg-white flex flex-col items-center justify-center p-8 md:p-16 relative">
+        <div className="flex-1 bg-[#280905] flex flex-col items-center justify-center p-8 md:p-16 relative">
           <div className="w-full max-w-[340px] space-y-8">
-            {/* Header */}
             <div className="text-center">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400 font-bold mb-2">Welcome to Nectar</p>
-              <h2 className="text-4xl font-headline font-black text-black uppercase tracking-tight">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[#FEFFD3]/40 font-bold mb-2">Welcome to Nectar</p>
+              <h2 className="text-4xl font-headline font-black text-[#740A03] uppercase tracking-tight">
                 {isLogin ? "Login" : "Sign Up"}
               </h2>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleAuth} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 ml-1">Full Name</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#FEFFD3]/60 ml-1">Full Name</label>
                   <Input 
                     type="text" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="h-12 bg-neutral-50 border-none rounded-xl text-black px-4 focus:ring-2 focus:ring-black/5"
+                    className="h-12 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4 focus:ring-2 focus:ring-[#740A03]"
                     required
                   />
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 ml-1">Email Address</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#FEFFD3]/60 ml-1">Email Address</label>
                 <Input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@email.com"
-                  className="h-12 bg-neutral-50 border-none rounded-xl text-black px-4 focus:ring-2 focus:ring-black/5"
+                  className="h-12 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4 focus:ring-2 focus:ring-[#740A03]"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 ml-1">Password</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#FEFFD3]/60 ml-1">Password</label>
                 <Input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-12 bg-neutral-50 border-none rounded-xl text-black px-4 focus:ring-2 focus:ring-black/5"
+                  className="h-12 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4 focus:ring-2 focus:ring-[#740A03]"
                   required
                 />
               </div>
@@ -179,42 +168,34 @@ export default function NectarAuthPage() {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-12 bg-black text-white font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+                className="w-full h-12 bg-[#740A03] text-[#FEFFD3] font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-[#C3110C] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
               >
                 {isLoading ? <Loader2 className="animate-spin" size={18} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
               </button>
             </form>
 
-            {/* Social Divider */}
             <div className="relative flex items-center gap-4">
-              <div className="flex-1 h-[1px] bg-neutral-100" />
-              <span className="text-[10px] text-neutral-300 font-bold uppercase tracking-widest">or continue</span>
-              <div className="flex-1 h-[1px] bg-neutral-100" />
+              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
+              <span className="text-[10px] text-[#FEFFD3]/20 font-bold uppercase tracking-widest">or</span>
+              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
             </div>
 
-            {/* Social Icons */}
             <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
 
-            {/* Footer Toggle */}
             <div className="text-center pt-4">
               <button 
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-[11px] font-bold text-neutral-400 hover:text-black transition-colors uppercase tracking-widest"
+                className="text-[11px] font-bold text-[#FEFFD3]/40 hover:text-[#FEFFD3] transition-colors uppercase tracking-widest"
               >
                 {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
               </button>
             </div>
           </div>
-          
-          <div className="absolute bottom-8 left-0 w-full text-center">
-             <p className="text-[9px] text-neutral-300 font-bold uppercase tracking-[0.4em]">© 2025 Nectar Juice</p>
-          </div>
         </div>
       </div>
 
-      {/* Background Navigation Link */}
-      <Link href="/" className="fixed bottom-8 text-[10px] uppercase tracking-[0.5em] text-white/40 hover:text-white transition-all font-bold flex items-center gap-2 z-50">
-        <ArrowRight size={14} className="rotate-180" /> Back to Grove
+      <Link href="/" className="fixed bottom-8 text-[10px] uppercase tracking-[0.5em] text-[#FEFFD3]/40 hover:text-[#FEFFD3] transition-all font-bold flex items-center gap-2 z-50">
+        <ArrowRight size={14} className="rotate-180" /> Back to Selection
       </Link>
     </div>
   );
