@@ -11,7 +11,7 @@ export function FAQSection() {
   ];
 
   return (
-    <section id="faq" className="py-24 bg-black">
+    <section id="faq" className="py-24 bg-background">
       <div className="container mx-auto px-6 md:px-12 max-w-2xl">
         <div className="mb-12 text-center md:text-left">
           <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">questions</p>
@@ -20,11 +20,11 @@ export function FAQSection() {
         
         <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`item-${i}`} className="border-white/5 px-0 bg-neutral-900/20 rounded-xl px-6">
-              <AccordionTrigger className="text-[11px] md:text-sm font-headline font-bold hover:no-underline hover:text-primary transition-colors py-5 uppercase tracking-widest text-left">
+            <AccordionItem key={i} value={`item-${i}`} className="border-white/5 bg-black/20 rounded-xl px-6">
+              <AccordionTrigger className="text-[11px] md:text-sm font-headline font-bold hover:no-underline hover:text-primary transition-colors py-5 uppercase tracking-widest text-left text-foreground">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="text-white/40 text-[11px] pb-5 leading-relaxed font-light border-t border-white/5 pt-4">
+              <AccordionContent className="text-foreground/40 text-[11px] pb-5 leading-relaxed font-light border-t border-white/5 pt-4">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>

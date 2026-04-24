@@ -94,7 +94,7 @@ export function NectarHero() {
   };
 
   return (
-    <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-black flex items-center">
+    <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-[#000000] flex items-center">
       {/* Background Animated WebP */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 

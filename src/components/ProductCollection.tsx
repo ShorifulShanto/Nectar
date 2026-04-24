@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Plus, RefreshCw, Eye } from "lucide-react";
@@ -63,7 +62,7 @@ export function ProductCollection() {
   };
 
   return (
-    <section id="product" className="py-24 bg-black">
+    <section id="product" className="py-24 bg-background">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
           <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">our collection</p>
@@ -88,7 +87,7 @@ export function ProductCollection() {
                   <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform">
                      <Link 
                        href={`/product/${product.id}`}
-                       className="aspect-square w-full rounded-[2.5rem] bg-neutral-950 border border-white/5 overflow-hidden p-4 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative cursor-pointer"
+                       className="aspect-square w-full rounded-[2.5rem] bg-[#1a1a1a] border border-white/5 overflow-hidden p-4 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative cursor-pointer"
                      >
                         {/* Dynamic Flavor Glow */}
                         <div 
@@ -125,10 +124,10 @@ export function ProductCollection() {
                         )}
                      </Link>
                      <div className="text-center sm:text-left px-2">
-                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-colors ${isSoldOut ? 'text-white/20' : 'text-white/90 group-hover:text-primary'}`}>
+                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-colors ${isSoldOut ? 'opacity-20' : 'text-foreground group-hover:text-primary'}`}>
                          {product.name}
                        </h4>
-                       <p className="text-[9px] text-white/30 uppercase tracking-[0.4em] font-medium font-mono">
+                       <p className="text-[9px] text-foreground/40 uppercase tracking-[0.4em] font-medium font-mono">
                          ${price.toFixed(2)} — 350ml
                        </p>
                      </div>
@@ -136,8 +135,8 @@ export function ProductCollection() {
                 );
               })
             ) : (
-              <div className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-[3rem] bg-neutral-950/50 opacity-40">
-                <p className="text-white uppercase tracking-[0.5em] text-[10px]">Catalog is currently empty</p>
+              <div className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-[3rem] bg-black/20 opacity-40">
+                <p className="text-foreground uppercase tracking-[0.5em] text-[10px]">Catalog is currently empty</p>
               </div>
             )}
           </div>

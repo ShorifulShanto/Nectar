@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -61,7 +60,7 @@ export function ReviewsSection() {
   const displayReviews = reviews && reviews.length > 0 ? reviews : aiFallbackReviews;
 
   return (
-    <section id="reviews" className="py-24 bg-neutral-900/20">
+    <section id="reviews" className="py-24 bg-background">
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div className="text-center md:text-left">
@@ -74,7 +73,7 @@ export function ReviewsSection() {
           <Button 
             onClick={handleShareStory}
             variant="outline" 
-            className="rounded-full border-white/10 bg-white/5 uppercase tracking-widest text-[9px] px-8 h-12 hover:bg-white hover:text-black transition-all group"
+            className="rounded-full border-primary/20 bg-black/20 text-foreground uppercase tracking-widest text-[9px] px-8 h-12 hover:bg-primary hover:text-black transition-all group"
           >
             <MessageSquare size={14} className="mr-2 group-hover:scale-110 transition-transform" />
             Share Your Story
@@ -93,7 +92,7 @@ export function ReviewsSection() {
               <div className="flex gap-1.5 my-3 text-primary relative z-10">
                 {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />) }
               </div>
-              <p className="text-[9px] text-white/30 uppercase tracking-[0.3em] relative z-10 font-bold">Verified Praise</p>
+              <p className="text-[9px] text-foreground/30 uppercase tracking-[0.3em] relative z-10 font-bold">Verified Praise</p>
             </div>
             
             {displayReviews.map((review) => (
@@ -101,11 +100,11 @@ export function ReviewsSection() {
                 <div className="flex gap-1 mb-5 text-primary/20 group-hover:text-primary transition-colors">
                   {[...Array(review.rating || 5)].map((_, j) => <Star key={j} size={10} fill="currentColor" />)}
                 </div>
-                <p className="text-[12px] text-white/50 mb-6 leading-relaxed font-light italic truncate-3-lines flex-1">
+                <p className="text-[12px] text-foreground/50 mb-6 leading-relaxed font-light italic truncate-3-lines flex-1">
                   "{review.comment}"
                 </p>
                 <div className="mt-auto pt-4 border-t border-white/5">
-                  <h5 className="font-bold text-[10px] tracking-widest uppercase">{review.userName || 'Valued Member'}</h5>
+                  <h5 className="font-bold text-[10px] tracking-widest uppercase text-foreground">{review.userName || 'Valued Member'}</h5>
                   <p className="text-[9px] text-primary uppercase tracking-widest mt-1 font-bold">
                     {(review as any).role || 'Nectar Enthusiast'}
                   </p>
