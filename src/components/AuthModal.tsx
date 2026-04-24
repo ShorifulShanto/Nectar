@@ -118,12 +118,12 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         setTimeout(resetState, 300);
       }
     }}>
-      <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-[420px] z-[500] flex items-center justify-center">
+      <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-[420px] z-[500] flex items-center justify-center py-20">
         {/* OUTER BOX FRAME: Mirrors the page design */}
         <div className="absolute inset-0 border-2 border-white/5 rounded-[40px] pointer-events-none bg-white/5 backdrop-blur-[4px]" />
 
-        {/* SCALED DOWN LOGIN CARD - scaled to 75% for consistent branding */}
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in w-full max-w-[360px] text-[#3d1a5e] font-body relative overflow-hidden scale-75 origin-center shadow-2xl">
+        {/* SCALED DOWN LOGIN CARD - scaled to 60% for extreme space within frame */}
+        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in w-full max-w-[360px] text-[#3d1a5e] font-body relative overflow-hidden scale-[0.6] origin-center shadow-2xl">
           
           {/* WIREFRAME BOXES OVERLAY */}
           <AuthOverlayBoxes />

@@ -110,18 +110,18 @@ export default function NectarAuthPage() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden flex flex-col items-center justify-center font-body selection:bg-orange-200">
+    <div className="min-h-screen w-full relative overflow-hidden flex flex-col items-center justify-center font-body selection:bg-orange-200 py-20">
       <AuthBackground />
       <AuthFloatingLabels />
 
-      {/* Main Orchestrator Container */}
-      <div className="relative z-20 w-full max-w-[420px] px-4 flex items-center justify-center min-h-[600px]">
+      {/* Main Orchestrator Container - Height increased for room */}
+      <div className="relative z-20 w-full max-w-[420px] px-4 flex items-center justify-center min-h-[700px]">
         
         {/* OUTER BOX FRAME: Boundary marker */}
         <div className="absolute inset-0 border-2 border-white/5 rounded-[40px] pointer-events-none bg-white/5 backdrop-blur-[4px]" />
 
-        {/* SCALED DOWN LOGIN PAGE CARD - scaled to 75% for more bg space */}
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative w-full max-w-[360px] scale-75 origin-center shadow-2xl">
+        {/* SCALED DOWN LOGIN PAGE CARD - scaled to 60% for extreme bg space */}
+        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative w-full max-w-[360px] scale-[0.6] origin-center shadow-2xl">
           
           {/* WIREFRAME BOXES OVERLAY (Stay relative to the scaled content) */}
           <AuthOverlayBoxes />
@@ -227,7 +227,7 @@ export default function NectarAuthPage() {
       </div>
 
       {/* Back Navigation */}
-      <div className="relative z-20 mt-12 text-center">
+      <div className="relative z-20 mt-12 text-center pb-12">
         <Link href="/" className="text-[10px] uppercase tracking-[0.5em] text-white/60 hover:text-white transition-all font-bold group inline-flex items-center gap-2">
           <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
           Back to Site
