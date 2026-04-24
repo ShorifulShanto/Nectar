@@ -101,11 +101,11 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="p-0 border-none bg-black max-w-[900px] h-auto overflow-hidden rounded-[2rem] flex sm:min-h-[500px]">
+      <DialogContent className="p-0 border-none bg-black max-w-[800px] h-auto overflow-hidden rounded-[2rem] flex sm:min-h-[450px]">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         
         {/* Left Side: 55% Image */}
-        <div className="hidden md:flex flex-[0.55] relative overflow-hidden rounded-l-[2rem] bg-black">
+        <div className="hidden md:flex flex-[0.55] relative overflow-hidden rounded-l-[2rem] bg-black p-4">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"
@@ -116,21 +116,21 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         </div>
 
         {/* Right Side: 45% Form */}
-        <div className="flex-[0.45] p-10 md:p-14 relative flex flex-col justify-center bg-black">
-          <div className="max-w-[300px] mx-auto w-full space-y-6">
+        <div className="flex-[0.45] p-8 md:p-10 relative flex flex-col justify-center bg-black">
+          <div className="max-w-[280px] mx-auto w-full space-y-5">
             <div className="text-center">
-              <h2 className="text-3xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
+              <h2 className="text-2xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
                 {view === "login" ? "Login" : "Sign Up"}
               </h2>
             </div>
 
-            <form onSubmit={handleAuth} className="space-y-4">
+            <form onSubmit={handleAuth} className="space-y-3">
               {view === "signup" && (
                 <Input 
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
-                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4"
+                  className="h-10 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
                   required
                 />
               )}
@@ -139,7 +139,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
-                className="h-11 bg-white/5 border-none rounded-xl text-white px-4"
+                className="h-10 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
                 required
               />
               <Input 
@@ -147,15 +147,15 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                className="h-11 bg-white/5 border-none rounded-xl text-white px-4"
+                className="h-10 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
                 required
               />
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-11 bg-primary text-black font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#7AE2CF] transition-all shadow-[0_0_15px_rgba(29,205,159,0.2)]"
+                className="w-full h-10 bg-primary text-black font-bold rounded-xl text-[10px] uppercase tracking-widest hover:bg-[#7AE2CF] transition-all shadow-[0_0_15px_rgba(29,205,159,0.2)]"
               >
-                {isLoading ? <Loader2 className="animate-spin mx-auto" size={18} /> : <span>{view === "login" ? "Sign In" : "Create Account"}</span>}
+                {isLoading ? <Loader2 className="animate-spin mx-auto" size={16} /> : <span>{view === "login" ? "Sign In" : "Create Account"}</span>}
               </button>
             </form>
 
@@ -167,10 +167,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
             <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
 
-            <div className="text-center pt-2">
+            <div className="text-center pt-1">
               <button 
                 onClick={() => setView(view === "login" ? "signup" : "login")}
-                className="text-[10px] font-bold text-white/40 hover:text-primary transition-colors uppercase tracking-widest hover:[text-shadow:0_0_10px_#7AE2CF]"
+                className="text-[9px] font-bold text-white/40 hover:text-primary transition-colors uppercase tracking-widest hover:[text-shadow:0_0_10px_#7AE2CF]"
               >
                 {view === "login" ? "Need an account? Sign Up" : "Already a member? Sign In"}
               </button>

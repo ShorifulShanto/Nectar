@@ -105,10 +105,10 @@ export default function NectarAuthPage() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
-      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-black border-[12px] border-white/5 shadow-2xl rounded-[3rem] overflow-hidden flex">
+      <div className="relative w-full max-w-[1000px] aspect-[16/10] bg-black border-[12px] border-white/5 shadow-2xl rounded-[3rem] overflow-hidden flex">
         
         {/* Left Side: 55% Image */}
-        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden rounded-[2.2rem] bg-black">
+        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden rounded-[2.2rem] bg-black p-4">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"
@@ -119,50 +119,50 @@ export default function NectarAuthPage() {
         </div>
 
         {/* Right Side: 45% Form */}
-        <div className="flex-[0.45] bg-black flex flex-col items-center justify-center p-8 md:p-16 relative">
-          <div className="w-full max-w-[340px] space-y-8">
+        <div className="flex-[0.45] bg-black flex flex-col items-center justify-center p-8 md:p-12 relative">
+          <div className="w-full max-w-[300px] space-y-6">
             <div className="text-center">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-white/40 font-bold mb-2">Welcome to Nectar</p>
-              <h2 className="text-4xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-2">Welcome to Nectar</p>
+              <h2 className="text-3xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
                 {isLogin ? "Login" : "Sign Up"}
               </h2>
             </div>
 
             <form onSubmit={handleAuth} className="space-y-4">
               {!isLogin && (
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Full Name</label>
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold uppercase tracking-widest text-white/40 ml-1">Full Name</label>
                   <Input 
                     type="text" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="h-12 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary"
+                    className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
                     required
                   />
                 </div>
               )}
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
                 <Input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@email.com"
-                  className="h-12 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary"
+                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
                   required
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Password</label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-bold uppercase tracking-widest text-white/40 ml-1">Password</label>
                 <Input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-12 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary"
+                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
                   required
                 />
               </div>
@@ -170,26 +170,26 @@ export default function NectarAuthPage() {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-12 bg-primary text-black font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-[#7AE2CF] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(29,205,159,0.2)]"
+                className="w-full h-11 bg-primary text-black font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#7AE2CF] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(29,205,159,0.2)]"
               >
-                {isLoading ? <Loader2 className="animate-spin" size={18} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
+                {isLoading ? <Loader2 className="animate-spin" size={16} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
               </button>
             </form>
 
             <div className="relative flex items-center gap-4">
               <div className="flex-1 h-[1px] bg-white/10" />
-              <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest">or</span>
+              <span className="text-[9px] text-white/20 font-bold uppercase tracking-widest">or</span>
               <div className="flex-1 h-[1px] bg-white/10" />
             </div>
 
             <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
 
-            <div className="text-center pt-4">
+            <div className="text-center pt-2">
               <button 
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-[11px] font-bold text-white/40 hover:text-primary transition-colors uppercase tracking-widest hover:[text-shadow:0_0_10px_#7AE2CF]"
+                className="text-[10px] font-bold text-white/40 hover:text-primary transition-colors uppercase tracking-widest hover:[text-shadow:0_0_10px_#7AE2CF]"
               >
-                {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+                {isLogin ? "Need an account? Sign Up" : "Already a member? Sign In"}
               </button>
             </div>
           </div>
