@@ -66,7 +66,10 @@ export function ProductCollection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
           <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">our collection</p>
-          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">Discover Our<br />Latest Batch</h2>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold leading-tight uppercase">
+            <span style={{ color: 'hsl(var(--highlight-label))' }}>Discover Our</span><br />
+            Latest Batch
+          </h2>
         </div>
         
         {isLoading ? (
