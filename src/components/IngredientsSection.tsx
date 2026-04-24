@@ -17,7 +17,10 @@ export function IngredientsSection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
           <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what's inside</p>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">Real Ingredients<br /><span className="text-primary">Real Benefits</span></h2>
+          <h2 className="text-3xl md:text-4xl font-headline font-bold leading-tight uppercase">
+            <span style={{ color: 'hsl(var(--highlight-label))' }}>Real Ingredients</span><br />
+            <span className="text-primary">Real Benefits</span>
+          </h2>
           <p className="text-foreground/40 mt-4 max-w-lg font-light text-[11px] md:text-sm">Every drop starts with real, whole fruits. No concentrates, no preservatives — just nature in a bottle.</p>
         </div>
         

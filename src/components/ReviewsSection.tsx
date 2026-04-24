@@ -64,7 +64,7 @@ export function ReviewsSection() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div className="text-center md:text-left">
-            <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium flex items-center justify-center md:justify-start gap-2">
+            <p className="text-[9px] lowercase tracking-[0.4em] mb-3 font-medium flex items-center justify-center md:justify-start gap-2" style={{ color: 'hsl(var(--highlight-label))' }}>
               <Sparkles size={12} /> what people say
             </p>
             <h2 className="text-2xl md:text-4xl font-headline font-bold uppercase leading-tight">Community Stories</h2>

@@ -36,6 +36,9 @@
     --nectar-cream: #FFFDD0;
     --nectar-glow: #FFB399;
 
+    /* Custom Color Request: #FFF1D3 -> HSL(41, 100%, 91%) */
+    --highlight-label: 41 100% 91%;
+
     /* Default interactive glow color */
     --hover-glow: #FFB399;
   }
@@ -59,7 +62,7 @@
     @apply text-foreground;
   }
 
-  /* Global Text Hover Glow - now uses context-aware variable */
+  /* Global Text Hover Glow - context-aware */
   h1:hover, h2:hover, h3:hover, h4:hover, p:hover, span:hover, a:hover, button:hover {
     text-shadow: 0 0 15px var(--hover-glow);
   }

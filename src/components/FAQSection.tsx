@@ -14,7 +14,7 @@ export function FAQSection() {
     <section id="faq" className="py-24 bg-background">
       <div className="container mx-auto px-6 md:px-12 max-w-2xl">
         <div className="mb-12 text-center md:text-left">
-          <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">questions</p>
+          <p className="text-[9px] lowercase tracking-[0.4em] mb-3 font-medium" style={{ color: 'hsl(var(--highlight-label))' }}>questions</p>
           <h2 className="text-2xl md:text-3xl font-headline font-bold uppercase">Frequently Asked</h2>
         </div>
         
