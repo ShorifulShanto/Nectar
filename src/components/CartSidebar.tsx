@@ -1,19 +1,20 @@
-
 "use client";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useUser, useFirestore, useCollection } from "@/firebase";
 import { collection, doc } from "firebase/firestore";
-import { Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Plus, Minus, ShoppingBag, ArrowLeft, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useMemoFirebase } from "@/firebase/provider";
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { user } = useUser();
   const db = useFirestore();
   const router = useRouter();
+  const { toast } = useToast();
 
   const cartQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -30,6 +31,13 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       return;
     }
     updateDocumentNonBlocking(itemRef, { quantity: newQty });
+  };
+
+  const removeItem = (productId: string) => {
+    if (!user || !db) return;
+    const itemRef = doc(db, "users", user.uid, "cart", productId);
+    deleteDocumentNonBlocking(itemRef);
+    toast({ title: "Item removed from selection" });
   };
 
   const handleOrderNow = () => {
@@ -73,7 +81,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               const quantity = Number(item.quantity) || 0;
 
               return (
-                <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500 will-change-transform">
+                <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500 will-change-transform group">
                   <div className="relative w-16 h-16 bg-neutral-900/40 rounded-lg overflow-hidden flex-shrink-0">
                     <Image src={image} alt={name} fill className="object-contain p-2" />
                   </div>
@@ -83,7 +91,15 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                         <h4 className="text-[11px] font-bold uppercase tracking-widest truncate">{name}</h4>
                         <p className="text-[9px] text-white/20 uppercase tracking-[0.3em] mt-1 font-bold">Pure Cold Pressed</p>
                       </div>
-                      <p className="text-[10px] font-mono text-primary mt-0.5">${price.toFixed(2)}</p>
+                      <div className="flex flex-col items-end gap-1">
+                        <p className="text-[10px] font-mono text-primary">${price.toFixed(2)}</p>
+                        <button 
+                          onClick={() => removeItem(item.id)}
+                          className="text-white/10 hover:text-red-500 transition-colors p-1"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
                     </div>
                     
                     <div className="flex items-center gap-3 mt-4">

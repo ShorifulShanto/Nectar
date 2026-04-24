@@ -10,13 +10,16 @@ import {
   ShoppingBag, 
   ArrowLeft, 
   MapPin, 
-  Loader2
+  Loader2,
+  Trash2,
+  Plus,
+  Minus
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { addDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { addDocumentNonBlocking, setDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 export default function CheckoutPage() {
   const { user, isUserLoading } = useUser();
@@ -37,6 +40,23 @@ export default function CheckoutPage() {
 
   const { data: items, isLoading: isCartLoading } = useCollection(cartQuery);
   const { data: profile } = useDoc(userRef);
+
+  const updateQty = (productId: string, newQty: number) => {
+    if (!user || !db) return;
+    const itemRef = doc(db, "users", user.uid, "cart", productId);
+    if (newQty < 1) {
+      deleteDocumentNonBlocking(itemRef);
+      return;
+    }
+    updateDocumentNonBlocking(itemRef, { quantity: newQty });
+  };
+
+  const removeItem = (productId: string) => {
+    if (!user || !db) return;
+    const itemRef = doc(db, "users", user.uid, "cart", productId);
+    deleteDocumentNonBlocking(itemRef);
+    toast({ title: "Flavor removed from selection" });
+  };
 
   const handlePlaceOrder = async () => {
     if (!user || !db || !items || items.length === 0) return;
@@ -152,7 +172,7 @@ export default function CheckoutPage() {
                     const imageSrc = (typeof item.image === 'string' && item.image) ? item.image : "https://picsum.photos/seed/juice/400/600";
                     
                     return (
-                      <div key={item.id} className="bg-white/5 border border-white/5 rounded-2xl p-6 flex items-center gap-6">
+                      <div key={item.id} className="bg-white/5 border border-white/5 rounded-2xl p-6 flex items-center gap-6 group">
                         <div className="relative w-20 h-20 bg-black/40 rounded-xl overflow-hidden flex-shrink-0">
                           <Image 
                             src={imageSrc} 
@@ -161,10 +181,33 @@ export default function CheckoutPage() {
                             className="object-contain p-2" 
                           />
                         </div>
-                        <div className="flex-1">
-                          <h4 className="text-sm font-bold uppercase tracking-widest">{item.name || "NECTAR Flavor"}</h4>
-                          <div className="flex justify-between items-end mt-4">
-                            <p className="text-[10px] font-mono text-white/40">Qty: {qty}</p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start">
+                            <h4 className="text-sm font-bold uppercase tracking-widest truncate">{item.name || "NECTAR Flavor"}</h4>
+                            <button 
+                              onClick={() => removeItem(item.id)}
+                              className="text-white/20 hover:text-red-500 transition-colors p-1"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                          
+                          <div className="flex justify-between items-center mt-6">
+                            <div className="flex items-center border border-white/10 rounded-full px-3 py-1 bg-black/40">
+                              <button 
+                                onClick={() => updateQty(item.id, qty - 1)}
+                                className="p-1 text-white/40 hover:text-white transition-colors"
+                              >
+                                <Minus size={14} />
+                              </button>
+                              <span className="w-10 text-center text-xs font-bold font-mono">{String(qty)}</span>
+                              <button 
+                                onClick={() => updateQty(item.id, qty + 1)}
+                                className="p-1 text-white/40 hover:text-white transition-colors"
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </div>
                             <p className="text-sm font-bold text-primary">${(price * qty).toFixed(2)}</p>
                           </div>
                         </div>
@@ -175,6 +218,9 @@ export default function CheckoutPage() {
                   <div className="bg-white/5 border border-white/5 rounded-2xl p-12 text-center">
                     <ShoppingBag className="mx-auto text-white/10 mb-4" size={32} />
                     <p className="text-[10px] uppercase tracking-widest text-white/20">Selection is empty</p>
+                    <Button asChild variant="ghost" className="mt-6 text-primary uppercase tracking-widest text-[9px] hover:bg-primary/5">
+                      <Link href="/">Back to Shop</Link>
+                    </Button>
                   </div>
                 )}
               </div>
