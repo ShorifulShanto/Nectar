@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
@@ -121,26 +120,30 @@ export default function OrdersPage() {
                     <div className="space-y-6">
                       <p className="text-[9px] text-white/20 uppercase tracking-[0.4em] font-bold">Included Items</p>
                       <div className="space-y-4">
-                        {order.items?.map((item: any, idx: number) => (
-                          <div key={idx} className="flex items-center gap-4 group/item">
-                            <div className="w-12 h-12 bg-black/40 border border-white/5 rounded-xl overflow-hidden relative">
-                              <Image src={item.image} alt={item.name} fill className="object-contain p-2" />
+                        {order.items?.map((item: any, idx: number) => {
+                          const imageSrc = (typeof item.image === 'string' && item.image) ? item.image : "https://picsum.photos/seed/juice/400/600";
+                          
+                          return (
+                            <div key={idx} className="flex items-center gap-4 group/item">
+                              <div className="w-12 h-12 bg-black/40 border border-white/5 rounded-xl overflow-hidden relative">
+                                <Image src={imageSrc} alt={item.name || "NECTAR Flavor"} fill className="object-contain p-2" />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-[11px] font-bold uppercase tracking-widest">{item.name || "NECTAR Flavor"}</p>
+                                <p className="text-[10px] text-white/30 font-mono">Qty: {item.quantity} • ${Number(item.price || 0).toFixed(2)}</p>
+                              </div>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => setSelectedProduct({ id: item.productId, name: item.name })}
+                                className="text-[9px] uppercase tracking-widest text-white/20 hover:text-primary hover:bg-primary/10 rounded-full h-8"
+                              >
+                                <MessageSquare size={12} className="mr-2" />
+                                Rate
+                              </Button>
                             </div>
-                            <div className="flex-1">
-                              <p className="text-[11px] font-bold uppercase tracking-widest">{item.name}</p>
-                              <p className="text-[10px] text-white/30 font-mono">Qty: {item.quantity} • ${item.price.toFixed(2)}</p>
-                            </div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => setSelectedProduct({ id: item.productId, name: item.name })}
-                              className="text-[9px] uppercase tracking-widest text-white/20 hover:text-primary hover:bg-primary/10 rounded-full h-8"
-                            >
-                              <MessageSquare size={12} className="mr-2" />
-                              Rate
-                            </Button>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
 

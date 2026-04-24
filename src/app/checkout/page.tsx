@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -64,7 +63,7 @@ export default function CheckoutPage() {
         name: item.name || "NECTAR Flavor",
         quantity: item.quantity,
         price: item.priceAtAddToCart || 12.00,
-        image: item.image || ""
+        image: item.image || "https://picsum.photos/seed/juice/400/600"
       }));
 
       const subtotal = orderItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -103,7 +102,7 @@ export default function CheckoutPage() {
       await batch.commit();
 
       toast({ title: "Order Confirmed", description: "Your harvest is being prepared." });
-      router.push("/orders");
+      router.push("/checkout/success");
     } catch (e: any) {
       toast({ variant: "destructive", title: "Order Failed", description: e.message });
     } finally {
@@ -121,7 +120,8 @@ export default function CheckoutPage() {
 
   const subtotal = items?.reduce((acc, item) => {
     const itemPrice = item.priceAtAddToCart || 12.00;
-    return acc + (itemPrice * item.quantity);
+    const qty = Number(item.quantity) || 0;
+    return acc + (itemPrice * qty);
   }, 0) || 0;
   const SHIPPING_FEE = subtotal > 0 ? 5.00 : 0;
   const total = subtotal + SHIPPING_FEE;
@@ -148,22 +148,24 @@ export default function CheckoutPage() {
                 {items && items.length > 0 ? (
                   items.map((item) => {
                     const price = item.priceAtAddToCart || 12.00;
+                    const qty = Number(item.quantity) || 0;
+                    const imageSrc = (typeof item.image === 'string' && item.image) ? item.image : "https://picsum.photos/seed/juice/400/600";
                     
                     return (
                       <div key={item.id} className="bg-white/5 border border-white/5 rounded-2xl p-6 flex items-center gap-6">
                         <div className="relative w-20 h-20 bg-black/40 rounded-xl overflow-hidden flex-shrink-0">
                           <Image 
-                            src={item.image || ""} 
-                            alt={item.name || ""} 
+                            src={imageSrc} 
+                            alt={item.name || "NECTAR Flavor"} 
                             fill 
                             className="object-contain p-2" 
                           />
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-sm font-bold uppercase tracking-widest">{item.name}</h4>
+                          <h4 className="text-sm font-bold uppercase tracking-widest">{item.name || "NECTAR Flavor"}</h4>
                           <div className="flex justify-between items-end mt-4">
-                            <p className="text-[10px] font-mono text-white/40">Qty: {item.quantity}</p>
-                            <p className="text-sm font-bold text-primary">${(price * item.quantity).toFixed(2)}</p>
+                            <p className="text-[10px] font-mono text-white/40">Qty: {qty}</p>
+                            <p className="text-sm font-bold text-primary">${(price * qty).toFixed(2)}</p>
                           </div>
                         </div>
                       </div>
