@@ -131,10 +131,10 @@ export function ProductCollection() {
                         )}
                      </Link>
                      <div className="text-center sm:text-left px-2">
-                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-all duration-300 ${isSoldOut ? 'opacity-20' : 'text-foreground hover:[text-shadow:none]'}`}>
+                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-all duration-300 ${isSoldOut ? 'opacity-20' : 'text-foreground group-hover:text-primary hover:[text-shadow:none]'}`}>
                          {product.name}
                        </h4>
-                       <p className="text-[9px] text-foreground/40 uppercase tracking-[0.4em] font-medium font-mono group-hover:text-foreground/60 transition-colors">
+                       <p className="text-[9px] text-foreground/40 uppercase tracking-[0.4em] font-medium font-mono group-hover:text-primary transition-colors">
                          ${price.toFixed(2)} — 350ml
                        </p>
                      </div>
