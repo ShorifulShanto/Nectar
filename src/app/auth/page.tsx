@@ -16,15 +16,12 @@ import {
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 // MODULAR IMPORTS
 import { AuthBackground } from "@/components/auth/AuthBackground";
-import { AuthFloatingLabels } from "@/components/auth/AuthFloatingLabels";
-import { AuthLogo } from "@/components/auth/AuthLogo";
 import { AuthSocial } from "@/components/auth/AuthSocial";
-import { AuthOverlayBoxes } from "@/components/auth/AuthOverlayBoxes";
 
 export default function NectarAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,7 +30,6 @@ export default function NectarAuthPage() {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const auth = useAuth();
   const db = useFirestore();
@@ -78,7 +74,7 @@ export default function NectarAuthPage() {
           await updateProfile(userCred.user, { displayName: name });
         }
         await syncUserToFirestore(userCred.user);
-        toast({ title: "Welcome to the NECTAR family" });
+        toast({ title: "Welcome to NECTAR" });
       }
       window.location.href = "/";
     } catch (error: any) {
@@ -111,129 +107,115 @@ export default function NectarAuthPage() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden flex flex-col items-center justify-center font-body selection:bg-orange-200 py-20">
-      <AuthBackground />
-      <AuthFloatingLabels />
-
-      {/* Main Orchestrator Container */}
-      <div className="relative z-20 w-full max-w-[420px] px-4 flex items-center justify-center min-h-[700px]">
+    <div className="min-h-screen w-full bg-[#121212] flex items-center justify-center p-4 sm:p-10 font-body">
+      {/* Main Outer Container with White Border */}
+      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-white border-[12px] border-white shadow-2xl rounded-[3rem] overflow-hidden flex">
         
-        {/* OUTER BOX FRAME: Boundary marker */}
-        <div className="absolute inset-0 border-2 border-white/5 rounded-[40px] pointer-events-none bg-white/5 backdrop-blur-[4px]" />
-
-        {/* FULL SCALE LOGIN CARD (Removed scale-[0.6]) */}
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative w-full max-w-[360px] shadow-2xl overflow-hidden">
-          
-          {/* REFERENCE IMAGE OVERLAYS */}
-          <AuthOverlayBoxes />
-
-          <AuthLogo />
-
-          <div className="text-center mb-4">
-            <h2 className="font-headline font-extrabold text-[20px] text-[#3d1a5e] mb-1">
-              {isLogin ? "Welcome Back!" : "Create Account"}
-            </h2>
-            <p className="text-[12px] text-[#5a2d6e]/55">
-              {isLogin ? "Login to enjoy the freshest experience." : "Sign up and start your healthy journey."}
-            </p>
+        {/* Left Panel: Brand Illustration / Dark Space */}
+        <div className="hidden lg:flex flex-1 bg-[#1a1a1a] relative overflow-hidden items-center justify-center rounded-[2.2rem]">
+          {/* Subtle Watermark Logo Placeholder */}
+          <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
+            <div className="w-[80%] aspect-square border-[40px] border-white/20 rounded-full flex items-center justify-center">
+              <div className="w-[60%] aspect-square border-[40px] border-white/20 rounded-full" />
+            </div>
           </div>
+          
+          <div className="relative z-10 text-center">
+            <h1 className="text-white font-headline font-black text-6xl tracking-[0.2em] opacity-20">NECTAR</h1>
+          </div>
+        </div>
 
-          <form onSubmit={handleAuth} className="space-y-3">
-            {!isLogin && (
-              <div className="space-y-1">
-                <label className="text-[12px] font-semibold text-[#3d1a5e] block">Full Name</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#7a5a9a]">👤</span>
+        {/* Right Panel: White Authentication Form */}
+        <div className="flex-1 bg-white flex flex-col items-center justify-center p-8 md:p-16 relative">
+          <div className="w-full max-w-[340px] space-y-8">
+            {/* Header */}
+            <div className="text-center">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400 font-bold mb-2">Welcome to Nectar</p>
+              <h2 className="text-4xl font-headline font-black text-black uppercase tracking-tight">
+                {isLogin ? "Login" : "Sign Up"}
+              </h2>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleAuth} className="space-y-4">
+              {!isLogin && (
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 ml-1">Full Name</label>
                   <Input 
                     type="text" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Your Name"
-                    className="bg-[#fff8ee]/48 border-[rgba(255,255,255,0.48)] rounded-[12px] h-[40px] pl-10 focus:ring-0 focus:border-[#8040c0] text-[#3d1a5e] text-[13px]"
+                    placeholder="Enter your name"
+                    className="h-12 bg-neutral-50 border-none rounded-xl text-black px-4 focus:ring-2 focus:ring-black/5"
                     required
                   />
                 </div>
-              </div>
-            )}
+              )}
 
-            <div className="space-y-1">
-              <label className="text-[12px] font-semibold text-[#3d1a5e] block">Email</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#7a5a9a]">✉️</span>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 ml-1">Email Address</label>
                 <Input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="youremail@example.com"
-                  className="bg-[#fff8ee]/48 border-[rgba(255,255,255,0.48)] rounded-[12px] h-[40px] pl-10 focus:ring-0 focus:border-[#8040c0] text-[#3d1a5e] text-[13px]"
+                  placeholder="name@email.com"
+                  className="h-12 bg-neutral-50 border-none rounded-xl text-black px-4 focus:ring-2 focus:ring-black/5"
                   required
                 />
               </div>
-            </div>
 
-            <div className="space-y-1">
-              <label className="text-[12px] font-semibold text-[#3d1a5e] block">Password</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#7a5a9a]">🔒</span>
-                <button 
-                  type="button" 
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] text-[#7a5a9a] cursor-pointer z-10"
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 ml-1">Password</label>
                 <Input 
-                  type={showPassword ? "text" : "password"} 
+                  type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={isLogin ? "••••••••" : "Create Password"}
-                  className="bg-[#fff8ee]/48 border-[rgba(255,255,255,0.48)] rounded-[12px] h-[40px] pl-10 pr-10 focus:ring-0 focus:border-[#8040c0] text-[#3d1a5e] text-[13px]"
+                  placeholder="••••••••"
+                  className="h-12 bg-neutral-50 border-none rounded-xl text-black px-4 focus:ring-2 focus:ring-black/5"
                   required
                 />
               </div>
+
+              <button 
+                type="submit" 
+                disabled={isLoading}
+                className="w-full h-12 bg-black text-white font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+              >
+                {isLoading ? <Loader2 className="animate-spin" size={18} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
+              </button>
+            </form>
+
+            {/* Social Divider */}
+            <div className="relative flex items-center gap-4">
+              <div className="flex-1 h-[1px] bg-neutral-100" />
+              <span className="text-[10px] text-neutral-300 font-bold uppercase tracking-widest">or continue</span>
+              <div className="flex-1 h-[1px] bg-neutral-100" />
             </div>
 
-            {isLogin && (
-              <div className="text-right -mt-2">
-                <a className="text-[12px] text-[#8040c0] font-semibold hover:underline cursor-pointer">Forgot Password?</a>
-              </div>
-            )}
+            {/* Social Icons */}
+            <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
 
-            <button 
-              type="submit" 
-              disabled={isLoading}
-              className="w-full h-[45px] btn-green-gradient text-white font-semibold rounded-[50px] text-[15px] mt-2 active:scale-95 flex items-center justify-center gap-2"
-            >
-              {isLoading ? <Loader2 className="animate-spin" size={18} /> : (
-                <span>{isLogin ? "Login" : "Sign Up"}</span>
-              )}
-            </button>
-          </form>
-
-          <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
-
-          <div className="text-center mt-4">
-            <button 
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-[12px] text-[#46236e]/58 font-medium hover:text-[#3d1a5e]"
-            >
-              {isLogin ? (
-                <>Don't have an account? <span className="text-[#8040c0] font-bold ml-1">Sign Up</span></>
-              ) : (
-                <>Already have an account? <span className="text-[#8040c0] font-bold ml-1">Login</span></>
-              )}
-            </button>
+            {/* Footer Toggle */}
+            <div className="text-center pt-4">
+              <button 
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-[11px] font-bold text-neutral-400 hover:text-black transition-colors uppercase tracking-widest"
+              >
+                {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+              </button>
+            </div>
+          </div>
+          
+          <div className="absolute bottom-8 left-0 w-full text-center">
+             <p className="text-[9px] text-neutral-300 font-bold uppercase tracking-[0.4em]">© 2025 Nectar Juice</p>
           </div>
         </div>
       </div>
 
-      {/* Back Navigation */}
-      <div className="relative z-20 mt-12 text-center pb-12">
-        <Link href="/" className="text-[10px] uppercase tracking-[0.5em] text-white/60 hover:text-white transition-all font-bold group inline-flex items-center gap-2">
-          <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-          Back to Site
-        </Link>
-      </div>
+      {/* Background Navigation Link */}
+      <Link href="/" className="fixed bottom-8 text-[10px] uppercase tracking-[0.5em] text-white/40 hover:text-white transition-all font-bold flex items-center gap-2 z-50">
+        <ArrowRight size={14} className="rotate-180" /> Back to Grove
+      </Link>
     </div>
   );
 }

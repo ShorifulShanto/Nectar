@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -8,36 +9,25 @@ interface AuthSocialProps {
 }
 
 export function AuthSocial({ onGoogle, isLoading }: AuthSocialProps) {
-  // CONFIG: SOCIAL BUTTON COLORS AND SHAPES
-  const buttonBg = "rgba(255, 255, 255, 0.48)";
-  const borderColor = "rgba(255, 255, 255, 0.55)";
-  const textColor = "#3d1a5e";
-
   return (
-    <div className="mt-4">
-      <div className="flex items-center gap-2 my-4 text-[#5a2d6e]/45">
-        <div className="flex-1 h-[1px] bg-[rgba(110,50,140,0.18)]" />
-        <span className="text-[11px] whitespace-nowrap">or continue with</span>
-        <div className="flex-1 h-[1px] bg-[rgba(110,50,140,0.18)]" />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <button 
-          onClick={onGoogle}
-          disabled={isLoading}
-          className="flex items-center justify-center gap-2 h-[40px] rounded-[12px] text-[13px] font-semibold hover:bg-white/60 transition-colors disabled:opacity-50"
-          style={{ backgroundColor: buttonBg, border: `1px solid ${borderColor}`, color: textColor }}
-        >
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" className="w-[18px] h-[18px]"/> Google
-        </button>
-        <button 
-          disabled={isLoading}
-          className="flex items-center justify-center gap-2 h-[40px] rounded-[12px] text-[13px] font-semibold hover:bg-white/60 transition-colors disabled:opacity-50"
-          style={{ backgroundColor: buttonBg, border: `1px solid ${borderColor}`, color: textColor }}
-        >
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="F" className="w-[18px] h-[18px]"/> Facebook
-        </button>
-      </div>
+    <div className="grid grid-cols-2 gap-3">
+      <button 
+        onClick={onGoogle}
+        disabled={isLoading}
+        className="flex items-center justify-center gap-3 h-12 rounded-xl border border-neutral-100 bg-white hover:bg-neutral-50 transition-all active:scale-95 disabled:opacity-50 group"
+      >
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" className="w-5 h-5"/>
+        <span className="text-[11px] font-bold text-black uppercase tracking-widest">Google</span>
+      </button>
+      <button 
+        disabled={isLoading}
+        className="flex items-center justify-center gap-3 h-12 rounded-xl border border-neutral-100 bg-white hover:bg-neutral-50 transition-all active:scale-95 disabled:opacity-50 group"
+      >
+        <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.05 20.28c-.96.95-2.06 1.18-3.12 1.18-1.12 0-2.07-.3-3.2-.3-1.15 0-2.22.33-3.23.33-1.04 0-2.2-.23-3.18-1.22C2.18 18.15 1.1 14.2 1.1 11.23c0-3.1 1.6-4.7 3.3-4.7.9 0 1.94.48 2.6.48 1.14 0 1.94-.48 2.94-.48 1.44 0 2.6.5 3.34 1.54-3.1.84-2.6 5.5.3 6.64-.6 1.4-1.4 2.8-2.53 4.07zM12.03 5.4c.1-.8 1-2.4 2.4-3.3.15 1.5-.9 3.1-2.4 3.6-.1-.1-.1-.2-.2-.3z"/>
+        </svg>
+        <span className="text-[11px] font-bold text-black uppercase tracking-widest">Apple</span>
+      </button>
     </div>
   );
 }
