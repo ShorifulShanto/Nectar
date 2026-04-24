@@ -4,27 +4,27 @@
 
 @layer base {
   :root {
-    /* Background: Dark Grayish Blue #44444E -> HSL(240, 7%, 29%) */
-    --background: 240 7% 29%;
+    /* Background: Charcoal Black #222222 -> HSL(0, 0%, 13%) */
+    --background: 0 0% 13%;
     /* Foreground: Cream #FFFDD0 -> HSL(59, 100%, 91%) */
     --foreground: 59 100% 91%;
-    --card: 240 7% 20%;
+    --card: 0 0% 10%;
     --card-foreground: 59 100% 91%;
-    --popover: 240 7% 20%;
+    --popover: 0 0% 10%;
     --popover-foreground: 59 100% 91%;
     /* Primary: Orange #FF7F11 -> HSL(28, 100%, 53%) */
     --primary: 28 100% 53%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 240 7% 35%;
+    --secondary: 0 0% 20%;
     --secondary-foreground: 59 100% 91%;
-    --muted: 240 7% 35%;
+    --muted: 0 0% 20%;
     --muted-foreground: 0 0% 60%;
     --accent: 28 100% 53%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 7% 40%;
-    --input: 240 7% 40%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
     --ring: 28 100% 53%;
     --radius: 1rem;
     
@@ -70,7 +70,7 @@
 
 /* Custom UI Effects */
 .glass-card-nectar {
-  background: rgba(68, 68, 78, 0.4);
+  background: rgba(34, 34, 34, 0.4);
   backdrop-filter: blur(24px) saturate(140%);
   border: 1px solid rgba(255, 127, 17, 0.2);
   box-shadow: 0 6px 32px rgba(0, 0, 0, 0.4);
