@@ -29,10 +29,10 @@ export function AuthOverlayBoxes() {
         2
       </div>
 
-      {/* BOX 3: Positioned between the Password input and the primary CTA button */}
+      {/* BOX 3: Positioned down near the primary CTA button */}
       <div 
         className={boxStyle} 
-        style={{ width: size, height: size, top: '235px', left: '8px' }}
+        style={{ width: size, height: size, top: '285px', left: '8px' }}
       >
         3
       </div>
