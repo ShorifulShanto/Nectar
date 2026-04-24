@@ -101,7 +101,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="p-0 border-[3px] border-primary bg-black max-w-[1000px] h-auto overflow-hidden rounded-[2.5rem] flex sm:min-h-[500px]">
+      <DialogContent className="p-0 border-[3px] border-primary bg-black max-w-[850px] h-auto overflow-hidden rounded-[2.5rem] flex sm:min-h-[500px]">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         
         {/* Left Side: 55% Image - Filling the section entirely */}

@@ -105,7 +105,7 @@ export default function NectarAuthPage() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
-      <div className="relative w-full max-w-[1100px] aspect-[16/9] bg-black border-[3px] border-primary shadow-[0_0_60px_rgba(29,205,159,0.15)] rounded-[3rem] overflow-hidden flex">
+      <div className="relative w-full max-w-[900px] aspect-[16/9] bg-black border-[3px] border-primary shadow-[0_0_60px_rgba(29,205,159,0.15)] rounded-[3rem] overflow-hidden flex">
         
         {/* Left Side: 55% Image - Filling the section entirely */}
         <div className="hidden lg:flex flex-[0.55] relative overflow-hidden bg-black border-r border-primary/30">
@@ -120,7 +120,7 @@ export default function NectarAuthPage() {
 
         {/* Right Side: 45% Form */}
         <div className="flex-1 lg:flex-[0.45] bg-black flex flex-col items-center justify-center p-12 relative">
-          <div className="w-full max-w-[320px] space-y-8">
+          <div className="w-full max-w-[300px] space-y-8">
             <div className="text-center">
               <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold mb-3">Welcome to Nectar</p>
               <h2 className="text-4xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_20px_#7AE2CF] transition-all">
