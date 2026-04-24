@@ -13,7 +13,7 @@ export function IngredientsSection() {
   ];
 
   return (
-    <section id="ingredients" className="py-24 bg-background">
+    <section id="ingredients" className="py-24 bg-black">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16 text-center md:text-left">
           <p className="text-primary text-[9px] lowercase tracking-[0.4em] mb-3 font-medium">what's inside</p>
@@ -26,7 +26,7 @@ export function IngredientsSection() {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ingredients.map((item) => (
-            <div key={item.name} className="p-8 bg-black/20 rounded-2xl transition-all duration-300 group primary-glow-border">
+            <div key={item.name} className="p-8 bg-white/5 rounded-2xl transition-all duration-300 group primary-glow-border border-white/5">
               <div className="mb-4 text-primary">
                 <item.icon size={22} strokeWidth={1.5} />
               </div>
