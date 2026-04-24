@@ -122,8 +122,8 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         {/* OUTER BOX FRAME: Mirrors the page design */}
         <div className="absolute inset-0 border-2 border-white/5 rounded-[40px] pointer-events-none bg-white/5 backdrop-blur-[4px]" />
 
-        {/* SCALED DOWN LOGIN CARD */}
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in w-full max-w-[360px] text-[#3d1a5e] font-body relative overflow-hidden scale-90 origin-center shadow-2xl">
+        {/* SCALED DOWN LOGIN CARD - scaled to 75% for consistent branding */}
+        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in w-full max-w-[360px] text-[#3d1a5e] font-body relative overflow-hidden scale-75 origin-center shadow-2xl">
           
           {/* WIREFRAME BOXES OVERLAY */}
           <AuthOverlayBoxes />

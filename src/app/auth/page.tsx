@@ -117,11 +117,11 @@ export default function NectarAuthPage() {
       {/* Main Orchestrator Container */}
       <div className="relative z-20 w-full max-w-[420px] px-4 flex items-center justify-center min-h-[600px]">
         
-        {/* OUTER BOX FRAME: Similar size to original page */}
+        {/* OUTER BOX FRAME: Boundary marker */}
         <div className="absolute inset-0 border-2 border-white/5 rounded-[40px] pointer-events-none bg-white/5 backdrop-blur-[4px]" />
 
-        {/* SCALED DOWN LOGIN PAGE CARD */}
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative w-full max-w-[360px] scale-90 origin-center shadow-2xl">
+        {/* SCALED DOWN LOGIN PAGE CARD - scaled to 75% for more bg space */}
+        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative w-full max-w-[360px] scale-75 origin-center shadow-2xl">
           
           {/* WIREFRAME BOXES OVERLAY (Stay relative to the scaled content) */}
           <AuthOverlayBoxes />
