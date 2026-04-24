@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -107,7 +108,7 @@ export default function NectarAuthPage() {
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
       <div className="relative w-full max-w-[900px] aspect-[16/9] bg-black border-[3px] border-primary shadow-[0_0_60px_rgba(29,205,159,0.15)] rounded-[3rem] overflow-hidden flex">
         
-        {/* Left Side: 55% Image - Filling the section entirely */}
+        {/* Left Side: 55% Image */}
         <div className="hidden lg:flex flex-[0.55] relative overflow-hidden bg-black border-r border-primary/30">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
@@ -119,16 +120,16 @@ export default function NectarAuthPage() {
         </div>
 
         {/* Right Side: 45% Form */}
-        <div className="flex-1 lg:flex-[0.45] bg-black flex flex-col items-center justify-center p-12 relative">
-          <div className="w-full max-w-[300px] space-y-8">
+        <div className="flex-1 lg:flex-[0.45] bg-black flex flex-col items-center justify-center p-8 relative">
+          <div className="w-full max-w-[300px] space-y-6">
             <div className="text-center">
-              <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold mb-3">Welcome to Nectar</p>
+              <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold mb-2">Welcome to Nectar</p>
               <h2 className="text-4xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_20px_#7AE2CF] transition-all">
                 {isLogin ? "Login" : "Sign Up"}
               </h2>
             </div>
 
-            <form onSubmit={handleAuth} className="space-y-5">
+            <form onSubmit={handleAuth} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Full Name</label>
@@ -137,7 +138,7 @@ export default function NectarAuthPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="h-12 bg-white/5 border-none rounded-xl text-white px-5 focus:ring-2 focus:ring-primary text-sm"
+                    className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
                     required
                   />
                 </div>
@@ -150,7 +151,7 @@ export default function NectarAuthPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@email.com"
-                  className="h-12 bg-white/5 border-none rounded-xl text-white px-5 focus:ring-2 focus:ring-primary text-sm"
+                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
                   required
                 />
               </div>
@@ -162,7 +163,7 @@ export default function NectarAuthPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-12 bg-white/5 border-none rounded-xl text-white px-5 focus:ring-2 focus:ring-primary text-sm"
+                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4 focus:ring-2 focus:ring-primary text-sm"
                   required
                 />
               </div>
@@ -184,7 +185,7 @@ export default function NectarAuthPage() {
 
             <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
 
-            <div className="text-center pt-2">
+            <div className="text-center">
               <button 
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-[11px] font-bold text-white/40 hover:text-primary transition-colors uppercase tracking-widest hover:[text-shadow:0_0_10px_#7AE2CF]"

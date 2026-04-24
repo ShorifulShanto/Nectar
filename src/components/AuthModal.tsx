@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -101,10 +102,10 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="p-0 border-[3px] border-primary bg-black max-w-[850px] h-auto overflow-hidden rounded-[2.5rem] flex sm:min-h-[500px]">
+      <DialogContent className="p-0 border-[3px] border-primary bg-black max-w-[900px] h-auto overflow-hidden rounded-[2.5rem] flex sm:min-h-[500px]">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         
-        {/* Left Side: 55% Image - Filling the section entirely */}
+        {/* Left Side: 55% Image */}
         <div className="hidden md:flex flex-[0.55] relative overflow-hidden bg-black border-r border-primary/20">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
@@ -117,7 +118,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
         {/* Right Side: 45% Form */}
         <div className="flex-1 md:flex-[0.45] p-10 md:p-12 relative flex flex-col justify-center bg-black">
-          <div className="max-w-[280px] mx-auto w-full space-y-6">
+          <div className="max-w-[300px] mx-auto w-full space-y-6">
             <div className="text-center">
               <h2 className="text-3xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
                 {view === "login" ? "Login" : "Sign Up"}
@@ -126,30 +127,36 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
             <form onSubmit={handleAuth} className="space-y-4">
               {view === "signup" && (
+                <div className="space-y-1.5">
+                  <Input 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Full Name"
+                    className="h-11 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
+                    required
+                  />
+                </div>
+              )}
+              <div className="space-y-1.5">
                 <Input 
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Full Name"
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email Address"
                   className="h-11 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
                   required
                 />
-              )}
-              <Input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email Address"
-                className="h-11 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
-                required
-              />
-              <Input 
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                className="h-11 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
-                required
-              />
+              </div>
+              <div className="space-y-1.5">
+                <Input 
+                  type="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="h-11 bg-white/5 border-none rounded-xl text-white px-4 text-sm"
+                  required
+                />
+              </div>
               <button 
                 type="submit" 
                 disabled={isLoading}
