@@ -80,20 +80,20 @@ export function ProductCollection() {
                 const isSoldOut = product.amount <= 0;
                 const price = product.price || 12.00;
                 const flavorConfig = flavors.find(f => f.id === product.id);
-                const accentColor = flavorConfig?.accentHex || '#ffffff';
+                const accentColor = flavorConfig?.accentHex || '#FFB399';
                 const productImage = product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600';
 
                 return (
                   <div 
                     key={product.id} 
-                    className="group relative flex flex-col items-center sm:items-start will-change-transform product-card-glow"
-                    style={{ '--hover-glow': accentColor } as React.CSSProperties}
+                    className="group relative flex flex-col items-center sm:items-start product-card-glow will-change-transform"
+                    style={{ '--hover-glow': '#FFB399' } as React.CSSProperties}
                   >
                      <Link 
                        href={`/product/${product.id}`}
                        className="aspect-square w-full rounded-[2.5rem] bg-[#1a1a1a] border border-white/5 overflow-hidden p-4 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative cursor-pointer"
                      >
-                        {/* Dynamic Flavor Glow */}
+                        {/* Dynamic Flavor Glow (Internal Branding) */}
                         <div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-[80px] pointer-events-none"
                           style={{ background: `radial-gradient(circle at center, ${accentColor} 0%, transparent 70%)` }}
@@ -128,7 +128,7 @@ export function ProductCollection() {
                         )}
                      </Link>
                      <div className="text-center sm:text-left px-2">
-                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-all duration-300 ${isSoldOut ? 'opacity-20' : 'text-foreground group-hover:text-primary group-hover:[text-shadow:0_0_12px_var(--hover-glow)]'}`}>
+                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-all duration-300 ${isSoldOut ? 'opacity-20' : 'text-foreground group-hover:text-primary group-hover:[text-shadow:0_0_12px_#FFB399]'}`}>
                          {product.name}
                        </h4>
                        <p className="text-[9px] text-foreground/40 uppercase tracking-[0.4em] font-medium font-mono group-hover:text-foreground/60 transition-colors">
