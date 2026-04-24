@@ -114,11 +114,16 @@ export default function NectarAuthPage() {
       <AuthBackground />
       <AuthFloatingLabels />
 
-      {/* Main Container */}
-      <div className="relative z-20 w-full max-w-[360px] px-6">
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative">
+      {/* Main Orchestrator Container */}
+      <div className="relative z-20 w-full max-w-[420px] px-4 flex items-center justify-center min-h-[600px]">
+        
+        {/* OUTER BOX FRAME: Similar size to original page */}
+        <div className="absolute inset-0 border-2 border-white/5 rounded-[40px] pointer-events-none bg-white/5 backdrop-blur-[4px]" />
+
+        {/* SCALED DOWN LOGIN PAGE CARD */}
+        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative w-full max-w-[360px] scale-90 origin-center shadow-2xl">
           
-          {/* WIREFRAME BOXES OVERLAY */}
+          {/* WIREFRAME BOXES OVERLAY (Stay relative to the scaled content) */}
           <AuthOverlayBoxes />
 
           <AuthLogo />
@@ -219,14 +224,14 @@ export default function NectarAuthPage() {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Back Navigation */}
-        <div className="mt-12 text-center">
-          <Link href="/" className="text-[10px] uppercase tracking-[0.5em] text-white/60 hover:text-white transition-all font-bold group inline-flex items-center gap-2">
-            <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-            Back to Site
-          </Link>
-        </div>
+      {/* Back Navigation */}
+      <div className="relative z-20 mt-12 text-center">
+        <Link href="/" className="text-[10px] uppercase tracking-[0.5em] text-white/60 hover:text-white transition-all font-bold group inline-flex items-center gap-2">
+          <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+          Back to Site
+        </Link>
       </div>
     </div>
   );

@@ -118,8 +118,12 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         setTimeout(resetState, 300);
       }
     }}>
-      <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-[360px] z-[500]">
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in w-full text-[#3d1a5e] font-body relative overflow-hidden">
+      <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-[420px] z-[500] flex items-center justify-center">
+        {/* OUTER BOX FRAME: Mirrors the page design */}
+        <div className="absolute inset-0 border-2 border-white/5 rounded-[40px] pointer-events-none bg-white/5 backdrop-blur-[4px]" />
+
+        {/* SCALED DOWN LOGIN CARD */}
+        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in w-full max-w-[360px] text-[#3d1a5e] font-body relative overflow-hidden scale-90 origin-center shadow-2xl">
           
           {/* WIREFRAME BOXES OVERLAY */}
           <AuthOverlayBoxes />
@@ -144,7 +148,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your Name"
-                    className="bg-[#fff8ee]/48 border-[rgba(255,255,255,0.48)] rounded-[12px] h-[40px] pl-10 focus:ring-0 focus:border-[#8040c0] text-[#3d1a5e] text-[13px]"
+                    className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px]"
                     required
                   />
                 </div>
@@ -159,7 +163,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   type="email" 
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-[#fff8ee]/48 border-[rgba(255,255,255,0.48)] rounded-[12px] h-[40px] pl-10 focus:ring-0 focus:border-[#8040c0] text-[#3d1a5e] text-[13px]"
+                  className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px]"
                   required
                   placeholder="youremail@example.com"
                 />
@@ -174,7 +178,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   type={showPassword ? "text" : "password"} 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-[#fff8ee]/48 border-[rgba(255,255,255,0.48)] rounded-[12px] h-[40px] pl-10 pr-10 focus:ring-0 focus:border-[#8040c0] text-[#3d1a5e] text-[13px]"
+                  className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px] pr-10"
                   required
                   placeholder={view === "login" ? "••••••••" : "Create Password"}
                 />
