@@ -63,7 +63,7 @@ export function Navbar() {
   }, [db, user]);
 
   const { data: cartItems } = useCollection(cartQuery);
-  const cartCount = cartItems?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
+  const cartCount = cartItems?.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0) || 0;
 
   const navLinks = [
     { name: "Product", href: "/#product" },
@@ -94,7 +94,7 @@ export function Navbar() {
               <ShoppingCart size={20} strokeWidth={1.5} />
               {cartCount > 0 && (
                 <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {cartCount}
+                  {String(cartCount)}
                 </span>
               )}
             </button>

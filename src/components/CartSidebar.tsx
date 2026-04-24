@@ -38,6 +38,8 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     router.push("/checkout");
   };
 
+  const totalQuantity = items?.reduce((acc, i) => acc + (Number(i.quantity) || 0), 0) || 0;
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="bg-black/60 backdrop-blur-2xl border-white/10 text-white w-full sm:max-w-md flex flex-col p-0 transition-all duration-500 ease-in-out z-[1000]">
@@ -52,7 +54,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             </span>
             {items && items.length > 0 && (
               <span className="text-[10px] bg-primary text-black px-2 py-0.5 rounded-full font-mono font-bold">
-                {items.reduce((acc, i) => acc + i.quantity, 0)}
+                {String(totalQuantity)}
               </span>
             )}
           </SheetTitle>
@@ -68,6 +70,7 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               const name = item.name || "NECTAR Flavor";
               const image = item.image || "https://picsum.photos/seed/juice/400/600";
               const price = item.priceAtAddToCart || 12.00;
+              const quantity = Number(item.quantity) || 0;
 
               return (
                 <div key={item.id} className="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/5 animate-in fade-in slide-in-from-right-4 duration-500 will-change-transform">
@@ -85,11 +88,11 @@ export function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                     
                     <div className="flex items-center gap-3 mt-4">
                       <div className="flex items-center border border-white/10 rounded-full px-2 py-0.5 bg-black/40">
-                        <button onClick={() => updateQty(item.id, item.quantity - 1)} className="p-1 text-white/40 hover:text-white transition-colors">
+                        <button onClick={() => updateQty(item.id, quantity - 1)} className="p-1 text-white/40 hover:text-white transition-colors">
                           <Minus size={10} />
                         </button>
-                        <span className="w-6 text-center text-[9px] font-bold font-mono">{item.quantity}</span>
-                        <button onClick={() => updateQty(item.id, item.quantity + 1)} className="p-1 text-white/40 hover:text-white transition-colors">
+                        <span className="w-6 text-center text-[9px] font-bold font-mono">{String(quantity)}</span>
+                        <button onClick={() => updateQty(item.id, quantity + 1)} className="p-1 text-white/40 hover:text-white transition-colors">
                           <Plus size={10} />
                         </button>
                       </div>
