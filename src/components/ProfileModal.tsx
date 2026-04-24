@@ -117,6 +117,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-[400px] z-[500]">
+        <DialogTitle className="sr-only">User Profile Dashboard</DialogTitle>
         <div className="dash-main w-full">
           {/* Dashboard-style Profile Tab */}
           <div className="flex flex-col gap-[12px] animate-card-in">
@@ -174,31 +175,31 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     placeholder="First Name"
-                    className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px]"
+                    className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px] text-[#3d1a5e]"
                   />
                   <Input 
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     placeholder="Last Name"
-                    className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px]"
+                    className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px] text-[#3d1a5e]"
                   />
                 </div>
                 <Input 
                   value={formData.phoneNumber}
                   onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                   placeholder="Phone"
-                  className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px]"
+                  className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px] text-[#3d1a5e]"
                 />
                 <Input 
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   placeholder="Location"
-                  className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px]"
+                  className="bg-[#fff8ee]/48 border-white/40 h-[40px] text-[13px] rounded-[10px] text-[#3d1a5e]"
                 />
                 <button 
                   type="submit" 
                   disabled={isLoading}
-                  className="w-full h-[40px] btn-nectar-grad text-white font-semibold rounded-[50px] text-[14px] flex items-center justify-center gap-2"
+                  className="w-full h-[40px] bg-[#740A03] text-[#FFC193] font-semibold rounded-[50px] text-[14px] flex items-center justify-center gap-2"
                 >
                   {isLoading ? <Loader2 className="animate-spin" size={16} /> : "Save Profile"}
                 </button>
@@ -241,15 +242,15 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                         Delete Account
                       </button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent className="bg-black/90 border-white/10 text-white rounded-[2rem]">
+                    <AlertDialogContent className="bg-black/90 border-white/10 text-[#FFC193] rounded-[2rem]">
                       <AlertDialogHeader>
                         <AlertDialogTitle className="uppercase tracking-widest font-headline">End the Harvest?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-white/40 text-sm">
+                        <AlertDialogDescription className="text-[#FFC193]/40 text-sm">
                           This will permanently delete your selection, order history, and profile.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-full">Cancel</AlertDialogCancel>
+                        <AlertDialogCancel className="bg-white/5 border-white/10 text-[#FFC193] hover:bg-white/10 rounded-full">Cancel</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDeleteAccount} className="bg-red-500 text-white hover:bg-red-600 rounded-full">Delete Forever</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

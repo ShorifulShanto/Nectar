@@ -104,7 +104,7 @@ export default function NectarAuthPage() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
-      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-[#FEFFD3] border-[12px] border-[#FEFFD3] shadow-2xl rounded-[3rem] overflow-hidden flex">
+      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-[#FFC193] border-[12px] border-[#FFC193] shadow-2xl rounded-[3rem] overflow-hidden flex">
         
         <div className="hidden lg:flex flex-1 bg-black relative overflow-hidden items-center justify-center rounded-[2.2rem]">
           <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
@@ -120,7 +120,7 @@ export default function NectarAuthPage() {
         <div className="flex-1 bg-[#280905] flex flex-col items-center justify-center p-8 md:p-16 relative">
           <div className="w-full max-w-[340px] space-y-8">
             <div className="text-center">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-[#FEFFD3]/40 font-bold mb-2">Welcome to Nectar</p>
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[#FFC193]/40 font-bold mb-2">Welcome to Nectar</p>
               <h2 className="text-4xl font-headline font-black text-[#740A03] uppercase tracking-tight">
                 {isLogin ? "Login" : "Sign Up"}
               </h2>
@@ -129,38 +129,38 @@ export default function NectarAuthPage() {
             <form onSubmit={handleAuth} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#FEFFD3]/60 ml-1">Full Name</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#FFC193]/60 ml-1">Full Name</label>
                   <Input 
                     type="text" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="h-12 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4 focus:ring-2 focus:ring-[#740A03]"
+                    className="h-12 bg-black/40 border-none rounded-xl text-[#FFC193] px-4 focus:ring-2 focus:ring-[#740A03]"
                     required
                   />
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-[#FEFFD3]/60 ml-1">Email Address</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#FFC193]/60 ml-1">Email Address</label>
                 <Input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@email.com"
-                  className="h-12 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4 focus:ring-2 focus:ring-[#740A03]"
+                  className="h-12 bg-black/40 border-none rounded-xl text-[#FFC193] px-4 focus:ring-2 focus:ring-[#740A03]"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-[#FEFFD3]/60 ml-1">Password</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#FFC193]/60 ml-1">Password</label>
                 <Input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-12 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4 focus:ring-2 focus:ring-[#740A03]"
+                  className="h-12 bg-black/40 border-none rounded-xl text-[#FFC193] px-4 focus:ring-2 focus:ring-[#740A03]"
                   required
                 />
               </div>
@@ -168,16 +168,16 @@ export default function NectarAuthPage() {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-12 bg-[#740A03] text-[#FEFFD3] font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-[#C3110C] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+                className="w-full h-12 bg-[#740A03] text-[#FFC193] font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-[#C3110C] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
               >
                 {isLoading ? <Loader2 className="animate-spin" size={18} /> : <span>{isLogin ? "Sign In" : "Create Account"}</span>}
               </button>
             </form>
 
             <div className="relative flex items-center gap-4">
-              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
-              <span className="text-[10px] text-[#FEFFD3]/20 font-bold uppercase tracking-widest">or</span>
-              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
+              <div className="flex-1 h-[1px] bg-[#FFC193]/10" />
+              <span className="text-[10px] text-[#FFC193]/20 font-bold uppercase tracking-widest">or</span>
+              <div className="flex-1 h-[1px] bg-[#FFC193]/10" />
             </div>
 
             <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
@@ -185,7 +185,7 @@ export default function NectarAuthPage() {
             <div className="text-center pt-4">
               <button 
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-[11px] font-bold text-[#FEFFD3]/40 hover:text-[#FEFFD3] transition-colors uppercase tracking-widest"
+                className="text-[11px] font-bold text-[#FFC193]/40 hover:text-[#FFC193] transition-colors uppercase tracking-widest"
               >
                 {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
               </button>
@@ -194,7 +194,7 @@ export default function NectarAuthPage() {
         </div>
       </div>
 
-      <Link href="/" className="fixed bottom-8 text-[10px] uppercase tracking-[0.5em] text-[#FEFFD3]/40 hover:text-[#FEFFD3] transition-all font-bold flex items-center gap-2 z-50">
+      <Link href="/" className="fixed bottom-8 text-[10px] uppercase tracking-[0.5em] text-[#FFC193]/40 hover:text-[#FFC193] transition-all font-bold flex items-center gap-2 z-50">
         <ArrowRight size={14} className="rotate-180" /> Back to Selection
       </Link>
     </div>

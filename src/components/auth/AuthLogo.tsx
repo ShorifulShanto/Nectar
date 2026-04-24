@@ -5,7 +5,7 @@ import React from "react";
 export function AuthLogo() {
   const primaryColor = "#740A03";
   const secondaryColor = "#C3110C";
-  const taglineColor = "#FEFFD3";
+  const taglineColor = "#FFC193";
 
   return (
     <div className="text-center mb-4 relative">

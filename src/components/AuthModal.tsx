@@ -111,7 +111,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         </div>
 
         <div className="flex-1 p-10 md:p-14 relative flex flex-col justify-center">
-          <button onClick={onClose} className="absolute top-6 right-6 text-[#FEFFD3]/20 hover:text-[#FEFFD3] transition-colors">
+          <button onClick={onClose} className="absolute top-6 right-6 text-[#FFC193]/20 hover:text-[#FFC193] transition-colors">
             <X size={20} />
           </button>
           
@@ -128,7 +128,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
-                  className="h-11 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4"
+                  className="h-11 bg-black/40 border-none rounded-xl text-[#FFC193] px-4"
                   required
                 />
               )}
@@ -137,7 +137,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
-                className="h-11 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4"
+                className="h-11 bg-black/40 border-none rounded-xl text-[#FFC193] px-4"
                 required
               />
               <Input 
@@ -145,22 +145,22 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                className="h-11 bg-black/40 border-none rounded-xl text-[#FEFFD3] px-4"
+                className="h-11 bg-black/40 border-none rounded-xl text-[#FFC193] px-4"
                 required
               />
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full h-11 bg-[#740A03] text-[#FEFFD3] font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#C3110C] transition-all"
+                className="w-full h-11 bg-[#740A03] text-[#FFC193] font-bold rounded-xl text-[11px] uppercase tracking-widest hover:bg-[#C3110C] transition-all"
               >
                 {isLoading ? <Loader2 className="animate-spin mx-auto" size={18} /> : <span>{view === "login" ? "Sign In" : "Create Account"}</span>}
               </button>
             </form>
 
             <div className="relative flex items-center gap-4">
-              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
-              <span className="text-[9px] text-[#FEFFD3]/20 font-bold uppercase tracking-widest">or</span>
-              <div className="flex-1 h-[1px] bg-[#FEFFD3]/10" />
+              <div className="flex-1 h-[1px] bg-[#FFC193]/10" />
+              <span className="text-[9px] text-[#FFC193]/20 font-bold uppercase tracking-widest">or</span>
+              <div className="flex-1 h-[1px] bg-[#FFC193]/10" />
             </div>
 
             <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
@@ -168,7 +168,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             <div className="text-center pt-2">
               <button 
                 onClick={() => setView(view === "login" ? "signup" : "login")}
-                className="text-[10px] font-bold text-[#FEFFD3]/40 hover:text-[#FEFFD3] transition-colors uppercase tracking-widest"
+                className="text-[10px] font-bold text-[#FFC193]/40 hover:text-[#FFC193] transition-colors uppercase tracking-widest"
               >
                 {view === "login" ? "Need an account? Sign Up" : "Already a member? Sign In"}
               </button>

@@ -5,21 +5,21 @@
 @layer base {
   :root {
     --background: 0 0% 0%;
-    /* Creamy Off-White #FEFFD3 -> HSL(61, 100%, 91%) */
-    --foreground: 61 100% 91%;
+    /* Peach-Tan #FFC193 -> HSL(26, 100%, 79%) */
+    --foreground: 26 100% 79%;
     --card: 0 0% 4%;
-    --card-foreground: 61 100% 91%;
+    --card-foreground: 26 100% 79%;
     --popover: 0 0% 4%;
-    --popover-foreground: 61 100% 91%;
+    --popover-foreground: 26 100% 79%;
     /* Deep Red #740A03 -> HSL(4, 95%, 23%) */
     --primary: 4 95% 23%;
-    --primary-foreground: 61 100% 91%;
+    --primary-foreground: 26 100% 79%;
     --secondary: 0 0% 12%;
-    --secondary-foreground: 61 100% 91%;
+    --secondary-foreground: 26 100% 79%;
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 60%;
     --accent: 4 95% 23%;
-    --accent-foreground: 61 100% 91%;
+    --accent-foreground: 26 100% 79%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 15%;
@@ -30,7 +30,7 @@
     --nectar-burgundy: #280905;
     --nectar-red: #740A03;
     --nectar-red-hover: #C3110C;
-    --nectar-cream: #FEFFD3;
+    --nectar-peach: #FFC193;
   }
 }
 
