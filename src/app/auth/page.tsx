@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -15,10 +14,16 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ArrowRight } from "lucide-react";
+import { Loader2, ArrowRight, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+
+// MODULAR IMPORTS
+import { AuthBackground } from "@/components/auth/AuthBackground";
+import { AuthFloatingLabels } from "@/components/auth/AuthFloatingLabels";
+import { AuthLogo } from "@/components/auth/AuthLogo";
+import { AuthSocial } from "@/components/auth/AuthSocial";
+import { AuthOverlayBoxes } from "@/components/auth/AuthOverlayBoxes";
 
 export default function NectarAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -105,49 +110,18 @@ export default function NectarAuthPage() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden flex flex-col items-center justify-center font-body bg-[linear-gradient(145deg,#a04838_0%,#ba4f72_45%,#c87040_100%)] selection:bg-orange-200">
-      
-      {/* BG FRUITS */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-70">
-        <div className="absolute top-[5%] left-[2%] text-[62px] fruit-emoji animate-float" style={{ animationDelay: '0s' }}>🍍</div>
-        <div className="absolute top-[55%] left-[1%] text-[70px] fruit-emoji animate-float" style={{ animationDelay: '1s' }}>🍉</div>
-        <div className="absolute top-[78%] left-[5%] text-[58px] fruit-emoji animate-float" style={{ animationDelay: '2s' }}>🍌</div>
-        <div className="absolute top-[28%] left-[1%] text-[46px] fruit-emoji animate-float" style={{ animationDelay: '0.5s' }}>🍓</div>
-        <div className="absolute top-[2%] right-[4%] text-[65px] fruit-emoji animate-float" style={{ animationDelay: '1.5s' }}>🍒</div>
-        <div className="absolute top-[38%] right-[1%] text-[68px] fruit-emoji animate-float" style={{ animationDelay: '2.5s' }}>🍊</div>
-        <div className="absolute top-[72%] right-[2%] text-[58px] fruit-emoji animate-float" style={{ animationDelay: '0.8s' }}>🍇</div>
-        <div className="absolute top-[15%] right-[7%] text-[48px] fruit-emoji animate-float" style={{ animationDelay: '3s' }}>🍋</div>
-      </div>
-
-      {/* FLOAT LABELS */}
-      <div className="fixed top-[9%] left-[2%] z-10 hidden lg:block font-bold text-[13px] text-white/75 drop-shadow-lg animate-float" style={{ animationDelay: '0.3s' }}>
-        Fresh Login<span className="block text-[16px]">↙</span>
-      </div>
-      <div className="fixed top-[52%] left-[0%] z-10 hidden lg:block font-bold text-[13px] text-white/75 drop-shadow-lg animate-float" style={{ animationDelay: '1.2s' }}>
-        Juicy Deals<span className="block text-[16px]">↓</span>
-      </div>
-      <div className="fixed top-[85%] left-[2%] z-10 hidden lg:block font-bold text-[13px] text-white/75 drop-shadow-lg animate-float" style={{ animationDelay: '2.1s' }}>
-        Smooth Experience<span className="block text-[16px]">↗</span>
-      </div>
-      <div className="fixed top-[3%] right-[12%] z-10 hidden lg:block font-bold text-[13px] text-white/75 drop-shadow-lg animate-float" style={{ animationDelay: '0.7s' }}>
-        Quick Access<span className="block text-[16px]">↙</span>
-      </div>
-      <div className="fixed top-[40%] right-[0%] z-10 hidden lg:block font-bold text-[13px] text-white/75 drop-shadow-lg animate-float" style={{ animationDelay: '1.8s' }}>
-        Healthy Choice<span className="block text-[16px]">↙</span>
-      </div>
+    <div className="min-h-screen w-full relative overflow-hidden flex flex-col items-center justify-center font-body selection:bg-orange-200">
+      <AuthBackground />
+      <AuthFloatingLabels />
 
       {/* Main Container */}
       <div className="relative z-20 w-full max-w-[360px] px-6">
-        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in">
+        <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in relative">
           
-          <div className="text-center mb-4">
-            <div className="font-headline font-black text-[30px] leading-none tracking-[3px] bg-gradient-to-br from-[#7030b0] to-[#a03070] bg-clip-text text-transparent">
-              NECTAR
-            </div>
-            <p className="text-[11px] tracking-[1.8px] text-[#7a5a9a] mt-1 font-medium">
-              Fresh Fruit Juice
-            </p>
-          </div>
+          {/* WIREFRAME BOXES OVERLAY */}
+          <AuthOverlayBoxes />
+
+          <AuthLogo />
 
           <div className="text-center mb-4">
             <h2 className="font-headline font-extrabold text-[20px] text-[#3d1a5e] mb-1">
@@ -200,7 +174,7 @@ export default function NectarAuthPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] text-[#7a5a9a] cursor-pointer z-10"
                 >
-                  {showPassword ? "🙈" : "👁️"}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
                 <Input 
                   type={showPassword ? "text" : "password"} 
@@ -222,7 +196,7 @@ export default function NectarAuthPage() {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full h-[45px] btn-nectar-grad text-white font-semibold rounded-[50px] text-[15px] mt-2 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full h-[45px] btn-green-gradient text-white font-semibold rounded-[50px] text-[15px] mt-2 active:scale-95 flex items-center justify-center gap-2"
             >
               {isLoading ? <Loader2 className="animate-spin" size={18} /> : (
                 <span>{isLogin ? "Login" : "Sign Up"}</span>
@@ -230,29 +204,7 @@ export default function NectarAuthPage() {
             </button>
           </form>
 
-          {isLogin && (
-            <>
-              <div className="flex items-center gap-2 my-4 text-[#5a2d6e]/45">
-                <div className="flex-1 h-[1px] bg-[rgba(110,50,140,0.18)]" />
-                <span className="text-[11px] whitespace-nowrap">or continue with</span>
-                <div className="flex-1 h-[1px] bg-[rgba(110,50,140,0.18)]" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                <button 
-                  onClick={handleGoogleSignIn}
-                  className="flex items-center justify-center gap-2 h-[40px] bg-[#ffffff]/48 border border-[rgba(255,255,255,0.55)] rounded-[12px] text-[#3d1a5e] text-[13px] font-semibold hover:bg-white/60 transition-colors"
-                >
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" className="w-[18px] h-[18px]"/> Google
-                </button>
-                <button 
-                  className="flex items-center justify-center gap-2 h-[40px] bg-[#ffffff]/48 border border-[rgba(255,255,255,0.55)] rounded-[12px] text-[#3d1a5e] text-[13px] font-semibold hover:bg-white/60 transition-colors"
-                >
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="F" className="w-[18px] h-[18px]"/> Facebook
-                </button>
-              </div>
-            </>
-          )}
+          <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
 
           <div className="text-center mt-4">
             <button 

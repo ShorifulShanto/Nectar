@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -7,8 +6,6 @@ import { useAuth, useFirestore } from "@/firebase";
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  sendEmailVerification, 
-  signOut,
   GoogleAuthProvider,
   signInWithPopup,
   setPersistence,
@@ -18,11 +15,15 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 
-type AuthView = "login" | "signup" | "verify";
+// MODULAR IMPORTS
+import { AuthLogo } from "@/components/auth/AuthLogo";
+import { AuthSocial } from "@/components/auth/AuthSocial";
+import { AuthOverlayBoxes } from "@/components/auth/AuthOverlayBoxes";
+
+type AuthView = "login" | "signup";
 
 export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [view, setView] = useState<AuthView>("login");
@@ -31,6 +32,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
   const auth = useAuth();
   const db = useFirestore();
   const { toast } = useToast();
@@ -65,7 +67,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         await syncUserToFirestore(userCred.user);
         onClose();
         toast({ title: "Welcome back to NECTAR" });
-      } else if (view === "signup") {
+      } else {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         if (name) {
           await updateProfile(userCred.user, { displayName: name });
@@ -119,23 +121,18 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-[360px] z-[500]">
         <div className="glass-card-nectar rounded-[24px] p-[32px_30px] animate-card-in w-full text-[#3d1a5e] font-body relative overflow-hidden">
           
-          <div className="text-center mb-4">
-            <DialogTitle className="font-headline font-black text-[30px] leading-none tracking-[3px] bg-gradient-to-br from-[#7030b0] to-[#a03070] bg-clip-text text-transparent">
-              NECTAR
-            </DialogTitle>
-            <DialogDescription className="text-[11px] tracking-[1.8px] text-[#7a5a9a] mt-1 font-medium">
-              Fresh Fruit Juice
-            </DialogDescription>
-          </div>
+          {/* WIREFRAME BOXES OVERLAY */}
+          <AuthOverlayBoxes />
 
-          <div className="text-center mb-4">
-            <h2 className="font-headline font-extrabold text-[20px] text-[#3d1a5e] mb-1">
+          <DialogHeader className="text-center mb-4">
+            <AuthLogo />
+            <DialogTitle className="font-headline font-extrabold text-[20px] text-[#3d1a5e] mb-1 text-center">
               {view === "login" ? "Welcome Back!" : "Create Account"}
-            </h2>
-            <p className="text-[12px] text-[#5a2d6e]/55">
+            </DialogTitle>
+            <DialogDescription className="text-[12px] text-[#5a2d6e]/55 text-center">
               {view === "login" ? "Login to enjoy the freshest experience." : "Sign up and start your healthy journey."}
-            </p>
-          </div>
+            </DialogDescription>
+          </DialogHeader>
 
           <form onSubmit={handleAuth} className="space-y-3">
             {view === "signup" && (
@@ -186,7 +183,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] text-[#7a5a9a] hover:text-[#3d1a5e]"
                 >
-                  {showPassword ? "🙈" : "👁️"}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -200,35 +197,13 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full h-[45px] btn-nectar-grad text-white font-semibold rounded-[50px] text-[15px] mt-2 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full h-[45px] btn-green-gradient text-white font-semibold rounded-[50px] text-[15px] mt-2 active:scale-95 flex items-center justify-center gap-2"
             >
               {isLoading ? <Loader2 className="animate-spin" size={18} /> : <span>{view === "login" ? "Login" : "Sign Up"}</span>}
             </button>
           </form>
 
-          {view === "login" && (
-            <>
-              <div className="flex items-center gap-2 my-4 text-[#5a2d6e]/45">
-                <div className="flex-1 h-[1px] bg-[rgba(110,50,140,0.18)]" />
-                <span className="text-[11px] whitespace-nowrap">or continue with</span>
-                <div className="flex-1 h-[1px] bg-[rgba(110,50,140,0.18)]" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <button 
-                  onClick={handleGoogleSignIn}
-                  className="flex items-center justify-center gap-2 h-[40px] bg-[#ffffff]/48 border border-[rgba(255,255,255,0.55)] rounded-[12px] text-[#3d1a5e] text-[13px] font-semibold hover:bg-white/60 transition-colors"
-                >
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" className="w-[18px] h-[18px]"/> Google
-                </button>
-                <button 
-                  className="flex items-center justify-center gap-2 h-[40px] bg-[#ffffff]/48 border border-[rgba(255,255,255,0.55)] rounded-[12px] text-[#3d1a5e] text-[13px] font-semibold hover:bg-white/60 transition-colors"
-                >
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="F" className="w-[18px] h-[18px]"/> Facebook
-                </button>
-              </div>
-            </>
-          )}
+          <AuthSocial onGoogle={handleGoogleSignIn} isLoading={isLoading} />
 
           <div className="text-center mt-4 pt-2">
             <button 
