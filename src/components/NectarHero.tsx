@@ -33,7 +33,7 @@ export function NectarHero() {
     }, 800);
   }, [isLoadingFlavor]);
 
-  // Automatic rotation: 8s animation + 2s wait = 10s cycle
+  // Automatic rotation: 10s cycle
   useEffect(() => {
     const autoRotateTimer = setTimeout(() => {
       changeFlavor("next");
@@ -103,9 +103,8 @@ export function NectarHero() {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
           ref={heroImageRef}
-          className={`relative w-full h-full transition-all duration-1000 ease-in-out will-change-transform ${isLoadingFlavor ? 'opacity-0 scale-105 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
+          className={`relative w-full h-full transition-all duration-1000 ease-in-out will-change-transform gpu-smooth ${isLoadingFlavor ? 'opacity-0 scale-105 blur-xl' : 'opacity-100 scale-100 blur-0'}`}
         >
-          {/* Key restarts animation on transition */}
           <Image 
             key={currentFlavor.id}
             src={currentFlavor.videoUrl} 
@@ -124,7 +123,7 @@ export function NectarHero() {
       <div className="relative z-20 h-full w-full flex items-center justify-between px-6 md:px-24">
         <div 
           ref={contentRef}
-          className={`max-w-md transition-all duration-700 ${isLoadingFlavor ? 'opacity-0 translate-y-8 blur-lg' : 'opacity-100 translate-y-0 blur-0'}`}
+          className={`max-w-md transition-all duration-700 gpu-smooth ${isLoadingFlavor ? 'opacity-0 translate-y-8 blur-lg' : 'opacity-100 translate-y-0 blur-0'}`}
         >
           <div className="space-y-6">
             <p className="text-white/40 font-bold tracking-[0.5em] text-[9px] uppercase">

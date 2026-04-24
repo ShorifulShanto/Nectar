@@ -6,22 +6,29 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(onComplete, 800);
-          return 100;
-        }
-        return prev + Math.floor(Math.random() * 8) + 2;
-      });
-    }, 100);
+    // High-performance loading simulation
+    const startTime = performance.now();
+    const duration = 2500; // Total 2.5s for a smooth atmospheric intro
 
-    return () => clearInterval(interval);
+    const update = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const nextProgress = Math.min(Math.floor((elapsed / duration) * 100), 100);
+      
+      setProgress(nextProgress);
+
+      if (nextProgress < 100) {
+        requestAnimationFrame(update);
+      } else {
+        setTimeout(onComplete, 600);
+      }
+    };
+
+    const frame = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frame);
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-1000">
+    <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-1000 gpu-smooth">
       <div className="mb-12 text-center">
         <h1 className="text-5xl md:text-7xl font-headline font-bold tracking-[0.3em] text-white animate-pulse">
           NECTAR

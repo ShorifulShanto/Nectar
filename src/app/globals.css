@@ -4,22 +4,18 @@
 
 @layer base {
   :root {
-    /* Background: Charcoal Black #222222 -> HSL(0, 0%, 13%) */
     --background: 0 0% 13%;
-    /* Foreground: Cream #FFFDD0 -> HSL(59, 100%, 91%) */
     --foreground: 59 100% 91%;
     --card: 0 0% 10%;
     --card-foreground: 59 100% 91%;
     --popover: 0 0% 10%;
     --popover-foreground: 59 100% 91%;
-    /* Primary: Teal #1DCD9F -> HSL(164, 75%, 46%) */
     --primary: 164 75% 46%;
     --primary-foreground: 0 0% 0%;
     --secondary: 0 0% 20%;
     --secondary-foreground: 59 100% 91%;
     --muted: 0 0% 20%;
     --muted-foreground: 0 0% 60%;
-    /* Accent: Teal #1DCD9F */
     --accent: 164 75% 46%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
@@ -36,11 +32,7 @@
     --nectar-teal: #1DCD9F;
     --nectar-cream: #FFFDD0;
     --nectar-glow: #7AE2CF;
-
-    /* Custom Highlight Label: #FFF1D3 -> HSL(41, 100%, 91%) */
     --highlight-label: 41 100% 91%;
-
-    /* Default interactive glow color: Mint #7AE2CF */
     --hover-glow: #7AE2CF;
   }
 }
@@ -48,13 +40,17 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground selection:bg-primary selection:text-black antialiased overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    text-rendering: optimizeLegibility;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline tracking-tighter uppercase transition-all duration-300;
+    @apply font-headline tracking-tighter uppercase;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translate3d(0, 0, 0);
   }
   h1, h2 {
     @apply text-primary;
@@ -63,10 +59,17 @@
     @apply text-foreground;
   }
 
-  /* Global Text Hover Glow - context-aware */
   h1:hover, h2:hover, h3:hover, h4:hover, p:hover, span:hover, a:hover, button:hover {
     text-shadow: 0 0 15px var(--hover-glow);
   }
+}
+
+/* GPU Accelerated Smoothness */
+.gpu-smooth {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
 }
 
 /* Custom UI Effects */
@@ -75,6 +78,7 @@
   backdrop-filter: blur(24px) saturate(140%);
   border: 1px solid rgba(29, 205, 159, 0.2);
   box-shadow: 0 6px 32px rgba(0, 0, 0, 0.4);
+  transform: translate3d(0, 0, 0);
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -91,7 +95,8 @@
 
 .primary-glow-border {
   border: 1px solid rgba(29, 205, 159, 0.1);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 0, 0);
 }
 
 .primary-glow-border:hover {
@@ -99,6 +104,17 @@
   box-shadow: 0 0 40px rgba(122, 226, 207, 0.2);
 }
 
+.product-card-glow {
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 0, 0);
+}
+
 .product-card-glow:hover {
   filter: drop-shadow(0 0 20px var(--hover-glow));
+}
+
+/* Optimization for off-screen content */
+#faq, #reviews, #nutrition, #ingredients {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1000px;
 }
