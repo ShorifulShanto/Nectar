@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -60,7 +61,7 @@ export function ReviewsSection() {
   const displayReviews = reviews && reviews.length > 0 ? reviews : aiFallbackReviews;
 
   return (
-    <section id="reviews" className="py-24 bg-background">
+    <section id="reviews" className="py-24 bg-black">
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div className="text-center md:text-left">
@@ -73,7 +74,7 @@ export function ReviewsSection() {
           <Button 
             onClick={handleShareStory}
             variant="outline" 
-            className="rounded-full border-primary/20 bg-black/20 text-foreground uppercase tracking-widest text-[9px] px-8 h-12 hover:bg-primary hover:text-black transition-all group"
+            className="rounded-full border-primary/20 bg-white/5 text-foreground uppercase tracking-widest text-[9px] px-8 h-12 hover:bg-primary hover:text-black transition-all group"
           >
             <MessageSquare size={14} className="mr-2 group-hover:scale-110 transition-transform" />
             Share Your Story
@@ -86,7 +87,7 @@ export function ReviewsSection() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-black/40 p-10 rounded-3xl border border-primary/10 text-center flex flex-col justify-center items-center backdrop-blur-sm shadow-xl relative overflow-hidden group">
+            <div className="bg-neutral-900/40 p-10 rounded-3xl border border-primary/10 text-center flex flex-col justify-center items-center backdrop-blur-sm shadow-xl relative overflow-hidden group">
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="text-4xl md:text-6xl font-headline font-bold text-primary relative z-10">4.9</span>
               <div className="flex gap-1.5 my-3 text-primary relative z-10">
@@ -96,7 +97,7 @@ export function ReviewsSection() {
             </div>
             
             {displayReviews.map((review) => (
-              <div key={review.id} className="p-8 bg-black/20 rounded-3xl group hover:border-primary transition-all duration-500 shadow-lg primary-glow-border flex flex-col">
+              <div key={review.id} className="p-8 bg-neutral-900/40 rounded-3xl group hover:border-primary transition-all duration-500 shadow-lg primary-glow-border flex flex-col">
                 <div className="flex gap-1 mb-5 text-primary/20 group-hover:text-primary transition-colors">
                   {[...Array(review.rating || 5)].map((_, j) => <Star key={j} size={10} fill="currentColor" />)}
                 </div>
