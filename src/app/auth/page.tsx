@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -106,19 +105,21 @@ export default function NectarAuthPage() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body">
-      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-primary/10 border-[12px] border-primary/5 shadow-2xl rounded-[3rem] overflow-hidden flex">
+      <div className="relative w-full max-w-[1100px] aspect-[16/10] bg-black border-[12px] border-white/5 shadow-2xl rounded-[3rem] overflow-hidden flex">
         
-        <div className="hidden lg:flex flex-1 relative overflow-hidden rounded-[2.2rem]">
+        {/* Left Side: 55% Image */}
+        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden rounded-[2.2rem] bg-black">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"
             fill
-            className="object-cover"
+            className="object-contain"
             priority
           />
         </div>
 
-        <div className="flex-1 bg-black flex flex-col items-center justify-center p-8 md:p-16 relative">
+        {/* Right Side: 45% Form */}
+        <div className="flex-[0.45] bg-black flex flex-col items-center justify-center p-8 md:p-16 relative">
           <div className="w-full max-w-[340px] space-y-8">
             <div className="text-center">
               <p className="text-[11px] uppercase tracking-[0.3em] text-white/40 font-bold mb-2">Welcome to Nectar</p>
