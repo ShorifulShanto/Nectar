@@ -11,11 +11,12 @@ import React from "react";
 export function AuthOverlayBoxes() {
   const overlayStyle = "absolute pointer-events-none z-50 transition-all drop-shadow-2xl";
   
+  // Using the Cloudinary URLs provided for the 4 reference PNGs
   const images = {
-    box1: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777043999/WhatsApp_Image_2026-04-24_at_9.17.53_PM_lvzjdp.png",
-    box2: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777044009/WhatsApp_Image_2026-04-24_at_9.17.53_PM_1_otdn45.png",
-    box3: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777044009/WhatsApp_Image_2026-04-24_at_9.17.52_PM_j9rwye.png",
-    box4: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777045316/11_bilfwq.png"
+    box1: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777043999/WhatsApp_Image_2026-04-24_at_9.17.53_PM_lvzjdp.jpg",
+    box2: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777044009/WhatsApp_Image_2026-04-24_at_9.17.53_PM_1_otdn45.jpg",
+    box3: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777044009/WhatsApp_Image_2026-04-24_at_9.17.52_PM_j9rwye.jpg",
+    box4: "https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777044008/WhatsApp_Image_2026-04-24_at_9.17.52_PM_1_l1rzj0.jpg"
   };
 
   return (
