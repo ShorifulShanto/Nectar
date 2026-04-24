@@ -94,7 +94,11 @@ export function NectarHero() {
   };
 
   return (
-    <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-[#000000] flex items-center">
+    <section 
+      id="hero" 
+      className="relative h-[100svh] w-full overflow-hidden bg-[#000000] flex items-center"
+      style={{ '--hover-glow': currentFlavor.accentHex } as React.CSSProperties}
+    >
       {/* Background Animated WebP */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 

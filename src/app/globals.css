@@ -35,6 +35,9 @@
     --nectar-orange: #FF7F11;
     --nectar-cream: #FFFDD0;
     --nectar-glow: #FFB399;
+
+    /* Default interactive glow color */
+    --hover-glow: #FFB399;
   }
 }
 
@@ -56,9 +59,9 @@
     @apply text-foreground;
   }
 
-  /* Global Text Hover Glow */
+  /* Global Text Hover Glow - now uses context-aware variable */
   h1:hover, h2:hover, h3:hover, h4:hover, p:hover, span:hover, a:hover, button:hover {
-    text-shadow: 0 0 15px #FFB399;
+    text-shadow: 0 0 15px var(--hover-glow);
   }
 }
 
@@ -93,5 +96,5 @@
 }
 
 .product-card-glow:hover {
-  filter: drop-shadow(0 0 20px rgba(255, 179, 153, 0.3));
+  filter: drop-shadow(0 0 20px var(--hover-glow));
 }

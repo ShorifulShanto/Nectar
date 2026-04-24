@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -95,7 +94,11 @@ export function OlipopHero() {
   };
 
   return (
-    <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-black flex items-center">
+    <section 
+      id="hero" 
+      className="relative h-[100svh] w-full overflow-hidden bg-black flex items-center"
+      style={{ '--hover-glow': currentFlavor.accentHex } as React.CSSProperties}
+    >
       {/* Background Animated WebP */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div 
@@ -177,7 +180,8 @@ export function OlipopHero() {
                className="font-headline font-bold text-7xl md:text-[10rem] leading-none select-none transition-all duration-1000 inline-block"
                style={{ 
                  color: 'transparent', 
-                 WebkitTextStroke: `1px ${currentFlavor.accentHex}20`,
+                 WebkitTextStroke: `1px ${currentFlavor.accentHex}`,
+                 filter: `drop-shadow(0 0 15px ${currentFlavor.accentHex}40)`,
                  transform: isLoadingFlavor ? 'scale(0.8) rotate(-5deg)' : 'scale(1) rotate(0deg)'
                }}
              >

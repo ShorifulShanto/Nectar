@@ -84,7 +84,11 @@ export function ProductCollection() {
                 const productImage = product.image || flavorConfig?.imageUrl || 'https://picsum.photos/seed/juice/400/600';
 
                 return (
-                  <div key={product.id} className="group relative flex flex-col items-center sm:items-start will-change-transform product-card-glow">
+                  <div 
+                    key={product.id} 
+                    className="group relative flex flex-col items-center sm:items-start will-change-transform product-card-glow"
+                    style={{ '--hover-glow': accentColor } as React.CSSProperties}
+                  >
                      <Link 
                        href={`/product/${product.id}`}
                        className="aspect-square w-full rounded-[2.5rem] bg-[#1a1a1a] border border-white/5 overflow-hidden p-4 mb-6 flex flex-col items-center justify-center group-hover:border-primary/40 transition-all duration-700 shadow-2xl relative cursor-pointer"
@@ -124,7 +128,7 @@ export function ProductCollection() {
                         )}
                      </Link>
                      <div className="text-center sm:text-left px-2">
-                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-all duration-300 ${isSoldOut ? 'opacity-20' : 'text-foreground group-hover:text-primary group-hover:[text-shadow:0_0_12px_#FFB399]'}`}>
+                       <h4 className={`text-[11px] font-bold tracking-[0.3em] uppercase mb-1 transition-all duration-300 ${isSoldOut ? 'opacity-20' : 'text-foreground group-hover:text-primary group-hover:[text-shadow:0_0_12px_var(--hover-glow)]'}`}>
                          {product.name}
                        </h4>
                        <p className="text-[9px] text-foreground/40 uppercase tracking-[0.4em] font-medium font-mono group-hover:text-foreground/60 transition-colors">
