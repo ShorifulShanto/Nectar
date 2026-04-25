@@ -105,10 +105,10 @@ export default function NectarAuthPage() {
 
   return (
     <div className="min-h-[100svh] w-full bg-black flex items-center justify-center p-4 sm:p-10 font-body overflow-y-auto">
-      <div className="relative w-full max-w-[900px] lg:min-h-[600px] bg-black border-[3px] border-primary shadow-[0_0_60px_rgba(29,205,159,0.15)] rounded-[2rem] sm:rounded-[3rem] overflow-hidden flex flex-col lg:flex-row">
+      <div className="relative w-full max-w-[900px] bg-black border-[3px] border-primary shadow-[0_0_60px_rgba(29,205,159,0.15)] rounded-[2rem] sm:rounded-[3rem] overflow-hidden flex flex-col lg:flex-row">
         
-        {/* Left Side: 55% Image - Hidden on mobile, visible on lg */}
-        <div className="hidden lg:flex lg:flex-[0.55] relative overflow-hidden bg-black border-r border-primary/30">
+        {/* Top/Left Side: Image - Stacks on mobile, Side-by-side on desktop */}
+        <div className="flex-[0.4] lg:flex-[0.55] relative overflow-hidden bg-black border-b lg:border-b-0 lg:border-r border-primary/30 min-h-[200px] sm:min-h-[300px] lg:min-h-0">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"

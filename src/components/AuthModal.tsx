@@ -104,8 +104,8 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <DialogContent className="p-0 border-[3px] border-primary bg-black max-w-[900px] w-[95vw] lg:w-full overflow-hidden rounded-[2.5rem] flex flex-col lg:flex-row max-h-[90vh] lg:h-auto">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         
-        {/* Left Side: Image - Hidden on small screens */}
-        <div className="hidden lg:flex lg:flex-[0.55] relative overflow-hidden bg-black border-r border-primary/20">
+        {/* Top/Left Side: Image - Visible on all screens, stacks on mobile */}
+        <div className="flex-[0.4] lg:flex-[0.55] relative overflow-hidden bg-black border-b lg:border-b-0 lg:border-r border-primary/20 min-h-[200px] sm:min-h-[250px] lg:min-h-0">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"
@@ -115,7 +115,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           />
         </div>
 
-        {/* Right Side: Form */}
+        {/* Bottom/Right Side: Form */}
         <div className="flex-1 lg:flex-[0.45] p-8 md:p-12 relative flex flex-col justify-center bg-black overflow-y-auto">
           <div className="max-w-[300px] mx-auto w-full space-y-6">
             <div className="text-center">
