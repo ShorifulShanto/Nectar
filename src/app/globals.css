@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 13%;
+    --background: 0 0% 0%;
     --foreground: 59 100% 91%;
     --card: 0 0% 10%;
     --card-foreground: 59 100% 91%;
@@ -25,14 +25,8 @@
     --ring: 164 75% 46%;
     --radius: 1rem;
     
-    --nectar-burgundy: #280905;
-    --nectar-red: #740A03;
-    --nectar-red-hover: #C3110C;
-    --nectar-peach: #FFC193;
     --nectar-teal: #1DCD9F;
-    --nectar-cream: #FFFDD0;
     --nectar-glow: #7AE2CF;
-    --highlight-label: 41 100% 91%;
     --hover-glow: #7AE2CF;
   }
 }
@@ -55,13 +49,6 @@
   h1, h2 {
     @apply text-primary;
   }
-  h3, h4, h5, h6 {
-    @apply text-foreground;
-  }
-
-  h1:hover, h2:hover, h3:hover, h4:hover, p:hover, span:hover, a:hover, button:hover {
-    text-shadow: 0 0 15px var(--hover-glow);
-  }
 }
 
 /* GPU Accelerated Smoothness */
@@ -72,13 +59,13 @@
   will-change: transform, opacity;
 }
 
-/* Custom UI Effects */
+/* Glassmorphism for mobile & desktop */
 .glass-card-nectar {
-  background: rgba(34, 34, 34, 0.4);
-  backdrop-filter: blur(24px) saturate(140%);
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgba(29, 205, 159, 0.2);
-  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.4);
-  transform: translate3d(0, 0, 0);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -90,7 +77,7 @@
 }
 
 .hero-vignette {
-  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.85) 100%);
 }
 
 .primary-glow-border {
@@ -101,20 +88,23 @@
 
 .primary-glow-border:hover {
   border-color: rgba(122, 226, 207, 0.4);
-  box-shadow: 0 0 40px rgba(122, 226, 207, 0.2);
-}
-
-.product-card-glow {
-  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translate3d(0, 0, 0);
-}
-
-.product-card-glow:hover {
-  filter: drop-shadow(0 0 20px var(--hover-glow));
+  box-shadow: 0 0 30px rgba(122, 226, 207, 0.15);
 }
 
 /* Optimization for off-screen content */
-#faq, #reviews, #nutrition, #ingredients {
+#faq, #reviews, #ingredients {
   content-visibility: auto;
   contain-intrinsic-size: 1px 1000px;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.1); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  70% { transform: scale(1); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2s ease-in-out infinite;
 }

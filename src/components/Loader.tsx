@@ -8,7 +8,7 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     // High-performance loading simulation
     const startTime = performance.now();
-    const duration = 2500; // Total 2.5s for a smooth atmospheric intro
+    const duration = 2000; // Reduced duration for faster perceived performance
 
     const update = (currentTime: number) => {
       const elapsed = currentTime - startTime;
@@ -19,7 +19,7 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
       if (nextProgress < 100) {
         requestAnimationFrame(update);
       } else {
-        setTimeout(onComplete, 600);
+        setTimeout(onComplete, 400);
       }
     };
 
@@ -28,23 +28,23 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-1000 gpu-smooth">
-      <div className="mb-12 text-center">
-        <h1 className="text-5xl md:text-7xl font-headline font-bold tracking-[0.3em] text-white animate-pulse">
+    <div className="fixed inset-0 z-[9999] bg-[#000000] flex flex-col items-center justify-center transition-opacity duration-1000 gpu-smooth">
+      <div className="mb-12 text-center animate-heartbeat">
+        <h1 className="text-5xl md:text-7xl font-headline font-bold tracking-[0.3em] text-white">
           NECTAR
         </h1>
         <p className="text-[10px] tracking-[0.4em] uppercase text-white/30 mt-4">
           Fresh Cold-Pressed Juice
         </p>
       </div>
-      <div className="w-80 h-0.5 bg-white/10 rounded-full overflow-hidden mb-6">
+      <div className="w-64 h-0.5 bg-white/10 rounded-full overflow-hidden mb-6">
         <div 
-          className="h-full bg-white transition-all duration-300 ease-out" 
+          className="h-full bg-primary transition-all duration-300 ease-out" 
           style={{ width: `${progress}%` }}
         />
       </div>
-      <p className="font-mono text-[10px] tracking-[0.3em] text-white/20">
-        LOADING {progress}%
+      <p className="font-mono text-[9px] tracking-[0.3em] text-white/20 uppercase">
+        Initializing {progress}%
       </p>
     </div>
   );
