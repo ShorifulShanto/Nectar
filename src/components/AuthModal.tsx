@@ -102,11 +102,11 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="p-0 border-[3px] border-primary bg-black max-w-[900px] h-auto overflow-hidden rounded-[2.5rem] flex sm:min-h-[500px]">
+      <DialogContent className="p-0 border-[3px] border-primary bg-black max-w-[900px] w-[95vw] lg:w-full h-auto overflow-hidden rounded-[2.5rem] flex flex-col lg:flex-row sm:min-h-[500px]">
         <DialogTitle className="sr-only">Authentication</DialogTitle>
         
-        {/* Left Side: 55% Image */}
-        <div className="hidden md:flex flex-[0.55] relative overflow-hidden bg-black border-r border-primary/20">
+        {/* Left Side: 55% Image - Hidden on small screens */}
+        <div className="hidden lg:flex flex-[0.55] relative overflow-hidden bg-black border-r border-primary/20">
           <Image 
             src="https://res.cloudinary.com/dhzt5kvoz/image/upload/v1777057652/334fab87-6bd2-410d-93e5-5a4bc04edda9.png"
             alt="NECTAR Brand Experience"
@@ -117,7 +117,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         </div>
 
         {/* Right Side: 45% Form */}
-        <div className="flex-1 md:flex-[0.45] p-10 md:p-12 relative flex flex-col justify-center bg-black">
+        <div className="flex-1 lg:flex-[0.45] p-8 md:p-12 relative flex flex-col justify-center bg-black min-h-[450px] lg:min-h-0">
           <div className="max-w-[300px] mx-auto w-full space-y-6">
             <div className="text-center">
               <h2 className="text-3xl font-headline font-black text-primary uppercase tracking-tight hover:[text-shadow:0_0_15px_#7AE2CF] transition-all">
